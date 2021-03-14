@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lacondesa/pages/Home.dart';
+import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/TextBox.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ButtonForm.dart';
+import 'package:provider/provider.dart';
 
 class Formulario extends StatefulWidget {
   const Formulario({
@@ -32,26 +35,36 @@ class _FormularioState extends State<Formulario> {
   }
 
   Future<void> startLogin(BuildContext context) async {
+    SharedPreferences disk = await SharedPreferences.getInstance();
     await http.post(
         Uri.parse("http://192.168.0.4/lacondesa/php/obtener_repartidor.php"),
         body: {
           "nombre": nombreInput.text,
           "clave": claveinput.text,
-        }).then((resulta) {
+        }).then((resulta) async {
       if (resulta.statusCode == 200) {
         if (resulta.body == "nothing") {
           setState(() => status = "No se encuentra el usuario");
         } else {
           setState(() => status = "Redirigidiendo...");
           final body = json.decode(resulta.body);
+          context.read<User>().setnombre = body[0]['nombreRepartidor'];
+          context.read<User>().setavatar =
+              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+                  body[0]['img_profile'];
+          context.read<User>().setisLogin = true;
+          //guardamos el estado de inicio de sesion en el disco.
+          await disk.setString('nombrekey', body[0]['nombreRepartidor']);
+          await disk.setString(
+              'avatarkey',
+              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+                  body[0]['img_profile']);
+          await disk.setBool('isloginkey', true);
+          context.read<User>().initial();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Home(
-                nombre: body[0]['nombreRepartidor'],
-                avatar: "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
-                    body[0]['img_profile'],
-              ),
+              builder: (context) => Home(),
             ),
           );
           print(body[0]['nombreRepartidor']);

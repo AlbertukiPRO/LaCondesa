@@ -16,6 +16,8 @@ const textsubtitle = TextStyle(fontFamily: 'SFBlack', color: textcolorsubtitle);
 const textsubtitlemini =
     TextStyle(fontFamily: 'SFSemibold', color: textcolorsubtitle);
 
+const texttitle2 = TextStyle(fontFamily: 'SFSemibold', color: textcolortitle);
+
 /* Paleta de colores para La condesa*/
 
 const primarycolor = Color(0xFF4461D0);

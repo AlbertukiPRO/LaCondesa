@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lacondesa/pages/LectorQR.dart';
+import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:lacondesa/widget/NavBar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  @required
-  final String nombre;
-  @required
-  final String avatar;
-  Home({Key key, this.nombre, this.avatar}) : super(key: key);
+  const Home({
+    Key key,
+  }) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -60,6 +61,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 
+  int _selectedIndex = 0;
+
+  get selectedIndex => this._selectedIndex;
+
+  set selectedIndex(int _selectedIndex) {
+    this._selectedIndex = _selectedIndex;
+  }
+
   final iconlist = [
     LineIcons.home,
     LineIcons.cog,
@@ -74,12 +83,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     'Alertas',
   ];
 
+  List<Widget> tabs = <Widget>[
+    const HomeWidget(),
+    const Configuraciones(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.qr_code_scanner),
-        onPressed: () => null,
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LectorQR())),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
@@ -148,7 +163,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         splashColor: terciarycolor,
         notchAndCornersAnimation: animation,
         splashSpeedInMilliseconds: 300,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
+        onTap: (index) => setState(() {
+          _bottomNavIndex = index;
+          _selectedIndex = index;
+        }),
         //other params
       ),
       body: Container(
@@ -160,15 +178,53 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             const NavBar(
               backbutton: false,
             ),
-            Positioned(
-              top: 70,
-              child: BarRepartidor(
-                nombre: widget.nombre,
-                avatar: widget.avatar,
-              ),
-            ),
+            Positioned(top: 70, child: tabs[_selectedIndex]),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Configuraciones extends StatefulWidget {
+  const Configuraciones({Key key}) : super(key: key);
+
+  @override
+  _ConfiguracionesState createState() => _ConfiguracionesState();
+}
+
+class _ConfiguracionesState extends State<Configuraciones> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('Configuraciones'),
+    );
+  }
+}
+
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          BarRepartidor(
+            nombre: context.watch<User>().getnombre,
+            avatar: context.watch<User>().getavatar,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+            child: Text(
+              'Puntos totales',
+              style: texttitle2,
+              textScaleFactor: 1.5,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -187,7 +243,10 @@ class BarRepartidor extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.22,
+      constraints: BoxConstraints(
+        maxHeight: size.height * 0.28,
+        minHeight: size.height * 0.22,
+      ),
       width: size.width,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),

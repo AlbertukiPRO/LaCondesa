@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lacondesa/pages/Home.dart';
+import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/ButtonForm.dart';
 import 'package:lacondesa/widget/NavBar.dart';
@@ -13,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
@@ -412,17 +414,18 @@ class _RegisterState extends State<Register> {
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(contraste),
                         ),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Home(
-                              nombre: nombreInput.text,
-                              avatar:
-                                  "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
-                                      nombreImageAvatar,
+                        onPressed: () {
+                          context.read<User>().setnombre = nombreInput.text;
+                          context.read<User>().setavatar =
+                              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+                                  nombreImageAvatar;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                         child: Container(
                           width: size.width * 0.3,
                           child: Row(
