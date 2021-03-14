@@ -268,7 +268,7 @@ class BarRepartidor extends StatelessWidget {
                 ),
                 Spacer(),
                 CircleAvatar(
-                  radius: 30.0,
+                  radius: size.aspectRatio * 100,
                   backgroundImage: NetworkImage(avatar),
                 ),
               ],

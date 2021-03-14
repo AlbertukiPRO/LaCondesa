@@ -25,18 +25,22 @@ class _LectorQRState extends State<LectorQR> {
                   ],
                 )),
       floatingActionButton: FloatingActionButton(
+        elevation: 2,
         onPressed: () {
           _scanCode();
         },
         child: Icon(Icons.camera),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Future<void> _scanCode() async {
     var result = await BarcodeScanner.scan(
-        options: ScanOptions(android: AndroidOptions(useAutoFocus: true)));
+        options: ScanOptions(
+            android: AndroidOptions(
+      useAutoFocus: true,
+    )));
     setState(() {
       _scanResult = result;
     });
