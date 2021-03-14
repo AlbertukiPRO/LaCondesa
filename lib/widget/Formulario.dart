@@ -22,7 +22,7 @@ class _FormularioState extends State<Formulario> {
   final _formkey = GlobalKey<FormState>();
   bool showtextpassword = false;
   bool loginstatus = false;
-  String status = "";
+  String status;
 
   TextEditingController nombreInput = new TextEditingController();
   TextEditingController claveinput = new TextEditingController();
@@ -31,54 +31,35 @@ class _FormularioState extends State<Formulario> {
     setState(() => showtextpassword = !showtextpassword);
   }
 
-  final snackBar = SnackBar(
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Enviando datos al servidor espera...',
-          style: TextStyle(color: Colors.white),
-        ),
-        CircularProgressIndicator(),
-      ],
-    ),
-    duration: Duration(seconds: 20),
-    backgroundColor: primarycolor,
-  );
-
-  sendData(String user, String clave) {
-    bool cheked = false;
-    if (user == "Alberto Noche Rosas" && clave == "@#123") {
-      cheked = !cheked;
-    }
-    return cheked;
-  }
-
-  startLogin(BuildContext context) {
-    http.post(Uri.parse(""), body: {
-      "nombre": nombreInput.text,
-      "clave": claveinput.text,
-    }).then((resulta) {
+  Future<void> startLogin(BuildContext context) async {
+    await http.post(
+        Uri.parse("http://192.168.0.4/lacondesa/php/obtener_repartidor.php"),
+        body: {
+          "nombre": nombreInput.text,
+          "clave": claveinput.text,
+        }).then((resulta) {
       if (resulta.statusCode == 200) {
         if (resulta.body == "nothing") {
-          setState(() => status = "No se encuatra el usuario");
+          setState(() => status = "No se encuentra el usuario");
         } else {
+          setState(() => status = "Redirigidiendo...");
           final body = json.decode(resulta.body);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Home(
+                nombre: body[0]['nombreRepartidor'],
+                avatar: "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+                    body[0]['img_profile'],
+              ),
+            ),
+          );
+          print(body[0]['nombreRepartidor']);
         }
       } else {
         setState(() => status = "No fue posible conectar con el servidor.");
       }
     });
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Home(
-          nombre: nombreInput.text,
-          clave: claveinput.text,
-        ),
-      ),
-    );
   }
 
   @override
@@ -153,7 +134,10 @@ class _FormularioState extends State<Formulario> {
             },
           ),
           SizedBox(
-            height: 40,
+            height: 20,
+          ),
+          SizedBox(
+            height: 20,
           ),
           GestureDetector(
             onTap: () {
@@ -161,10 +145,30 @@ class _FormularioState extends State<Formulario> {
               // el formulario no es válido.
               if (_formkey.currentState.validate()) {
                 // Si el formulario es válido, queremos mostrar un Snackbar
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 //peticionServer();
                 if (_formkey.currentState.validate()) {
-                  startLogin(context);
+                  startLogin(context).whenComplete(() {
+                    final snackBar = SnackBar(
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            status == null ? "Cargando..." : status,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          status == null
+                              ? CircularProgressIndicator()
+                              : Icon(
+                                  LineIcons.server,
+                                  color: Colors.white,
+                                ),
+                        ],
+                      ),
+                      duration: Duration(seconds: 3),
+                      backgroundColor: primarycolor,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  });
                 } else {}
               }
             },

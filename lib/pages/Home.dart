@@ -8,10 +8,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
 
 class Home extends StatefulWidget {
+  @required
   final String nombre;
-  final String clave;
+  @required
   final String avatar;
-  Home({Key key, this.nombre, this.clave, this.avatar}) : super(key: key);
+  Home({Key key, this.nombre, this.avatar}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -198,7 +199,7 @@ class BarRepartidor extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Julian Peres Ramirez',
+                  this.nombre,
                   style: textsubtitle,
                   textScaleFactor: 1.1,
                 ),

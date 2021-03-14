@@ -417,7 +417,6 @@ class _RegisterState extends State<Register> {
                           MaterialPageRoute(
                             builder: (context) => Home(
                               nombre: nombreInput.text,
-                              clave: claveinput.text,
                               avatar:
                                   "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
                                       nombreImageAvatar,
