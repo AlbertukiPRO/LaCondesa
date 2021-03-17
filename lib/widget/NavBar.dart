@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:line_icons/line_icon.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({

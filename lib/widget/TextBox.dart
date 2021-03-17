@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/variables/styles.dart';
 
+// ignore: camel_case_types
 class textbox extends StatelessWidget {
   const textbox({
     Key key,

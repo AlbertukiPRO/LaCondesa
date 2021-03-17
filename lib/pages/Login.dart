@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           child: Text(
-                            'Registrarce',
+                            'Registrarse',
                             style: TextStyle(
                               color: textcolorsubtitle,
                             ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lacondesa/pages/LectorQR.dart';
+import 'package:lacondesa/pages/Settings.dart';
+import 'package:lacondesa/pages/Ventas.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
@@ -9,6 +12,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
 import 'package:provider/provider.dart';
+import 'package:lacondesa/widget/rivetest.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -71,21 +75,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   final iconlist = [
     LineIcons.home,
+    LineIcons.tint,
+    LineIcons.store,
     LineIcons.cog,
-    LineIcons.file,
-    LineIcons.bell,
   ];
 
   final pestanas = [
     'Menú',
-    'Configuració',
-    'Guia',
-    'Alertas',
+    'Garrafones',
+    'Ventas',
+    'Configuración',
   ];
 
   List<Widget> tabs = <Widget>[
     const HomeWidget(),
     const Configuraciones(),
+    const Ventas(),
+    const Settings(),
   ];
 
   @override
@@ -94,7 +100,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.qr_code_scanner),
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LectorQR())),
+            context, MaterialPageRoute(builder: (context) => const LectorQR())),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
@@ -196,17 +202,42 @@ class Configuraciones extends StatefulWidget {
 class _ConfiguracionesState extends State<Configuraciones> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      child: Text('Configuraciones'),
+      child: Column(
+        children: [
+          BarRepartidor(
+              nombre: "Garrafones",
+              avatar:
+                  "https://aquaclyva.mx/wp-content/uploads/2018/03/garrafon-19l-1.jpg"),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: size.width * 0.8,
+            child: Text(
+              'Promociones',
+              style: texttitle2,
+              textScaleFactor: 1.1,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class HomeWidget extends StatelessWidget {
+class HomeWidget extends StatefulWidget {
   const HomeWidget({
     Key key,
   }) : super(key: key);
 
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  /// Tracks if the animation is playing by whether controller is running.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -221,9 +252,32 @@ class HomeWidget extends StatelessWidget {
             child: Text(
               'Puntos totales',
               style: texttitle2,
-              textScaleFactor: 1.5,
+              textScaleFactor: 1.3,
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  "assets/icons/coins.svg",
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                ),
+              ),
+              Text(
+                'x ' + context.watch<User>().getpuntos.toString(),
+                style: texttitle2,
+                textScaleFactor: 2,
+              ),
+            ],
+          ),
+          TextButton(
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyRiveTest())),
+              child: Text('¿Como gano puntos?'))
         ],
       ),
     );
@@ -239,14 +293,11 @@ class BarRepartidor extends StatelessWidget {
 
   final String nombre;
   final String avatar;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      constraints: BoxConstraints(
-        maxHeight: size.height * 0.28,
-        minHeight: size.height * 0.22,
-      ),
       width: size.width,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -266,9 +317,11 @@ class BarRepartidor extends StatelessWidget {
                   'Repartidor',
                   style: textsubtitlemini,
                 ),
-                Spacer(),
+                SizedBox(
+                  height: 20,
+                ),
                 CircleAvatar(
-                  radius: size.aspectRatio * 100,
+                  radius: size.aspectRatio * 80,
                   backgroundImage: NetworkImage(avatar),
                 ),
               ],

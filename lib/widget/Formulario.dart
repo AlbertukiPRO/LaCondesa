@@ -34,10 +34,15 @@ class _FormularioState extends State<Formulario> {
     setState(() => showtextpassword = !showtextpassword);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> startLogin(BuildContext context) async {
     SharedPreferences disk = await SharedPreferences.getInstance();
     await http.post(
-        Uri.parse("http://192.168.0.4/lacondesa/php/obtener_repartidor.php"),
+        Uri.parse("http://192.168.0.8/lacondesa/php/obtener_repartidor.php"),
         body: {
           "nombre": nombreInput.text,
           "clave": claveinput.text,
@@ -50,16 +55,19 @@ class _FormularioState extends State<Formulario> {
           final body = json.decode(resulta.body);
           context.read<User>().setnombre = body[0]['nombreRepartidor'];
           context.read<User>().setavatar =
-              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+              "http://192.168.0.8/lacondesa/php/ReProfilesimgs/" +
                   body[0]['img_profile'];
           context.read<User>().setisLogin = true;
+          context.read<User>().setpuntos = "0";
+          context.read<User>().setid = int.parse(body[0]['idRepartidores']);
           //guardamos el estado de inicio de sesion en el disco.
           await disk.setString('nombrekey', body[0]['nombreRepartidor']);
           await disk.setString(
               'avatarkey',
-              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+              "http://192.168.0.8/lacondesa/php/ReProfilesimgs/" +
                   body[0]['img_profile']);
           await disk.setBool('isloginkey', true);
+          //
           context.read<User>().initial();
           Navigator.pushReplacement(
             context,

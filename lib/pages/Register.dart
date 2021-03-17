@@ -45,7 +45,7 @@ class _RegisterState extends State<Register> {
   }
 
   static final String uploadEndPoint =
-      'http://192.168.0.4/lacondesa/php/registro_repartidor.php';
+      'http://192.168.0.8/lacondesa/php/registro_repartidor.php';
   final picker = ImagePicker();
   String status = "";
   File _images;
@@ -286,7 +286,7 @@ class _RegisterState extends State<Register> {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Container(
-                                                width: size.width * 0.35,
+                                                width: size.width * 0.40,
                                                 child: TextButton(
                                                   onPressed: () => getImage(),
                                                   child: Row(
@@ -316,8 +316,7 @@ class _RegisterState extends State<Register> {
                                                 ),
                                               ),
                                               _images == null
-                                                  ? const Text(
-                                                      'No image selected.')
+                                                  ? const Text('No imagen.')
                                                   : Container(
                                                       height: 80,
                                                       width: 80,
@@ -417,7 +416,7 @@ class _RegisterState extends State<Register> {
                         onPressed: () {
                           context.read<User>().setnombre = nombreInput.text;
                           context.read<User>().setavatar =
-                              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+                              "http://192.168.0.8/lacondesa/php/ReProfilesimgs/" +
                                   nombreImageAvatar;
                           Navigator.push(
                             context,

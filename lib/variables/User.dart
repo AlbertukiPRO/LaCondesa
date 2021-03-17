@@ -2,27 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
+  int idRepartidor;
   String nombre;
   String avatar;
   String garrafonesVendidos;
   String puntos;
   bool isLogin;
-  bool themeLight;
+  bool themeLight = true;
+  bool islectorQR = false;
+  double preciogarrafon;
+  // SETTERS OF REPARTIDORES */
 
   void initial() async {
     SharedPreferences disk = await SharedPreferences.getInstance();
     //isloginkey == true o isLogin != null o isLogin == true => ya esta logeado;
     if (disk.getBool('isloginkey') != null &&
         disk.getBool('isloginkey') == true) {
-      setnombre = disk.getString('nombrekey');
-      setavatar = disk.getString('avatarkey');
-      setisLogin = (disk.getBool('isloginkey') ?? true);
+      nombre = disk.getString('nombrekey');
+      avatar = disk.getString('avatarkey');
+      isLogin = true;
       print("Logeado como = " +
           disk.getString('nombrekey') +
           disk.getString('avatarkey'));
     }
   }
-  // SETTERS OF REPARTIDORES */
+
+  set setid(data) {
+    this.idRepartidor = data;
+    notifyListeners();
+  }
 
   set setnombre(data) {
     this.nombre = data;
@@ -54,12 +62,25 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
+  set setiscodelectorQR(data) {
+    this.islectorQR = data;
+    notifyListeners();
+  }
+
+  set setPreciogarrafon(data) {
+    this.preciogarrafon = data;
+    notifyListeners();
+  }
+
   /// GETTERS OF REPARTIDORES  */
 
+  int get getid => this.idRepartidor;
   String get getnombre => this.nombre;
   String get getavatar => this.avatar;
   String get getgarrafonesvendidos => this.garrafonesVendidos;
-  String get getpuntos => this.garrafonesVendidos;
+  String get getpuntos => this.puntos;
   bool get getisLogin => this.isLogin;
   bool get geThemeLigth => this.themeLight;
+  bool get getislectorQR => this.islectorQR;
+  double get getpreciogarrafon => this.preciogarrafon;
 }
