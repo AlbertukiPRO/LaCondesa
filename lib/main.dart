@@ -28,8 +28,6 @@ class MyApp extends StatelessWidget {
     } catch (error) {
       print(error);
     }
-
-    return false;
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lacondesa/pages/Profile.dart';
 import 'package:lacondesa/variables/styles.dart';
 
 class BarRepartidor extends StatelessWidget {
@@ -37,9 +38,16 @@ class BarRepartidor extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                CircleAvatar(
-                  radius: size.aspectRatio * 80,
-                  backgroundImage: NetworkImage(avatar),
+                InkWell(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Profile())),
+                  child: Hero(
+                    tag: 'fotoprofile',
+                    child: CircleAvatar(
+                      radius: size.aspectRatio * 80,
+                      backgroundImage: NetworkImage(avatar),
+                    ),
+                  ),
                 ),
               ],
             ),

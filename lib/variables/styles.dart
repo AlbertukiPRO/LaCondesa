@@ -18,6 +18,17 @@ const textsubtitlemini =
 
 const texttitle2 = TextStyle(fontFamily: 'SFSemibold', color: textcolortitle);
 
+const gradient = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment.bottomCenter,
+  stops: [0.1, 0.4, 0.7],
+  colors: [
+    Color(0xFF8BC6EC),
+    terciarycolor,
+    Color(0xFF9599E2),
+  ],
+);
+
 /* Paleta de colores para La condesa*/
 
 const primarycolor = Color(0xFF4461D0);

@@ -128,7 +128,7 @@ class _RegisterState extends State<Register> {
           },
           child: succesfull == false
               ? Container(
-                  height: size.height * 2,
+                  height: size.height * 1.5,
                   width: double.infinity,
                   child: Stack(
                     alignment: Alignment.topCenter,
@@ -139,7 +139,7 @@ class _RegisterState extends State<Register> {
                       Positioned(
                         top: 70,
                         child: Container(
-                          height: size.height * 2,
+                          height: size.height * 1.5,
                           width: size.width,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
