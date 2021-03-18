@@ -17,14 +17,7 @@ class User with ChangeNotifier {
     SharedPreferences disk = await SharedPreferences.getInstance();
     //isloginkey == true o isLogin != null o isLogin == true => ya esta logeado;
     if (disk.getBool('isloginkey') != null &&
-        disk.getBool('isloginkey') == true) {
-      nombre = disk.getString('nombrekey');
-      avatar = disk.getString('avatarkey');
-      isLogin = true;
-      print("Logeado como = " +
-          disk.getString('nombrekey') +
-          disk.getString('avatarkey'));
-    }
+        disk.getBool('isloginkey') == true) {}
   }
 
   set setid(data) {

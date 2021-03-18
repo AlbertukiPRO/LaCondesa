@@ -2,22 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 
-class MyRiveTest extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MyRiveAnimation(),
-    );
-  }
-}
-
 class MyRiveAnimation extends StatefulWidget {
   @override
   _MyRiveAnimationState createState() => _MyRiveAnimationState();
 }
 
 class _MyRiveAnimationState extends State<MyRiveAnimation> {
-  final riveFileName = 'assets/truck.riv';
+  final riveFileName = 'assets/icons/coins.riv';
   Artboard _artboard;
 
   @override
@@ -35,7 +26,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
       // Select an animation by its name
       setState(() => _artboard = file.mainArtboard
         ..addController(
-          SimpleAnimation('idle'),
+          SimpleAnimation('coinsmove'),
         ));
     }
   }
@@ -44,9 +35,15 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   @override
   Widget build(BuildContext context) {
     return _artboard != null
-        ? Rive(
-            artboard: _artboard,
-            fit: BoxFit.cover,
+        ? Center(
+            child: Container(
+              width: 150,
+              height: 150,
+              child: Rive(
+                artboard: _artboard,
+                fit: BoxFit.contain,
+              ),
+            ),
           )
         : Container();
   }

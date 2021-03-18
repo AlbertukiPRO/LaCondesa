@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/pages/Register.dart';
+import 'package:lacondesa/pages/test_img_pick.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Formulario.dart';
 
@@ -81,13 +82,18 @@ class _LoginState extends State<Login> {
                           vertical: 20, horizontal: 35),
                       child: const Formulario(),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 15),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         TextButton(
-                          onPressed: () => null,
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyHomePage(),
+                            ),
+                          ),
                           child: Text(
                             'Ver terminos y condiciones',
                             style: TextStyle(

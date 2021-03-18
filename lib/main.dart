@@ -8,79 +8,65 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+class MyApp extends StatelessWidget {
+  Future<bool> initial() async {
+    try {
+      SharedPreferences disk = await SharedPreferences.getInstance();
+      bool islogin = disk.getBool('isloginkey');
 
-class _MyAppState extends State<MyApp> {
+      if (islogin != null) {
+        print('Metodo: <main()> : esta logeado => ' + islogin.toString());
+        print('Metodo: <main()> : nombre => ' + disk.getString('nombrekey'));
+        print('Metodo: <main()> : img => ' + disk.getString('avatarkey'));
+        return true;
+      } else {
+        print("Close sesion");
+        return false;
+      }
+    } on Exception catch (exception) {
+      print(exception);
+    } catch (error) {
+      print(error);
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => User()),
       ],
-      child: Cargador(),
-    );
-  }
-}
-
-class Cargador extends StatefulWidget {
-  const Cargador({Key key}) : super(key: key);
-
-  @override
-  _CargadorState createState() => _CargadorState();
-}
-
-class _CargadorState extends State<Cargador> {
-  datas(BuildContext context) async {
-    SharedPreferences disk = await SharedPreferences.getInstance();
-
-    if (disk.getBool('isloginkey') != null) {
-      print("ya esta logeado");
-      context.read<User>().setnombre = disk.getString('nombrekey');
-      context.read<User>().setavatar = disk.getString('avatarkey');
-      context.read<User>().setisLogin = true;
-      await disk.setBool('isloginkey', true);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    datas(context);
-    return Center(
       child: MaterialApp(
-          title: titleapp,
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              primaryColor: primarycolor,
-              accentColor: contraste,
-              accentColorBrightness: Brightness.dark,
-              floatingActionButtonTheme: FloatingActionButtonThemeData(
-                backgroundColor: primarycolor,
-                splashColor: terciarycolor,
-                foregroundColor: Colors.white,
-                elevation: 2,
-              ),
-              fontFamily: 'SFRegular',
-              scaffoldBackgroundColor: Colors.black54),
-          darkTheme: context.watch<User>().geThemeLigth
-              ? ThemeData.light()
-              : ThemeData.dark(),
-          home: context.watch<User>().getisLogin == null
-              ? const Login()
-              : const Home()
-          /*FutureBuilder<bool>(
-            future: dataread(context),
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              return snapshot.hasData
-                  ? snapshot.data
-                      ? const Login()
-                      : const Home()
-                  : CircularProgressIndicator();
-            }),*/
+        title: titleapp,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          primaryColor: primarycolor,
+          accentColor: contraste,
+          accentColorBrightness: Brightness.dark,
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: primarycolor,
+            splashColor: terciarycolor,
+            foregroundColor: Colors.white,
+            elevation: 2,
           ),
+          fontFamily: 'SFRegular',
+        ),
+        home: FutureBuilder<bool>(
+          future: initial(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return snapshot.hasData
+                ? snapshot.data == false
+                    ? Login()
+                    : Home()
+                : Center(
+                    child: CircularProgressIndicator(),
+                  );
+          },
+        ),
+      ),
     );
   }
 }

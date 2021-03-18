@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/services.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/NavBar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:rive/rive.dart';
 import 'VentaScreen.dart';
 
 class LectorQR extends StatefulWidget {
@@ -41,134 +41,64 @@ class _LectorQRState extends State<LectorQR> {
                   top: 40,
                   child: Column(
                     children: [
-                      context.watch<User>().getislectorQR == false
-                          ? AnimatedOpacity(
-                              opacity: context.watch<User>().getislectorQR
-                                  ? 0.0
-                                  : 1.0,
-                              duration: Duration(seconds: 2),
-                              child: Container(
-                                width: size.width,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 40, horizontal: 30),
-                                  child: Card(
-                                    color: Colors.white,
-                                    child: _scanResult == null
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(20.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  "Esperado datos del QR",
-                                                  style: textsubtitle,
-                                                  textScaleFactor: 1.5,
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  'Repartidor',
-                                                  style: textsubtitlemini,
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                CircularProgressIndicator(),
-                                              ],
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(20),
-                                                  child: _scanResult
-                                                              .rawContent !=
-                                                          ""
-                                                      ? Text(
-                                                          "Correto !!",
-                                                          style: textsubtitle,
-                                                          textScaleFactor: 1.5,
-                                                        )
-                                                      : Text(
-                                                          "Se cerro el lector !!",
-                                                          style: textsubtitle,
-                                                          textScaleFactor: 1.5,
-                                                        ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.all(15),
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: _scanResult
-                                                                .rawContent !=
-                                                            ""
-                                                        ? contraste
-                                                        : Colors.redAccent,
-                                                  ),
-                                                  child: _scanResult
-                                                              .rawContent !=
-                                                          ""
-                                                      ? Icon(
-                                                          LineIcons.check,
-                                                          size: 25,
-                                                          color: Colors.white,
-                                                        )
-                                                      : Icon(
-                                                          Icons.close,
-                                                          size: 25,
-                                                          color: Colors.white,
-                                                        ),
-                                                ),
-                                                SizedBox(
-                                                  height: 40,
-                                                ),
-                                                /*Text('Contenido: ${_scanResult.rawContent}'),
-                                            Text(
-                                                'Formato: ${_scanResult.format.toString()}'),*/
-                                              ],
-                                            ),
+                      AnimatedOpacity(
+                        opacity: 1.0,
+                        duration: Duration(seconds: 2),
+                        child: Container(
+                          width: size.width,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 40, horizontal: 30),
+                            child: Card(
+                              color: Colors.white,
+                              child: _scanResult == null
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Escaneé el QR",
+                                            style: textsubtitle,
+                                            textScaleFactor: 1.5,
                                           ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
-                      context.watch<User>().getislectorQR
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            'Lector de QR - La condesa',
+                                            style: textsubtitlemini,
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          CircularProgressIndicator(),
+                                        ],
+                                      ),
+                                    )
+                                  : Container(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      _scanResult != null
                           ? FutureBuilder<dynamic>(
                               future: getdatauser(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<dynamic> snapshot) {
                                 return snapshot.hasData
-                                    ? iuQRlector(
-                                        size: size, cuerpo: snapshot.data)
-                                    /*:snapshot.data == "nothing"
-                                    
-                                        ? Center(
-                                            child: Text(
-                                              'No se encontro el cliente',
-                                              style: textsubtitle,
-                                            ),
-                                          )
-                                        : snapshot.hasError
-                                            ? Center(
-                                                child: Text(
-                                                  'No se encontro el servidor',
-                                                  style: textsubtitle,
-                                                ),
-                                              )*/
-                                    : CircularProgressIndicator();
+                                    ? IuQRlector(
+                                        size: size,
+                                        cuerpo: snapshot.data,
+                                      )
+                                    : Text(
+                                        'Se cerro el lector..',
+                                        style: texttitle2,
+                                        textScaleFactor: 1.3,
+                                      );
                               })
                           : Container(),
                     ],
@@ -186,7 +116,7 @@ class _LectorQRState extends State<LectorQR> {
           onPressed: () {
             _scanCode();
           },
-          child: Icon(Icons.camera),
+          child: Icon(LineIcons.camera),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -212,7 +142,7 @@ class _LectorQRState extends State<LectorQR> {
     var arr = _scanResult.rawContent.split(".");
     print("QR contenido: " + arr[0] + arr[1] + arr[2]);
     var body = await http.post(
-        Uri.parse("http://192.168.0.8/lacondesa/php/get_data_qr.php"),
+        Uri.parse("http://192.168.0.4/lacondesa/php/get_data_qr.php"),
         body: {
           "idcliente": arr[2],
         });
@@ -220,21 +150,22 @@ class _LectorQRState extends State<LectorQR> {
   }
 }
 
-class iuQRlector extends StatefulWidget {
+// ignore: must_be_immutable
+class IuQRlector extends StatefulWidget {
   final Size size;
   dynamic cuerpo;
 
-  iuQRlector({
+  IuQRlector({
     Key key,
     this.size,
     this.cuerpo,
   }) : super(key: key);
 
   @override
-  _iuQRlectorState createState() => _iuQRlectorState();
+  _IuQRlectorrState createState() => _IuQRlectorrState();
 }
 
-class _iuQRlectorState extends State<iuQRlector> {
+class _IuQRlectorrState extends State<IuQRlector> {
   int countgarrafones = 1;
 
   upgarrafon() {
@@ -244,6 +175,27 @@ class _iuQRlectorState extends State<iuQRlector> {
   downgarrafon() {
     if (countgarrafones != 1) {
       setState(() => countgarrafones -= 1);
+    }
+  }
+
+  final riveFileName = 'assets/img/agua.riv';
+  Artboard _artboard;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _loadRiveFile() async {
+    final bytes = await rootBundle.load(riveFileName);
+    final file = RiveFile();
+
+    if (file.import(bytes)) {
+      // Select an animation by its name
+      setState(() => _artboard = file.mainArtboard
+        ..addController(
+          SimpleAnimation('bote'),
+        ));
     }
   }
 
@@ -324,7 +276,11 @@ class _iuQRlectorState extends State<iuQRlector> {
                       backgroundColor: MaterialStateProperty.all(primarycolor),
                       overlayColor: MaterialStateProperty.all(contraste),
                     ),
-                    onPressed: () => upgarrafon(),
+                    onPressed: () {
+                      //_togglePlay();
+                      _loadRiveFile();
+                      upgarrafon();
+                    },
                     child: Icon(
                       Icons.expand_less_sharp,
                       size: 40,
@@ -351,10 +307,20 @@ class _iuQRlectorState extends State<iuQRlector> {
               SizedBox(
                 width: 10,
               ),
-              SvgPicture.asset(
-                "assets/img/botella-de-agua.svg",
-                width: widget.size.width * 0.2,
-                height: widget.size.height * 0.18,
+              Padding(
+                padding: const EdgeInsets.all(0),
+                child: _artboard != null
+                    ? Center(
+                        child: Container(
+                          width: 150,
+                          height: 150,
+                          child: Rive(
+                            artboard: _artboard,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      )
+                    : Container(),
               ),
               Text(
                 ' x ' + countgarrafones.toString(),

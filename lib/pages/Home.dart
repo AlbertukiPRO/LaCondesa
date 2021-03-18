@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lacondesa/pages/LectorQR.dart';
 import 'package:lacondesa/pages/Settings.dart';
 import 'package:lacondesa/pages/Ventas.dart';
@@ -10,9 +9,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:lacondesa/widget/NavBar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:badges/badges.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:lacondesa/widget/rivetest.dart';
+import 'Garrafones.dart';
+import 'HomeWidget.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -25,12 +25,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final autoSizeGroup = AutoSizeGroup();
-
   var _bottomNavIndex = 0;
+
   AnimationController _animationController;
-
   Animation<double> animation;
-
   CurvedAnimation curve;
 
   @override
@@ -63,6 +61,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       Duration(seconds: 1),
       () => _animationController.forward(),
     );
+    buildProvier(context);
   }
 
   int _selectedIndex = 0;
@@ -73,7 +72,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     this._selectedIndex = _selectedIndex;
   }
 
-  final iconlist = [
+  final iconlist = <IconData>[
     LineIcons.home,
     LineIcons.tint,
     LineIcons.store,
@@ -89,75 +88,66 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   List<Widget> tabs = <Widget>[
     const HomeWidget(),
-    const Configuraciones(),
+    const Garrafones(),
     const Ventas(),
     const Settings(),
   ];
 
+  buildProvier(BuildContext context) async {
+    SharedPreferences disk = await SharedPreferences.getInstance();
+    context.read<User>().setnombre = disk.getString('nombrekey');
+    context.read<User>().setavatar = disk.getString('avatarkey');
+    context.read<User>().setisLogin = true;
+    context.read<User>().setid = disk.getString('idkey');
+    context.read<User>().setpuntos = disk.getString('puntoskey');
+    print("Logeado como = " +
+        disk.getString('nombrekey') +
+        disk.getString('avatarkey'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.qr_code_scanner),
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const LectorQR())),
+      floatingActionButton: ScaleTransition(
+        scale: animation,
+        child: FloatingActionButton(
+          elevation: 8,
+          child: Icon(Icons.qr_code_scanner),
+          onPressed: () {
+            _animationController.reset();
+            _animationController.forward();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LectorQR(),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         itemCount: iconlist.length,
         tabBuilder: (int index, bool isActive) {
-          final color = isActive ? contraste : textcolorsubtitle;
+          final color = isActive ? primarycolor : Colors.blueGrey;
           return Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              index == 3
-                  ? Badge(
-                      badgeContent: Text(
-                        '2',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      badgeColor: contraste,
-                      child: Icon(
-                        iconlist[index],
-                        size: 24,
-                        color: color,
-                      ),
-                    )
-                  : (index == 2)
-                      ? Badge(
-                          badgeContent: Text(
-                            '5',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          badgeColor: contraste,
-                          child: Icon(
-                            iconlist[index],
-                            size: 24,
-                            color: color,
-                          ),
-                        )
-                      : Icon(
-                          iconlist[index],
-                          size: 24,
-                          color: color,
-                        ),
-              index == _bottomNavIndex
-                  ? SizedBox(height: 4)
-                  : SizedBox(height: 0),
-              index == _bottomNavIndex
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: AutoSizeText(
-                        "" + pestanas[index],
-                        maxLines: 1,
-                        style: TextStyle(color: color),
-                        group: autoSizeGroup,
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.all(0),
-                    )
+              Icon(
+                iconlist[index],
+                size: 24,
+                color: color,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: AutoSizeText(
+                  "" + pestanas[index],
+                  maxLines: 1,
+                  style: TextStyle(color: color),
+                  group: autoSizeGroup,
+                ),
+              ),
             ],
           );
         },
@@ -169,11 +159,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         splashColor: terciarycolor,
         notchAndCornersAnimation: animation,
         splashSpeedInMilliseconds: 300,
-        onTap: (index) => setState(() {
-          _bottomNavIndex = index;
-          _selectedIndex = index;
-        }),
-        //other params
+        onTap: (index) => setState(
+          () {
+            _bottomNavIndex = index;
+            _selectedIndex = index;
+          },
+        ),
       ),
       body: Container(
         height: double.infinity,
@@ -184,149 +175,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             const NavBar(
               backbutton: false,
             ),
-            Positioned(top: 70, child: tabs[_selectedIndex]),
+            Positioned(
+              top: 70,
+              child: tabs[_selectedIndex],
+            ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Configuraciones extends StatefulWidget {
-  const Configuraciones({Key key}) : super(key: key);
-
-  @override
-  _ConfiguracionesState createState() => _ConfiguracionesState();
-}
-
-class _ConfiguracionesState extends State<Configuraciones> {
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      child: Column(
-        children: [
-          BarRepartidor(
-              nombre: "Garrafones",
-              avatar:
-                  "https://aquaclyva.mx/wp-content/uploads/2018/03/garrafon-19l-1.jpg"),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            width: size.width * 0.8,
-            child: Text(
-              'Promociones',
-              style: texttitle2,
-              textScaleFactor: 1.1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class HomeWidget extends StatefulWidget {
-  const HomeWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _HomeWidgetState createState() => _HomeWidgetState();
-}
-
-class _HomeWidgetState extends State<HomeWidget> {
-  /// Tracks if the animation is playing by whether controller is running.
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          BarRepartidor(
-            nombre: context.watch<User>().getnombre,
-            avatar: context.watch<User>().getavatar,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-            child: Text(
-              'Puntos totales',
-              style: texttitle2,
-              textScaleFactor: 1.3,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset(
-                  "assets/icons/coins.svg",
-                  width: MediaQuery.of(context).size.width * 0.15,
-                  height: MediaQuery.of(context).size.height * 0.15,
-                ),
-              ),
-              Text(
-                'x ' + context.watch<User>().getpuntos.toString(),
-                style: texttitle2,
-                textScaleFactor: 2,
-              ),
-            ],
-          ),
-          TextButton(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyRiveTest())),
-              child: Text('¿Como gano puntos?'))
-        ],
-      ),
-    );
-  }
-}
-
-class BarRepartidor extends StatelessWidget {
-  const BarRepartidor({
-    Key key,
-    @required this.nombre,
-    @required this.avatar,
-  }) : super(key: key);
-
-  final String nombre;
-  final String avatar;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-        child: Card(
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  this.nombre,
-                  style: textsubtitle,
-                  textScaleFactor: 1.1,
-                ),
-                Text(
-                  'Repartidor',
-                  style: textsubtitlemini,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CircleAvatar(
-                  radius: size.aspectRatio * 80,
-                  backgroundImage: NetworkImage(avatar),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );

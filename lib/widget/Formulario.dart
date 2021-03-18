@@ -34,15 +34,10 @@ class _FormularioState extends State<Formulario> {
     setState(() => showtextpassword = !showtextpassword);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> startLogin(BuildContext context) async {
     SharedPreferences disk = await SharedPreferences.getInstance();
     await http.post(
-        Uri.parse("http://192.168.0.8/lacondesa/php/obtener_repartidor.php"),
+        Uri.parse("http://192.168.0.4/lacondesa/php/obtener_repartidor.php"),
         body: {
           "nombre": nombreInput.text,
           "clave": claveinput.text,
@@ -52,30 +47,39 @@ class _FormularioState extends State<Formulario> {
           setState(() => status = "No se encuentra el usuario");
         } else {
           setState(() => status = "Redirigidiendo...");
+
+          /** Decodificando el json repuesta */
           final body = json.decode(resulta.body);
+          final String rutaimg =
+              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/";
+
+          /** Almacenando datos de sesión en la clase User con ChangeNotifier */
           context.read<User>().setnombre = body[0]['nombreRepartidor'];
-          context.read<User>().setavatar =
-              "http://192.168.0.8/lacondesa/php/ReProfilesimgs/" +
-                  body[0]['img_profile'];
+          context.read<User>().setavatar = rutaimg + body[0]['img_profile'];
           context.read<User>().setisLogin = true;
           context.read<User>().setpuntos = "0";
           context.read<User>().setid = int.parse(body[0]['idRepartidores']);
+
           //guardamos el estado de inicio de sesion en el disco.
           await disk.setString('nombrekey', body[0]['nombreRepartidor']);
-          await disk.setString(
-              'avatarkey',
-              "http://192.168.0.8/lacondesa/php/ReProfilesimgs/" +
-                  body[0]['img_profile']);
+          await disk.setString('avatarkey', rutaimg + body[0]['img_profile']);
           await disk.setBool('isloginkey', true);
+          await disk.setString('idkey', body[0]['idRepartidores']);
+          await disk.setString('puntoskey', '0');
           //
-          context.read<User>().initial();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Home(),
+          //context.read<User>().initial();
+          Future.delayed(
+            const Duration(seconds: 2),
+            () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Home(),
+              ),
             ),
           );
-          print(body[0]['nombreRepartidor']);
+          print("Metodo <startLogin()> : API => " +
+              body[0]['idRepartidores'] +
+              body[0]['nombreRepartidor']);
         }
       } else {
         setState(() => status = "No fue posible conectar con el servidor.");
@@ -92,7 +96,7 @@ class _FormularioState extends State<Formulario> {
           textbox(
             nombreInput: nombreInput,
             textlabel: "Nombre de Usuario",
-            errorlabel: "Por favor ingrese un nombre valido",
+            errorlabel: "Por favor ingresé un nombre válido",
             prefixicono: Icon(
               LineIcons.userAlt,
               color: secundarycolor,

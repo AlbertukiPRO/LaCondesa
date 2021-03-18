@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lacondesa/pages/Home.dart';
+import 'package:lacondesa/main.dart';
 import 'package:lacondesa/variables/User.dart';
+import 'package:lacondesa/widget/Bar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,6 +76,8 @@ class _ListaState extends State<Lista> {
             onTap: () {
               context.read<User>().setisLogin = null;
               closesecion();
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp()));
             },
           ),
         ],
@@ -87,6 +90,8 @@ class _ListaState extends State<Lista> {
     await disk.remove('isloginkey');
     await disk.remove('nombrekey');
     await disk.remove('avatarkey');
+    await disk.remove('idkey');
+    await disk.remove('puntoskey');
   }
 }
 

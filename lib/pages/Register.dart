@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lacondesa/pages/Home.dart';
+import 'package:lacondesa/pages/Login.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/ButtonForm.dart';
@@ -45,7 +45,7 @@ class _RegisterState extends State<Register> {
   }
 
   static final String uploadEndPoint =
-      'http://192.168.0.8/lacondesa/php/registro_repartidor.php';
+      'http://192.168.0.4/lacondesa/php/registro_repartidor.php';
   final picker = ImagePicker();
   String status = "";
   File _images;
@@ -128,7 +128,7 @@ class _RegisterState extends State<Register> {
           },
           child: succesfull == false
               ? Container(
-                  height: size.height,
+                  height: size.height * 2,
                   width: double.infinity,
                   child: Stack(
                     alignment: Alignment.topCenter,
@@ -139,7 +139,7 @@ class _RegisterState extends State<Register> {
                       Positioned(
                         top: 70,
                         child: Container(
-                          height: size.height * 1,
+                          height: size.height * 2,
                           width: size.width,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -416,12 +416,12 @@ class _RegisterState extends State<Register> {
                         onPressed: () {
                           context.read<User>().setnombre = nombreInput.text;
                           context.read<User>().setavatar =
-                              "http://192.168.0.8/lacondesa/php/ReProfilesimgs/" +
+                              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
                                   nombreImageAvatar;
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const Home(),
+                              builder: (context) => const Login(),
                             ),
                           );
                         },
