@@ -57,7 +57,10 @@ class _RegisterState extends State<Register> {
   String nombreImageAvatar = "";
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
 
     setState(() {
       if (pickedFile != null) {
@@ -77,7 +80,7 @@ class _RegisterState extends State<Register> {
   }
 
   startUpload() {
-    setStatus('Uploading Image...');
+    setStatus('Cargando datos...');
     if (null == tmpFile) {
       setStatus(errMessage);
       return;
@@ -345,6 +348,9 @@ class _RegisterState extends State<Register> {
                                               fontWeight: FontWeight.w500,
                                               fontSize: 20.0,
                                             ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
                                           ),
                                           InkWell(
                                             borderRadius:

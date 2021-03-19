@@ -40,6 +40,7 @@ dependencies:
   provider: ^4.3.3
   shared_preferences: 2.0.5
   barcode_scan: ^3.0.1
+  qr_code_scanner: ^0.3.5
 
 dev_dependencies:
   flutter_test:

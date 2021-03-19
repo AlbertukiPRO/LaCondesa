@@ -58,7 +58,7 @@ class _FormularioState extends State<Formulario> {
           context.read<User>().setavatar = rutaimg + body[0]['img_profile'];
           context.read<User>().setisLogin = true;
           context.read<User>().setpuntos = "0";
-          context.read<User>().setid = int.parse(body[0]['idRepartidores']);
+          context.read<User>().setid = body[0]['idRepartidores'];
 
           //guardamos el estado de inicio de sesion en el disco.
           await disk.setString('nombrekey', body[0]['nombreRepartidor']);

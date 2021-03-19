@@ -57,10 +57,10 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             return snapshot.hasData
                 ? snapshot.data == false
-                    ? Login()
-                    : Home()
+                    ? const Login()
+                    : const Home()
                 : Center(
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   );
           },
         ),

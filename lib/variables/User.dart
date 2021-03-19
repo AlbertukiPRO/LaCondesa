@@ -21,7 +21,7 @@ class User with ChangeNotifier {
   }
 
   set setid(data) {
-    this.idRepartidor = data;
+    this.idRepartidor = int.parse(data);
     notifyListeners();
   }
 

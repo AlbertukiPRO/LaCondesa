@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'Garrafones.dart';
 import 'HomeWidget.dart';
+import 'QR_Lector.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -119,7 +120,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const LectorQR(),
+                builder: (context) => const QRLector(),
               ),
             );
           },
