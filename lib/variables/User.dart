@@ -11,6 +11,7 @@ class User with ChangeNotifier {
   bool themeLight = true;
   bool islectorQR = false;
   double preciogarrafon;
+  double pay;
   // SETTERS OF REPARTIDORES */
 
   void initial() async {
@@ -65,6 +66,11 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
+  set setPay(data) {
+    this.pay = data;
+    notifyListeners();
+  }
+
   /// GETTERS OF REPARTIDORES  */
 
   int get getid => this.idRepartidor;
@@ -76,4 +82,5 @@ class User with ChangeNotifier {
   bool get geThemeLigth => this.themeLight;
   bool get getislectorQR => this.islectorQR;
   double get getpreciogarrafon => this.preciogarrafon;
+  double get getPay => this.pay;
 }

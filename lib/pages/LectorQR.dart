@@ -199,9 +199,10 @@ class _IuQRlectorrState extends State<IuQRlector> {
     }
   }
 
-  Future addventa(int idR, int idC, int countGarr, double total) async {
+  addventa(int idR, int idC, int countGarr, double total) async {
     bool estatus;
-    await http.post(Uri.parse(""), body: {
+    await http
+        .post(Uri.parse("https://enfastmx.com/lacondesa/add_venta.php"), body: {
       "idCliten": idC,
       "idRepartido": idR,
       "countGarrafones": countGarr,

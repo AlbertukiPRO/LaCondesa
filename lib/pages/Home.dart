@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lacondesa/pages/LectorQR.dart';
 import 'package:lacondesa/pages/Settings.dart';
 import 'package:lacondesa/pages/Ventas.dart';
 import 'package:lacondesa/variables/User.dart';
@@ -100,7 +99,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     context.read<User>().setavatar = disk.getString('avatarkey');
     context.read<User>().setisLogin = true;
     context.read<User>().setid = disk.getString('idkey');
-    context.read<User>().setpuntos = disk.getString('puntoskey');
     print("Logeado como = " +
         disk.getString('nombrekey') +
         disk.getString('avatarkey'));
@@ -178,7 +176,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
             Positioned(
               top: 70,
-              child: tabs[_selectedIndex],
+              child: SingleChildScrollView(child: tabs[_selectedIndex]),
             ),
           ],
         ),

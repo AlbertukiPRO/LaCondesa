@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lacondesa/variables/BuilderPromos.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Bar.dart';
 
@@ -25,6 +26,7 @@ class Garrafones extends StatelessWidget {
               textScaleFactor: 1.1,
             ),
           ),
+          Container(child: const GetPromos()),
         ],
       ),
     );

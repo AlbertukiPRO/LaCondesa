@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +33,6 @@ class _RegisterState extends State<Register> {
   TextEditingController phoneInput = new TextEditingController();
   TextEditingController claveinput = new TextEditingController();
   TextEditingController claveinputrepete = new TextEditingController();
-  TextEditingController direccionInput = new TextEditingController();
 
   void showpassword() {
     setState(() => showtextpassword = !showtextpassword);
@@ -45,7 +46,7 @@ class _RegisterState extends State<Register> {
   }
 
   static final String uploadEndPoint =
-      'http://192.168.0.4/lacondesa/php/registro_repartidor.php';
+      'https://enfastmx.com/lacondesa/registro_repartidor.php';
   final picker = ImagePicker();
   String status = "";
   File _images;
@@ -79,41 +80,97 @@ class _RegisterState extends State<Register> {
     });
   }
 
-  startUpload() {
-    setStatus('Cargando datos...');
+  Future _ackAlert(BuildContext context, String title, String cuerpo) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title),
+              Icon(Icons.warning_amber_rounded, size: 25),
+            ],
+          ),
+          content: Text(cuerpo),
+          actions: [
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Aceptar'),
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  startUpload(BuildContext context) {
+    setStatus('Cargando datos..');
     if (null == tmpFile) {
       setStatus(errMessage);
       return;
     }
     String fileName = tmpFile.path.split('/').last;
     print(fileName);
-    upload(fileName);
-    print(fileName);
+    upload(fileName, context);
     setState(() => nombreImageAvatar = fileName);
   }
 
-  upload(String fileName) {
-    http.post(Uri.parse(uploadEndPoint), body: {
-      "image": base64Image,
-      "name": fileName,
-      "nombre": nombreInput.text,
-      "phone": phoneInput.text,
-      "clave": claveinput.text,
-      "direccion": direccionInput.text,
-    }).then((result) {
-      setStatus(result.statusCode == 200 ? result.body : errMessage);
-      print(result.body);
-      if (result.body == "ok") {
-        setState(() => succesfull = !succesfull);
-      } else {
-        setState(() {
-          errorregiter = true;
-          setStatus(result.body);
-        });
-      }
-    }).catchError((error) {
-      setStatus(error.toString());
-    });
+  upload(String fileName, context) {
+    try {
+      http
+          .post(Uri.parse(uploadEndPoint), body: {
+            "image": base64Image,
+            "name": fileName,
+            "nombre": nombreInput.text,
+            "phone": phoneInput.text,
+            "clave": claveinput.text,
+          })
+          .then((conect) {
+            if (conect.statusCode == 200) {
+              print("Register <starupload> => " + conect.body);
+              if (conect.body == "ok") {
+                setState(() => succesfull = !succesfull);
+              } else {
+                setState(() {
+                  errorregiter = true;
+                  _ackAlert(context, "Upps !!!",
+                      "Estamos tienido problemas intentalo mas tarde");
+                });
+              }
+            } else {
+              _ackAlert(
+                  context,
+                  "Sin conexion",
+                  "No pudimos conectar con los servidores de la condesa verifica tu conexion. \n " +
+                      conect.body.toString());
+              setState(() => errorregiter = true);
+            }
+          })
+          .timeout(Duration(seconds: 40))
+          .catchError((error) {
+            _ackAlert(
+                context,
+                "Tiempo de espera superado",
+                "El servidor tardo mucho en responder, comprueba tu conexion o intentalo mas tarde.\n error:" +
+                    error.toString());
+            setState(() => errorregiter = true);
+          });
+    } on TimeoutException catch (e) {
+      setStatus(
+          "La conexion tardo demasiado \n codigo de error:" + e.toString());
+      setState(() => errorregiter = true);
+    } on Error catch (e) {
+      setStatus(
+          "Parece que estamos teniedo problemas revisa tu conexion a internet, codigo de error: " +
+              e.toString());
+      setState(() => errorregiter = true);
+    }
   }
 
   @override
@@ -131,7 +188,7 @@ class _RegisterState extends State<Register> {
           },
           child: succesfull == false
               ? Container(
-                  height: size.height * 1.5,
+                  height: size.height,
                   width: double.infinity,
                   child: Stack(
                     alignment: Alignment.topCenter,
@@ -271,19 +328,6 @@ class _RegisterState extends State<Register> {
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          textbox(
-                                            nombreInput: direccionInput,
-                                            textlabel: "Domicilio actual",
-                                            errorlabel:
-                                                "La direccion no es valida",
-                                            prefixicono: Icon(
-                                              LineIcons.mapMarked,
-                                              color: secundarycolor,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -337,18 +381,9 @@ class _RegisterState extends State<Register> {
                                                     ),
                                             ],
                                           ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                            status,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.green,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20.0,
-                                            ),
-                                          ),
+                                          status != ""
+                                              ? CircularProgressIndicator()
+                                              : Text(''),
                                           SizedBox(
                                             height: 20,
                                           ),
@@ -361,7 +396,7 @@ class _RegisterState extends State<Register> {
                                               if (_formkeyRegiter.currentState
                                                   .validate()) {
                                                 // Si el formulario es válido, queremos mostrar un Snackbar
-                                                startUpload();
+                                                startUpload(context);
                                               }
                                             },
                                             child: errorregiter == false
@@ -372,7 +407,7 @@ class _RegisterState extends State<Register> {
                                                   )
                                                 : const ButtonForm(
                                                     txtbutton:
-                                                        'Tenemos problemas intentalo despues',
+                                                        'No se pudo registrar',
                                                     colorbtn: contraste,
                                                   ),
                                           ),
@@ -422,7 +457,7 @@ class _RegisterState extends State<Register> {
                         onPressed: () {
                           context.read<User>().setnombre = nombreInput.text;
                           context.read<User>().setavatar =
-                              "http://192.168.0.4/lacondesa/php/ReProfilesimgs/" +
+                              "https://enfastmx.com/lacondesa/ReProfilesimgs/" +
                                   nombreImageAvatar;
                           Navigator.push(
                             context,
@@ -457,3 +492,5 @@ class _RegisterState extends State<Register> {
     );
   }
 }
+
+class TextButtton {}

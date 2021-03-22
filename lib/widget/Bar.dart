@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lacondesa/pages/Profile.dart';
 import 'package:lacondesa/variables/styles.dart';
@@ -29,11 +30,12 @@ class BarRepartidor extends StatelessWidget {
                 Text(
                   this.nombre == null ? "" : this.nombre,
                   style: textsubtitle,
-                  textScaleFactor: 1.1,
+                  textScaleFactor: 1.4,
                 ),
                 Text(
                   'Repartidor',
                   style: textsubtitlemini,
+                  textScaleFactor: 1.3,
                 ),
                 SizedBox(
                   height: 20,
@@ -43,9 +45,23 @@ class BarRepartidor extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const Profile())),
                   child: Hero(
                     tag: 'fotoprofile',
-                    child: CircleAvatar(
-                      radius: size.aspectRatio * 80,
-                      backgroundImage: NetworkImage(avatar),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: CircleAvatar(
+                        radius: size.aspectRatio * 80,
+                        child: CachedNetworkImage(
+                          imageUrl: avatar,
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
                     ),
                   ),
                 ),

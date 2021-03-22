@@ -4,7 +4,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="La condesa"
-        android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="false"
         android:icon="@mipmap/launcher_icon">
         <activity
