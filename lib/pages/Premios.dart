@@ -42,7 +42,7 @@ class _PremiosState extends State<Premios> {
                 ),
                 width: size.width * 0.6,
                 child: Text(
-                  'Felizades se ha ganado un premio',
+                  'Felicidades se ha ganado un premio',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontFamily: 'SFBlack', color: Color(0xFF6F1E51)),

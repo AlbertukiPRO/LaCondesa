@@ -170,7 +170,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
             TextButton(
               onPressed: () => null,
-              child: Text('¿Como gano puntos?'),
+              child: Text('Los puntos se reiniciar diariamente'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),

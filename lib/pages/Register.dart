@@ -110,7 +110,7 @@ class _RegisterState extends State<Register> {
   }
 
   startUpload(BuildContext context) {
-    setStatus('Cargando datos..');
+    setStatus('Listo.');
     if (null == tmpFile) {
       setStatus(errMessage);
       return;
@@ -140,14 +140,14 @@ class _RegisterState extends State<Register> {
                 setState(() {
                   errorregiter = true;
                   _ackAlert(context, "Upps !!!",
-                      "Estamos tienido problemas intentalo mas tarde");
+                      "Estamos teniendo problemas inténtalo más tarde");
                 });
               }
             } else {
               _ackAlert(
                   context,
-                  "Sin conexion",
-                  "No pudimos conectar con los servidores de la condesa verifica tu conexion. \n " +
+                  "Sin conexión",
+                  "No pudimos conectar con los servidores de la condesa verifica tu conexión. \n " +
                       conect.body.toString());
               setState(() => errorregiter = true);
             }
@@ -157,7 +157,7 @@ class _RegisterState extends State<Register> {
             _ackAlert(
                 context,
                 "Tiempo de espera superado",
-                "El servidor tardo mucho en responder, comprueba tu conexion o intentalo mas tarde.\n error:" +
+                "El servidor tardo mucho en responder, comprueba tu conexión o inténtalo más tarde.\n error:" +
                     error.toString());
             setState(() => errorregiter = true);
           });
@@ -214,7 +214,7 @@ class _RegisterState extends State<Register> {
                                     Text(
                                       'Registro',
                                       style: textsubtitle,
-                                      textScaleFactor: 1.5,
+                                      textScaleFactor: 2,
                                     ),
                                     Text(
                                       'Repartidores',
@@ -310,7 +310,7 @@ class _RegisterState extends State<Register> {
                                                 LineIcons.mobilePhone,
                                                 color: secundarycolor,
                                               ),
-                                              labelText: "Numero telefonico",
+                                              labelText: "Numero telefónico",
                                               contentPadding: EdgeInsets.only(
                                                   top: 20, bottom: 20),
                                             ),
@@ -321,7 +321,7 @@ class _RegisterState extends State<Register> {
                                             // ignore: missing_return
                                             validator: (String valor) {
                                               if (valor.isEmpty) {
-                                                return "numero telefonico no valido";
+                                                return "Numero telefónico no valido";
                                               }
                                             },
                                           ),
@@ -342,7 +342,7 @@ class _RegisterState extends State<Register> {
                                                             .spaceBetween,
                                                     children: [
                                                       Text(
-                                                        'Subir fotografia',
+                                                        'Subir fotografía',
                                                         textAlign:
                                                             TextAlign.center,
                                                       ),
@@ -396,13 +396,21 @@ class _RegisterState extends State<Register> {
                                               if (_formkeyRegiter.currentState
                                                   .validate()) {
                                                 // Si el formulario es válido, queremos mostrar un Snackbar
-                                                startUpload(context);
+                                                if (claveinput.text ==
+                                                    claveinputrepete.text) {
+                                                  startUpload(context);
+                                                } else {
+                                                  _ackAlert(
+                                                      context,
+                                                      "Problemas",
+                                                      "Las contraseñas no son validas por favor verifique que sean iguales");
+                                                }
                                               }
                                             },
                                             child: errorregiter == false
                                                 ? const ButtonForm(
                                                     txtbutton:
-                                                        'Registrame ahora',
+                                                        'Regístrame ahora',
                                                     colorbtn: contraste,
                                                   )
                                                 : const ButtonForm(

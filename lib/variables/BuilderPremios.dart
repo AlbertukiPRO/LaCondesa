@@ -331,7 +331,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        'Udted recibirar.',
+                                        'Usted recibirá',
                                         style: textsubtitlemini,
                                       ),
                                       TextButton(
@@ -375,7 +375,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                           height: 50,
                                         ),
                                         Text(
-                                          'Usted a perdido ${widget.puntosReque}',
+                                          'Usted a canjeado ${widget.puntosReque}',
                                           style: texttitle2,
                                           textAlign: TextAlign.center,
                                         )

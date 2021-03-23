@@ -69,7 +69,7 @@ class _ListaState extends State<Lista> {
         children: <Widget>[
           ListTile(
             leading: Icon(Icons.wifi_lock),
-            title: Text('Ahorro de datos'),
+            title: Text('Ahorro de datos [No disponible]'),
             onTap: () {
               print('get location');
             },

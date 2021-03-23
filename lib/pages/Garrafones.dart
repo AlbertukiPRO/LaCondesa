@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/variables/BuilderPromos.dart';
+import 'package:lacondesa/variables/User.dart';
+import 'package:provider/provider.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Bar.dart';
 import 'package:lacondesa/widget/NavBar.dart';
@@ -26,6 +28,16 @@ class Garrafones extends StatelessWidget {
                     "https://aquaclyva.mx/wp-content/uploads/2018/03/garrafon-19l-1.jpg"),
             SizedBox(
               height: 10,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              alignment: Alignment.center,
+              width: size.width,
+              child: TextButton(
+                onPressed: () => null,
+                child: Text('Precio actual de la recarga: \$' +
+                    context.watch<User>().getcostoRecarga.toString()),
+              ),
             ),
             Container(
               width: size.width * 0.8,

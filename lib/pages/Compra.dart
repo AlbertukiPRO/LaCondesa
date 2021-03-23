@@ -8,6 +8,7 @@ import 'package:lacondesa/variables/styles.dart';
 import 'package:rive/rive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class IuQRlector extends StatefulWidget {
@@ -28,7 +29,7 @@ class IuQRlector extends StatefulWidget {
 
 class _IuQRlectorrState extends State<IuQRlector> {
   int countgarrafones = 1;
-  double preciogarrafon = 20;
+  double preciogarrafon = 0;
   double preciotal = 0;
 
   upgarrafon() {
@@ -97,12 +98,12 @@ class _IuQRlectorrState extends State<IuQRlector> {
       print(response.body.toString());
       if (response.body == "nothing") {
         setState(() {
-          mensanje = "No se pudo realisar la compra";
+          mensanje = "No se pudo realizar la compra";
           estatus = true;
         });
       } else if (response.body == "ok") {
         setState(() {
-          mensanje = "Compra realisaza";
+          mensanje = "Compra realizada";
           closedialog = !closedialog;
           estatus = true;
         });
@@ -117,6 +118,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    this.preciogarrafon = context.watch<User>().getpreciogarrafon;
     return new Scaffold(
       bottomNavigationBar: InkWell(
         onTap: () {
@@ -141,7 +143,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Comfirmar compra',
+                  'Confirmar compra',
                   style: texttitle,
                   textScaleFactor: 1.5,
                 ),
@@ -156,25 +158,26 @@ class _IuQRlectorrState extends State<IuQRlector> {
             )),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
         child: Stack(
           children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
               width: size.width,
-              height: size.height,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    height: 20,
+                    height: 40,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Venta de Garrafon',
+                        'Venta de Garrafón',
                         style: TextStyle(
                             fontFamily: 'SFSemibold', color: primarycolor),
                         textScaleFactor: 2,
@@ -189,6 +192,9 @@ class _IuQRlectorrState extends State<IuQRlector> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -215,11 +221,14 @@ class _IuQRlectorrState extends State<IuQRlector> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Total de puntos acumulados'),
+                      Text('Total, de puntos acumulados'),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +251,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Container(
                     color: Colors.white,
@@ -300,13 +309,16 @@ class _IuQRlectorrState extends State<IuQRlector> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Text(
-                    'Seleccione el numero de Garrafones:',
+                    'Seleccione el número de Garrafones:',
                     style: texttitle2,
                     textScaleFactor: 1.2,
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Container(
                     width: size.width,
@@ -385,7 +397,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -438,7 +450,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
                             height: 80,
                           ),
                           Text(
-                              "Gracias por su compra \nUsted a sumado un punto a su cuenta un punto. En total tiene:\n"),
+                              "Gracias por su compra. \nUsted a sumado un punto a su cuenta. En total tiene:\n"),
                           TextButton(
                               onPressed: () => null,
                               child: Text(
@@ -448,7 +460,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
                                 style: TextStyle(color: contraste),
                                 textScaleFactor: 1.5,
                               )),
-                          Text('Gracias !!!'),
+                          Text('¡¡¡Gracias!!!'),
                         ],
                       ),
                       actions: [

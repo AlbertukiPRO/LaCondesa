@@ -64,7 +64,7 @@ class GetVentas extends StatelessWidget {
               return Center(
                 child: TextButton(
                   onPressed: () => null,
-                  child: Text('Comprueba tu conexion'),
+                  child: Text('Comprueba tu conexión'),
                 ),
               );
             case ConnectionState.waiting:
@@ -113,7 +113,7 @@ class VentasList extends StatelessWidget {
                     TextButton(
                       onPressed: () => null,
                       child: Text(
-                        'Codigo de venta: #CONSA.${lista[index].idVenta}',
+                        'Código de venta: #CONSA.${lista[index].idVenta}',
                       ),
                     ),
                     Text(

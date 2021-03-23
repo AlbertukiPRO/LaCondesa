@@ -107,7 +107,7 @@ class _QRLectorState extends State<QRLector> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Este codigo no funciona',
+                                      'Este código no funciona',
                                       textAlign: TextAlign.center,
                                     ),
                                     Icon(Icons.not_interested_sharp),
@@ -126,7 +126,7 @@ class _QRLectorState extends State<QRLector> {
                           )
                     : Center(child: CircularProgressIndicator());
               })
-          : Text('jd'),
+          : Text(''),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       body: Stack(
         alignment: Alignment.topCenter,

@@ -95,7 +95,7 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           child: Text(
-                            'Ver terminos y condiciones',
+                            'Ver términos y condiciones',
                             style: TextStyle(
                               color: textcolorsubtitle,
                               decoration: TextDecoration.underline,
@@ -138,7 +138,7 @@ class _LoginState extends State<Login> {
                       child: AlertDialog(
                         title: Text('Bienvenido a purificadora la condesa'),
                         content: Text(
-                          'Al ser miembro de purificadora la condesa tendras beneficios asombrosos pero primero deberas registrarte',
+                          'Al ser miembro de purificadora la condesa tendrás beneficios asombrosos, pero primero deberás registrarte',
                           textAlign: TextAlign.justify,
                         ),
                         actions: [
