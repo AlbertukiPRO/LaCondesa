@@ -12,6 +12,8 @@ class User with ChangeNotifier {
   bool islectorQR = false;
   double preciogarrafon;
   double pay;
+  int minimopunto;
+  double costoRecarga;
   // SETTERS OF REPARTIDORES */
 
   void initial() async {
@@ -71,6 +73,16 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
+  set setMinpoint(data) {
+    this.minimopunto = data;
+    notifyListeners();
+  }
+
+  set setCostoRecarga(data) {
+    this.costoRecarga = data;
+    notifyListeners();
+  }
+
   /// GETTERS OF REPARTIDORES  */
 
   int get getid => this.idRepartidor;
@@ -83,4 +95,6 @@ class User with ChangeNotifier {
   bool get getislectorQR => this.islectorQR;
   double get getpreciogarrafon => this.preciogarrafon;
   double get getPay => this.pay;
+  int get getMinPoint => this.minimopunto;
+  double get getcostoRecarga => this.costoRecarga;
 }

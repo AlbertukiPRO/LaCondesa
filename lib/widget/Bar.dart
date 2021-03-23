@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:lacondesa/pages/Profile.dart';
 import 'package:lacondesa/variables/styles.dart';
 
 class BarRepartidor extends StatelessWidget {
@@ -43,8 +41,6 @@ class BarRepartidor extends StatelessWidget {
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(50),
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Profile())),
                   child: Hero(
                     tag: 'fotoprofile',
                     child: ClipRRect(

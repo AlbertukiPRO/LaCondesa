@@ -17,6 +17,9 @@ class Garrafones extends StatelessWidget {
         ),
         Column(
           children: [
+            SizedBox(
+              height: 70,
+            ),
             BarRepartidor(
                 nombre: "Garrafones",
                 avatar:

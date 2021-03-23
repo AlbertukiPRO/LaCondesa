@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 /* Estilos para los parrafos textos y titulos */
-const textligth = TextStyle(
-  fontFamily: 'SFLigera',
-);
+const textligth = TextStyle(fontFamily: 'SFLigera', color: primarycolor);
 
 const titleapp = "Purificadora la Condesa";
 

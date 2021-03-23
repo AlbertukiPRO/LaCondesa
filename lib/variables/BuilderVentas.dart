@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:lacondesa/variables/User.dart';
+import 'package:provider/provider.dart';
 import 'package:lacondesa/variables/styles.dart';
 
-Future<List<Ventas>> fetch(http.Client cliente) async {
-  final response = await cliente.post(
-      Uri.parse("https://enfastmx.com/lacondesa/get_ventas.php"),
-      body: {});
+Future<List<Ventas>> fetch(http.Client cliente, String idrepa) async {
+  final response = await cliente
+      .post(Uri.parse("https://enfastmx.com/lacondesa/get_ventas.php"), body: {
+    "identificador": idrepa,
+  });
 
   return compute(parseItem, response.body);
 }
@@ -20,29 +24,27 @@ List<Ventas> parseItem(String responseBody) {
 }
 
 class Ventas {
-  final String id;
-  final String nombre;
-  final String img;
-  final String precioviejo;
-  final String precionuevo;
-  final String descripcion;
+  final String cliente;
+  final String numeroGarrafones;
+  final String fecha;
+  final String total;
+  final String idVenta;
 
-  Ventas(
-      {this.precioviejo,
-      this.precionuevo,
-      this.id,
-      this.nombre,
-      this.img,
-      this.descripcion});
+  Ventas({
+    this.cliente,
+    this.numeroGarrafones,
+    this.fecha,
+    this.total,
+    this.idVenta,
+  });
 
   factory Ventas.fromJson(Map<String, dynamic> json) {
     return Ventas(
-      id: json['idOfertas'] as String,
-      nombre: json['NombreOferta'] as String,
-      img: json['imgoferta'] as String,
-      descripcion: json['descripcion'] as String,
-      precioviejo: json['precioViejo'] as String,
-      precionuevo: json['precioNuevo'] as String,
+      numeroGarrafones: json['NumeroGarrafones'] as String,
+      total: json['totalventa'] as String,
+      fecha: json['fecha_venta'] as String,
+      cliente: json['nombreClientel'] as String,
+      idVenta: json['idVenta'] as String,
     );
   }
 }
@@ -54,78 +56,110 @@ class GetVentas extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: fetch(http.Client()),
+        future:
+            fetch(http.Client(), Provider.of<User>(context).getid.toString()),
         builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData
-              ? PromoList(lista: snapshot.data)
-              : CircularProgressIndicator();
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return Center(
+                child: TextButton(
+                  onPressed: () => null,
+                  child: Text('Comprueba tu conexion'),
+                ),
+              );
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+              return snapshot.hasData
+                  ? VentasList(lista: snapshot.data)
+                  : CircularProgressIndicator();
+            default:
+              return Center(child: Text(snapshot.data.toString()));
+          }
         },
       ),
     );
   }
 }
 
-class PromoList extends StatelessWidget {
+class VentasList extends StatelessWidget {
   final List<Ventas> lista;
-  PromoList({Key key, this.lista}) : super(key: key);
+  VentasList({Key key, this.lista}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: lista.length,
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-            child: InkWell(
-              onTap: () => print(lista[index].id),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(lista[index].img),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      shrinkWrap: true,
+      itemCount: lista.length,
+      itemBuilder: (context, index) {
+        return Card(
+          elevation: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => null,
+                      child: Text(
+                        'Codigo de venta: #CONSA.${lista[index].idVenta}',
+                      ),
+                    ),
+                    Text(
+                      'Cantidad de Garrafones: ${lista[index].numeroGarrafones}',
+                      style: subtext,
+                      textScaleFactor: 1,
+                    ),
+                    SvgPicture.asset(
+                      "assets/img/botella-de-agua.svg",
+                      width: MediaQuery.of(context).size.width * 0.1,
+                      height: MediaQuery.of(context).size.height * 0.1,
+                    ),
+                    Text(
+                      'Nombre del Cliente:',
+                      style: subtext,
+                      textScaleFactor: 1,
+                    ),
+                    Text(
+                      '${lista[index].cliente}:',
+                      style: textligth,
+                      textScaleFactor: 1,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          lista[index].nombre,
-                          style: textsubtitlemini,
-                          textScaleFactor: 1.2,
+                          'Total de la compra: ',
+                          style: subtext,
+                          textScaleFactor: 1,
                         ),
                         Text(
-                          'Precio viejo: \$' + lista[index].precioviejo,
-                          style: texttitle2,
+                          '\$${lista[index].total}',
+                          style: textligth,
+                          textScaleFactor: 1.8,
                         ),
                       ],
                     ),
-                  ),
-                  Text(
-                    'Ahora:',
-                    style: textsubtitlemini,
-                  ),
-                  Text(
-                    '\$' + lista[index].precionuevo,
-                    style: TextStyle(color: contraste),
-                    textScaleFactor: 1.4,
-                  )
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

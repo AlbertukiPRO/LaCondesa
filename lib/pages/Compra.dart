@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lacondesa/pages/Home.dart';
+import 'package:lacondesa/pages/Premios.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:rive/rive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -98,12 +98,13 @@ class _IuQRlectorrState extends State<IuQRlector> {
       if (response.body == "nothing") {
         setState(() {
           mensanje = "No se pudo realisar la compra";
+          estatus = true;
         });
       } else if (response.body == "ok") {
         setState(() {
           mensanje = "Compra realisaza";
           closedialog = !closedialog;
-          estatus = false;
+          estatus = true;
         });
       }
     }).catchError((onError) {
@@ -126,314 +127,360 @@ class _IuQRlectorrState extends State<IuQRlector> {
           print("llamando datos");
         },
         child: Container(
-          height: 100,
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-          decoration: BoxDecoration(
-            color: contraste,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+            height: 70,
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+            decoration: BoxDecoration(
+              color: contraste,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
             ),
-          ),
-          child: Text(
-            'Comfirmar compra',
-            style: texttitle,
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-            width: size.width,
-            height: size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 20,
+                Text(
+                  'Comfirmar compra',
+                  style: texttitle,
+                  textScaleFactor: 1.5,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Venta de Garrafon',
-                      style: TextStyle(
-                          fontFamily: 'SFSemibold', color: primarycolor),
-                      textScaleFactor: 2,
-                    ),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(50),
-                      onTap: () => Navigator.pop(context),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.black87,
-                        size: 20,
+                mensanje != ""
+                    ? estatus
+                        ? Icon(Icons.check, color: Colors.white)
+                        : CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          )
+                    : SizedBox(width: 1),
+              ],
+            )),
+      ),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+              width: size.width,
+              height: size.height,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Venta de Garrafon',
+                        style: TextStyle(
+                            fontFamily: 'SFSemibold', color: primarycolor),
+                        textScaleFactor: 2,
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(3.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: primarycolor,
+                      InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.black87,
+                          size: 20,
+                        ),
                       ),
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: primarycolor,
+                        ),
+                        child: Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      widget.nombre,
-                      style: textsubtitle,
-                      textScaleFactor: 1.5,
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Total de puntos acumulados'),
-                    Row(
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        widget.nombre,
+                        style: textsubtitle,
+                        textScaleFactor: 1.5,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Total de puntos acumulados'),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/coins.svg",
+                            width: 20,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            widget.puntos == "null" ? '0' : widget.puntos,
+                            style: texttitle2,
+                            textScaleFactor: 2,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          "assets/icons/coins.svg",
-                          width: 20,
-                          height: 20,
+                        TextButton(
+                          onPressed: () => null,
+                          child: int.parse(widget.puntos) >=
+                                  context.watch<User>().getMinPoint
+                              ? Text(
+                                  'Premios disponibles: 1',
+                                  style: textsubtitle,
+                                )
+                              : Text(
+                                  'Premios disponibles: 0',
+                                  style: texttitle,
+                                ),
+                        ),
+                        int.parse(widget.puntos) >=
+                                context.watch<User>().getMinPoint
+                            ? Container(
+                                width: size.width * 0.35,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Image.asset(
+                                      "assets/icons/regalo.gif",
+                                      fit: BoxFit.cover,
+                                      width: 80,
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: textcolorsubtitle,
+                                        size: 25,
+                                      ),
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Premios(
+                                            puntos: widget.puntos,
+                                            idcliente: widget.id,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : SizedBox(
+                                height: 1,
+                              ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    'Seleccione el numero de Garrafones:',
+                    style: texttitle2,
+                    textScaleFactor: 1.2,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'x ' + countgarrafones.toString(),
+                          style: textsubtitlemini,
+                          textScaleFactor: 2,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: _artboard != null
+                              ? Center(
+                                  child: Container(
+                                    width: 150,
+                                    height: 150,
+                                    child: Rive(
+                                      artboard: _artboard,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  child: SvgPicture.asset(
+                                    "assets/img/botella-de-agua.svg",
+                                    width: 150,
+                                    height: 150,
+                                  ),
+                                ),
+                        ),
+                        Column(
+                          children: [
+                            TextButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(secundarycolor),
+                                overlayColor:
+                                    MaterialStateProperty.all(contraste),
+                              ),
+                              onPressed: () {
+                                _loadRiveFile();
+                                upgarrafon();
+                              },
+                              child: Icon(
+                                Icons.expand_less_sharp,
+                                size: 40,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            TextButton(
+                              child: Icon(
+                                Icons.expand_more,
+                                size: 40,
+                                color: Colors.white,
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(secundarycolor),
+                                overlayColor:
+                                    MaterialStateProperty.all(contraste),
+                              ),
+                              onPressed: () => downgarrafon(),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          widget.puntos == "null" ? '0' : widget.puntos,
-                          style: texttitle2,
-                          textScaleFactor: 2,
-                        )
                       ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Row(
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Text(
+                        'Costo final de la compra:',
+                        style: textsubtitlemini,
+                        textScaleFactor: 1.2,
+                      ),
                       TextButton(
                         onPressed: () => null,
                         child: Text(
-                          'Premios disponibles: 0',
-                          style: subtext,
+                          '\$' + preciotal.toString(),
+                          textScaleFactor: 1.5,
                         ),
-                      ),
-                      Container(
-                        width: size.width * 0.35,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Image.asset(
-                              "assets/icons/regalo.gif",
-                              fit: BoxFit.cover,
-                              width: 80,
-                            ),
-                            InkWell(
-                              child: Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: textcolorsubtitle,
-                                size: 25,
-                              ),
-                            )
-                          ],
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Colors.deepOrangeAccent),
+                          overlayColor: MaterialStateProperty.all(contraste),
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.white),
                         ),
                       )
                     ],
                   ),
-                ),
-                Text(
-                  'Seleccione el numero de Garrafones:',
-                  style: texttitle2,
-                  textScaleFactor: 1.2,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'x ' + countgarrafones.toString(),
-                        style: textsubtitlemini,
-                        textScaleFactor: 2,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: _artboard != null
-                            ? Center(
-                                child: Container(
-                                  width: 150,
-                                  height: 150,
-                                  child: Rive(
-                                    artboard: _artboard,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                child: SvgPicture.asset(
-                                  "assets/img/botella-de-agua.svg",
-                                  width: 150,
-                                  height: 150,
-                                ),
-                              ),
-                      ),
-                      Column(
+                  estatus
+                      ? CircularProgressIndicator()
+                      : SizedBox(
+                          width: 1,
+                        ),
+                ],
+              ),
+            ),
+            closedialog
+                ? Container(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    margin: EdgeInsets.only(top: 150),
+                    child: AlertDialog(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(secundarycolor),
-                              overlayColor:
-                                  MaterialStateProperty.all(contraste),
-                            ),
-                            onPressed: () {
-                              _loadRiveFile();
-                              upgarrafon();
-                            },
-                            child: Icon(
-                              Icons.expand_less_sharp,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextButton(
-                            child: Icon(
-                              Icons.expand_more,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(secundarycolor),
-                              overlayColor:
-                                  MaterialStateProperty.all(contraste),
-                            ),
-                            onPressed: () => downgarrafon(),
-                          ),
+                          Text("Compra Realizada con exito"),
                         ],
                       ),
-                      SizedBox(
-                        width: 10,
+                      content: Column(
+                        children: [
+                          Image.asset(
+                            "assets/icons/success.gif",
+                            width: 80,
+                            height: 80,
+                          ),
+                          Text(
+                              "Gracias por su compra \nUsted a sumado un punto a su cuenta un punto. En total tiene:\n"),
+                          TextButton(
+                              onPressed: () => null,
+                              child: Text(
+                                '' +
+                                    (int.parse(widget.puntos) + countgarrafones)
+                                        .toString(),
+                                style: TextStyle(color: contraste),
+                                textScaleFactor: 1.5,
+                              )),
+                          Text('Gracias !!!'),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      'Total de la compra: \$',
-                      style: textsubtitlemini,
-                      textScaleFactor: 1.2,
-                    ),
-                    Text(
-                      '' + preciotal.toString(),
-                      style: textsubtitlemini,
-                      textScaleFactor: 1.4,
-                    ),
-                  ],
-                ),
-                estatus
-                    ? CircularProgressIndicator()
-                    : SizedBox(
-                        width: 1,
-                      ),
-              ],
-            ),
-          ),
-          closedialog
-              ? Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  margin: EdgeInsets.only(top: 150),
-                  child: AlertDialog(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Compra Realizada con exito"),
+                      actions: [
+                        InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Inicio'),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()));
+                          },
+                        ),
+                        InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('Cerrar'),
+                          ),
+                          onTap: () {
+                            closeAlertDialog();
+                          },
+                        )
                       ],
                     ),
-                    content: Column(
-                      children: [
-                        Image.asset(
-                          "assets/icons/success.gif",
-                          width: 80,
-                          height: 80,
-                        ),
-                        Text(
-                            "Gracias por su compra \nUsted a sumado un punto a su cuenta un punto. En total tiene:"),
-                        TextButton(
-                            onPressed: () => null,
-                            child: Text(
-                              widget.puntos,
-                              style: TextStyle(color: contraste),
-                              textScaleFactor: 1.5,
-                            )),
-                        Text('Gracias !!!'),
-                      ],
-                    ),
-                    actions: [
-                      InkWell(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Inicio'),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Home()));
-                        },
-                      ),
-                      InkWell(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Cerrar'),
-                        ),
-                        onTap: () {
-                          closeAlertDialog();
-                        },
-                      )
-                    ],
+                  )
+                : SizedBox(
+                    height: 0,
                   ),
-                )
-              : SizedBox(
-                  height: 0,
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:lacondesa/main.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/widget/Bar.dart';
+import 'package:lacondesa/widget/NavBar.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
@@ -15,17 +20,25 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          BarRepartidor(
-            nombre: "Configuraciones",
-            avatar: context.watch<User>().getavatar,
-          ),
-          const Lista(),
-        ],
-      ),
+    return Stack(
+      children: [
+        const NavBar(
+          backbutton: false,
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(
+              height: 70,
+            ),
+            BarRepartidor(
+              nombre: "Configuraciones",
+              avatar: context.watch<User>().getavatar,
+            ),
+            const Lista(),
+          ],
+        )
+      ],
     );
   }
 }
@@ -41,6 +54,9 @@ class Lista extends StatefulWidget {
 }
 
 class _ListaState extends State<Lista> {
+  final AsyncMemoizer<bool> _memoizer = AsyncMemoizer();
+  bool estatus = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,23 +68,29 @@ class _ListaState extends State<Lista> {
       child: ListView(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.map),
-            title: Text('Obtener Ubicación'),
+            leading: Icon(Icons.wifi_lock),
+            title: Text('Ahorro de datos'),
             onTap: () {
               print('get location');
             },
           ),
           ListTile(
-              leading: Icon(Icons.security),
-              title: context.watch<User>().geThemeLigth == false
-                  ? Text('Tema claro activado')
-                  : Text('Tema oscuro activado'),
-              onTap: () {
-                context.read<User>().setTheme = false;
-              }),
+            leading: estatus == false
+                ? Icon(Icons.update_outlined)
+                : Icon(Icons.system_update_tv),
+            title: Text('Actulizar precios'),
+            onTap: () {
+              setState(() => estatus = true);
+              getConfiguraciones(context);
+            },
+          ),
           ListTile(
-            leading: Icon(Icons.history),
+            leading: Icon(Icons.dashboard_customize),
             title: Text('Terminos y Condiciones'),
+          ),
+          ListTile(
+            leading: Icon(Icons.qr_code_sharp),
+            title: Text('Lector QR - Pruebas'),
           ),
           ListTile(
             leading: Icon(Icons.close),
@@ -83,6 +105,45 @@ class _ListaState extends State<Lista> {
         ],
       ),
     );
+  }
+
+  Future<bool> getConfiguraciones(context) async {
+    return this._memoizer.runOnce(() async {
+      try {
+        SharedPreferences disk = await SharedPreferences.getInstance();
+        http.Response response = await http.get(Uri.parse(
+            "https://enfastmx.com/lacondesa/get_configuraciones.php"));
+        if (response.statusCode == 200) {
+          var result = jsonDecode(response.body);
+          print(result);
+
+          Provider.of<User>(context, listen: false).setPreciogarrafon =
+              double.parse(result[0]['preciogr'].toString());
+          Provider.of<User>(context, listen: false).setMinpoint =
+              int.parse(result[0]['minpt'].toString());
+          Provider.of<User>(context, listen: false).setCostoRecarga =
+              double.parse(result[0]['recarga'].toString());
+
+          await disk.setDouble(
+              'keypreciogarr', double.parse(result[0]['preciogr'].toString()));
+          await disk.setInt(
+              'keyminpt', int.parse(result[0]['minpt'].toString()));
+          await disk.setDouble(
+              'keyrecarga', double.parse(result[0]['recarga'].toString()));
+
+          setState(() {
+            estatus = !estatus;
+          });
+        } else {
+          setState(() {
+            estatus = !estatus;
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+      return true;
+    });
   }
 
   closesecion() async {

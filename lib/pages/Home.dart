@@ -62,7 +62,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       Duration(seconds: 1),
       () => _animationController.forward(),
     );
-    buildProvier(context);
+    Provider.of<User>(context, listen: false).getid == null
+        ? buildProvier(context)
+        : print('');
   }
 
   int _selectedIndex = 0;
@@ -100,6 +102,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     context.read<User>().setavatar = disk.getString('avatarkey');
     context.read<User>().setisLogin = true;
     context.read<User>().setid = disk.getString('idkey');
+    context.read<User>().setCostoRecarga = disk.getDouble("keyrecarga");
+    context.read<User>().setMinpoint = disk.getInt("keyminpt");
+    context.read<User>().setPreciogarrafon = disk.getDouble("keypreciogarr");
     print("Logeado como = " +
         disk.getString('nombrekey') +
         disk.getString('avatarkey'));
