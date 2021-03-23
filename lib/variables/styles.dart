@@ -18,6 +18,8 @@ const textsubtitlemini =
 
 const texttitle2 = TextStyle(fontFamily: 'SFSemibold', color: textcolortitle);
 
+const subtext = TextStyle(fontFamily: 'SFRegular', color: textcolortitle);
+
 const gradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,

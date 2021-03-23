@@ -71,11 +71,13 @@ class _QRLectorState extends State<QRLector> {
                               elevation: 8,
                               backgroundColor: contraste,
                               child: Icon(Icons.arrow_forward_ios_outlined),
-                              onPressed: () {
+                              onPressed: () async {
+                                await controller.pauseCamera();
                                 var mydata = snapshot.data;
                                 print(mydata);
                                 print(mydata[0]['idCliente']);
                                 print(mydata[0]['nombreCliente']);
+                                print(mydata[0]['puntos']);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -85,17 +87,45 @@ class _QRLectorState extends State<QRLector> {
                                         nombre: '' +
                                             mydata[0]['nombreCliente']
                                                 .toString(),
-                                        puntos: '' +
-                                            mydata[0]['puntos'].toString()),
+                                        puntos: mydata[0]['puntos']
+                                                    .toString() ==
+                                                'null'
+                                            ? "null"
+                                            : mydata[0]['puntos'].toString()),
                                   ),
                                 );
+                                controller.dispose();
                               },
                             ),
                           )
                         : Center(
-                            child: Text('Nada'),
+                            child: Container(
+                              width: size.width * 0.5,
+                              child: TextButton(
+                                onPressed: () => null,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Este codigo no funciona',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Icon(Icons.not_interested_sharp),
+                                  ],
+                                ),
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.red[700]),
+                                  overlayColor:
+                                      MaterialStateProperty.all(contraste),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                ),
+                              ),
+                            ),
                           )
-                    : Text('Sin datos');
+                    : Center(child: CircularProgressIndicator());
               })
           : Text('jd'),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

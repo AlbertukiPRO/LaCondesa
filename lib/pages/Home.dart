@@ -176,7 +176,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
             Positioned(
               top: 70,
-              child: SingleChildScrollView(child: tabs[_selectedIndex]),
+              child: tabs[_selectedIndex],
             ),
           ],
         ),

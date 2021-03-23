@@ -72,29 +72,35 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  Future getDataPoints(BuildContext context) async {
+  Future getDataPoints(String id) async {
     try {
       http.Response response = await http.post(
           Uri.parse("https://enfastmx.com/lacondesa/getsaldoandpoints.php"),
           body: {
-            "idrepartidor": '1', //context.watch<User>().getid,
+            "idrepartidor": id,
           });
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
         print(result);
+
+        //context.read<User>().setpuntos =
+        //context.read<User>().setPay =
+
         return result;
+      } else {
+        return false;
       }
     } catch (e) {
       print(e);
     }
   }
 
-  Future getdatacosto(BuildContext context) async {
+  Future getdatacosto(String id) async {
     try {
       http.Response response = await http.post(
           Uri.parse("https://enfastmx.com/lacondesa/getsaldoandpoints.php"),
           body: {
-            "idrepartidor": '' + context.watch<User>().getid.toString(),
+            "idrepartidor": id,
           });
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
@@ -109,117 +115,123 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          BarRepartidor(
-            nombre: context.watch<User>().getnombre,
-            avatar: context.watch<User>().getavatar == null
-                ? "https://www.w3schools.com/howto/img_avatar2.png"
-                : context.watch<User>().getavatar,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-            child: Text(
-              'Puntos totales',
-              style: texttitle2,
-              textScaleFactor: 1.2,
-              textAlign: TextAlign.left,
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 1,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            BarRepartidor(
+              nombre: context.watch<User>().getnombre,
+              avatar: context.watch<User>().getavatar == null
+                  ? "https://www.w3schools.com/howto/img_avatar2.png"
+                  : context.watch<User>().getavatar,
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _artboard != null
-                    ? Center(
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          child: Rive(
-                            artboard: _artboard,
-                            fit: BoxFit.contain,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              child: Text(
+                'Puntos totales',
+                style: texttitle2,
+                textScaleFactor: 1.2,
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _artboard != null
+                      ? Center(
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            child: Rive(
+                              artboard: _artboard,
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(),
-              ),
-              FutureBuilder(
-                future: getDataPoints(context),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error'));
-                  }
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    var mydata = snapshot.data;
-                    context.read<User>().setpuntos =
-                        '' + mydata[0]['Puntos'].toString();
-                    return Center(
-                        child: Text(
-                      'x ${mydata[0]['Puntos']}',
-                      style: texttitle2,
-                      textScaleFactor: 2,
-                    ));
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              )
-            ],
-          ),
-          TextButton(
-            onPressed: () => null,
-            child: Text('¿Como gano puntos?'),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-            child: Text(
-              'Mi cuenta',
-              style: texttitle2,
-              textScaleFactor: 1.2,
-              textAlign: TextAlign.left,
+                        )
+                      : Container(),
+                ),
+                FutureBuilder(
+                  future: getDataPoints(
+                      Provider.of<User>(context, listen: false)
+                          .getid
+                          .toString()),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var mydata = snapshot.data;
+                      return Center(
+                          child: Text(
+                        'x ${mydata[0]['Puntos']}',
+                        style: texttitle2,
+                        textScaleFactor: 2,
+                      ));
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )
+              ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                "assets/icons/calculator.svg",
-                width: 100,
-                height: 100,
+            TextButton(
+              onPressed: () => null,
+              child: Text('¿Como gano puntos?'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              child: Text(
+                'Mi cuenta',
+                style: texttitle2,
+                textScaleFactor: 1.2,
+                textAlign: TextAlign.left,
               ),
-              FutureBuilder(
-                future: getdatacosto(context),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error'));
-                  }
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    var mydata = snapshot.data;
-                    context.read<User>().setPay =
-                        double.parse(mydata[0]['Ganancias'].toString());
-                    return Center(
-                        child: Text(
-                      '\$ ${mydata[0]['Ganancias']}',
-                      style: texttitle2,
-                      textScaleFactor: 2,
-                    ));
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: () => null,
-            child: Text('Estado de cuenta del dia de hoy'),
-          )
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  "assets/icons/calculator.svg",
+                  width: 100,
+                  height: 100,
+                ),
+                FutureBuilder(
+                  future: getdatacosto(Provider.of<User>(context, listen: false)
+                      .getid
+                      .toString()),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error'));
+                    }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var mydata = snapshot.data;
+                      return Center(
+                          child: Text(
+                        '\$ ${mydata[0]['Ganancias']}',
+                        style: texttitle2,
+                        textScaleFactor: 2,
+                      ));
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              ],
+            ),
+            TextButton(
+              onPressed: () => null,
+              child: Text('Estado de cuenta del dia de hoy'),
+            )
+          ],
+        ),
       ),
     );
   }

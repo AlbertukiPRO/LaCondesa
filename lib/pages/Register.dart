@@ -60,7 +60,7 @@ class _RegisterState extends State<Register> {
   Future getImage() async {
     final pickedFile = await picker.getImage(
       source: ImageSource.gallery,
-      imageQuality: 70,
+      imageQuality: 50,
     );
 
     setState(() {

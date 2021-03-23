@@ -8,7 +8,6 @@ class Profile extends StatelessWidget {
   const Profile({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Orientation ori = MediaQuery.of(context).orientation;
     Size size = MediaQuery.of(context).size;
     return new Scaffold(
       body: Container(
@@ -179,7 +178,6 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User provider = context.watch<User>();
     Size size = MediaQuery.of(context).size;
     return Container(
       alignment: Alignment.center,
