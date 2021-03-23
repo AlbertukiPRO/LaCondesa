@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lacondesa/pages/Profile.dart';
 import 'package:lacondesa/variables/styles.dart';
 
@@ -17,7 +18,7 @@ class BarRepartidor extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width,
+      width: size.width * 1,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: Card(
@@ -33,7 +34,7 @@ class BarRepartidor extends StatelessWidget {
                   textScaleFactor: 1.4,
                 ),
                 Text(
-                  'Repartidor',
+                  'Aplicación Repartidor',
                   style: textsubtitlemini,
                   textScaleFactor: 1.3,
                 ),
@@ -41,19 +42,24 @@ class BarRepartidor extends StatelessWidget {
                   height: 20,
                 ),
                 InkWell(
+                  borderRadius: BorderRadius.circular(50),
                   onTap: () => Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const Profile())),
                   child: Hero(
                     tag: 'fotoprofile',
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50),
-                      child: CircleAvatar(
-                        radius: size.aspectRatio * 80,
+                      child: Container(
+                        width: size.width * 0.2,
+                        height: size.height * 0.1,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
                         child: CachedNetworkImage(
                           imageUrl: avatar,
                           fit: BoxFit.cover,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: size.width * 0.2,
+                          height: size.height * 0.1,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
                                   CircularProgressIndicator(

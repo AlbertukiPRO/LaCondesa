@@ -7,6 +7,7 @@ import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:lacondesa/widget/NavBar.dart';
 import 'package:rive/rive.dart';
 import 'package:provider/provider.dart';
 
@@ -23,11 +24,14 @@ class _HomeWidgetState extends State<HomeWidget> {
   final riveFileName = 'assets/icons/coins.riv';
   Artboard _artboard;
   bool conectionapi = false;
+  Future mydata;
 
   @override
   void initState() {
     _loadRiveFile();
     super.initState();
+    mydata = getDataPoints(
+        Provider.of<User>(context, listen: false).getid.toString());
   }
 
   void _loadRiveFile() async {
@@ -95,34 +99,20 @@ class _HomeWidgetState extends State<HomeWidget> {
     }
   }
 
-  Future getdatacosto(String id) async {
-    try {
-      http.Response response = await http.post(
-          Uri.parse("https://enfastmx.com/lacondesa/getsaldoandpoints.php"),
-          body: {
-            "idrepartidor": id,
-          });
-      if (response.statusCode == 200) {
-        var result = jsonDecode(response.body);
-        print(result);
-        return result;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 1,
-        child: Column(
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        const NavBar(
+          backbutton: false,
+        ),
+        Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            SizedBox(
+              height: 70,
+            ),
             BarRepartidor(
               nombre: context.watch<User>().getnombre,
               avatar: context.watch<User>().getavatar == null
@@ -158,10 +148,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       : Container(),
                 ),
                 FutureBuilder(
-                  future: getDataPoints(
-                      Provider.of<User>(context, listen: false)
-                          .getid
-                          .toString()),
+                  future: mydata,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasError) {
                       return Center(child: Text('Error'));
@@ -204,9 +191,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   height: 100,
                 ),
                 FutureBuilder(
-                  future: getdatacosto(Provider.of<User>(context, listen: false)
-                      .getid
-                      .toString()),
+                  future: mydata,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasError) {
                       return Center(child: Text('Error'));
@@ -232,7 +217,7 @@ class _HomeWidgetState extends State<HomeWidget> {
             )
           ],
         ),
-      ),
+      ],
     );
   }
 }

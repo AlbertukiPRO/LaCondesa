@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:lacondesa/pages/Settings.dart';
 import 'package:lacondesa/pages/Ventas.dart';
@@ -106,6 +107,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
       floatingActionButton: ScaleTransition(
         scale: animation,
@@ -165,21 +170,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           },
         ),
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            const NavBar(
-              backbutton: false,
-            ),
-            Positioned(
-              top: 70,
-              child: tabs[_selectedIndex],
-            ),
-          ],
-        ),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        child: tabs[_selectedIndex],
       ),
     );
   }

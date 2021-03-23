@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lacondesa/main.dart';
 import 'package:lacondesa/pages/Compra.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
