@@ -30,8 +30,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   void initState() {
     _loadRiveFile();
     super.initState();
-    mydata = getDataPoints(
-        Provider.of<User>(context, listen: false).getid.toString());
   }
 
   void _loadRiveFile() async {
@@ -148,7 +146,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                       : Container(),
                 ),
                 FutureBuilder(
-                  future: mydata,
+                  future: getDataPoints(
+                      '' + context.watch<User>().getid.toString()),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasError) {
                       return Center(child: Text('Error'));

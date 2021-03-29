@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:lacondesa/pages/Compra.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:vibration/vibration.dart';
 import 'package:http/http.dart' as http;
 
 class QRLector extends StatefulWidget {
@@ -32,6 +33,16 @@ class _QRLectorState extends State<QRLector> {
     controller.resumeCamera();
   }
 
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  Future<void> stopCamera() async {
+    await controller.pauseCamera();
+  }
+
   Future<dynamic> getdatauser() async {
     var arr = result.code.split(".");
     print("QR contenido: " + arr[0] + arr[1] + arr[2]);
@@ -43,13 +54,10 @@ class _QRLectorState extends State<QRLector> {
     setState(() {
       bodyhtp = json.decode(body.body);
     });
+    if (body.statusCode == 200) {
+      Vibration.vibrate(duration: 1000, amplitude: 1);
+    }
     return json.decode(body.body);
-  }
-
-  repaint() {
-    setState(() {
-      showcamera = !showcamera;
-    });
   }
 
   @override
@@ -60,23 +68,21 @@ class _QRLectorState extends State<QRLector> {
           ? FutureBuilder<dynamic>(
               future: getdatauser(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                controller.stopCamera();
                 return snapshot.hasData
                     ? bodyhtp[0]['idCliente'] != null
                         ? Padding(
                             padding: const EdgeInsets.only(bottom: 50),
                             child: FloatingActionButton(
-                              tooltip: 'Continuar con la compra',
                               elevation: 8,
                               backgroundColor: contraste,
                               child: Icon(Icons.arrow_forward_ios_outlined),
-                              onPressed: () async {
-                                await controller.pauseCamera();
+                              onPressed: () {
                                 var mydata = snapshot.data;
-                                print(mydata);
-                                print(mydata[0]['idCliente']);
-                                print(mydata[0]['nombreCliente']);
-                                print(mydata[0]['puntos']);
+                                print(
+                                    "QR_Lector => \"Datos del Cliente Segun su QR\":" +
+                                        mydata[0]['idCliente'] +
+                                        mydata[0]['nombreCliente'] +
+                                        mydata[0]['puntos']);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -93,7 +99,7 @@ class _QRLectorState extends State<QRLector> {
                                             : mydata[0]['puntos'].toString()),
                                   ),
                                 );
-                                controller.dispose();
+                                stopCamera();
                               },
                             ),
                           )
@@ -172,30 +178,31 @@ class _QRLectorState extends State<QRLector> {
                     Container(
                       margin: EdgeInsets.only(top: 50),
                       child: ElevatedButton(
-                          onPressed: () async {
-                            await controller?.flipCamera();
-                            setState(() {});
+                        onPressed: () async {
+                          await controller?.flipCamera();
+                          setState(() {});
+                        },
+                        child: FutureBuilder(
+                          future: controller?.getCameraInfo(),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              return describeEnum(snapshot.data) == "back"
+                                  ? Icon(
+                                      Icons.photo_camera_back,
+                                      color: Colors.white,
+                                      size: 25,
+                                    )
+                                  : Icon(
+                                      Icons.camera_front,
+                                      color: Colors.white,
+                                      size: 25,
+                                    );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
                           },
-                          child: FutureBuilder(
-                            future: controller?.getCameraInfo(),
-                            builder: (context, snapshot) {
-                              if (snapshot.data != null) {
-                                return describeEnum(snapshot.data) == "back"
-                                    ? Icon(
-                                        Icons.photo_camera_back,
-                                        color: Colors.white,
-                                        size: 25,
-                                      )
-                                    : Icon(
-                                        Icons.camera_front,
-                                        color: Colors.white,
-                                        size: 25,
-                                      );
-                              } else {
-                                return CircularProgressIndicator();
-                              }
-                            },
-                          )),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -236,11 +243,5 @@ class _QRLectorState extends State<QRLector> {
         result = scanData;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }
