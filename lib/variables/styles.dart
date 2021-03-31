@@ -29,6 +29,15 @@ const gradient = LinearGradient(
   ],
 );
 
+const mask = LinearGradient(
+  begin: Alignment.topCenter,
+  end: Alignment(0.0, 0.0), // 10% of the width, so there are ten blinds.
+  colors: [
+    const Color.fromRGBO(0, 0, 0, 0.7),
+    const Color.fromRGBO(0, 0, 0, 0.9),
+  ],
+);
+
 /* Paleta de colores para La condesa*/
 
 const primarycolor = Color(0xFF4461D0);

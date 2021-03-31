@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lacondesa/pages/Settings.dart';
 import 'package:lacondesa/pages/Ventas.dart';
-import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
 import 'Garrafones.dart';
 import 'HomeWidget.dart';
 import 'QR_Lector.dart';
@@ -60,9 +57,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       Duration(seconds: 1),
       () => _animationController.forward(),
     );
-    Provider.of<User>(context, listen: false).getid == null
+    /*Provider.of<User>(context, listen: false).getid == null
         ? buildProvier(context)
-        : print('');
+        : print('');*/
   }
 
   int _selectedIndex = 0;
@@ -93,20 +90,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     const Ventas(),
     const Settings(),
   ];
-
-  buildProvier(BuildContext context) async {
-    SharedPreferences disk = await SharedPreferences.getInstance();
-    context.read<User>().setnombre = disk.getString('nombrekey');
-    context.read<User>().setavatar = disk.getString('avatarkey');
-    context.read<User>().setisLogin = true;
-    context.read<User>().setid = disk.getString('idkey');
-    context.read<User>().setCostoRecarga = disk.getDouble("keyrecarga");
-    context.read<User>().setMinpoint = disk.getInt("keyminpt");
-    context.read<User>().setPreciogarrafon = disk.getDouble("keypreciogarr");
-    print("Logeado como = " +
-        disk.getString('nombrekey') +
-        disk.getString('avatarkey'));
-  }
 
   @override
   Widget build(BuildContext context) {

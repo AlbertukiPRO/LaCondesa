@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/pages/Premios.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
@@ -15,12 +14,14 @@ class IuQRlector extends StatefulWidget {
   final String nombre;
   final String id;
   final String puntos;
+  final double preciogarrafon;
 
   IuQRlector({
     Key key,
     this.nombre,
     this.id,
     this.puntos,
+    this.preciogarrafon,
   }) : super(key: key);
 
   @override
@@ -34,8 +35,10 @@ class _IuQRlectorrState extends State<IuQRlector> {
 
   upgarrafon() {
     setState(() {
-      countgarrafones += 1;
-      preciotal = preciogarrafon * countgarrafones;
+      if (countgarrafones < 20) {
+        countgarrafones += 1;
+        preciotal = preciogarrafon * countgarrafones;
+      }
     });
   }
 
@@ -56,7 +59,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
   @override
   void initState() {
     super.initState();
-    this.preciotal = preciogarrafon * countgarrafones;
+    this.preciotal = widget.preciogarrafon * countgarrafones;
   }
 
   void _loadRiveFile() async {
@@ -90,45 +93,57 @@ class _IuQRlectorrState extends State<IuQRlector> {
         preciotal.toString());
     await http
         .post(Uri.parse("https://enfastmx.com/lacondesa/add_venta.php"), body: {
-      "id_cliente": '' + idC.toString(),
-      "id_repartidor": '' + idR.toString(),
-      "garrafones": '' + countgarrafones.toString(),
-      "total": '' + preciotal.toString(),
-    }).then((response) {
-      print(response.body.toString());
-      if (response.body == "nothing") {
-        setState(() {
-          mensanje = "No se pudo realizar la compra";
-          estatus = true;
+          "id_cliente": '' + idC.toString(),
+          "id_repartidor": '' + idR.toString(),
+          "garrafones": '' + countgarrafones.toString(),
+          "total": '' + preciotal.toString(),
+        })
+        .then((response) {
+          if (response.body == "nothing") {
+            setState(() {
+              mensanje = "No se pudo realizar la compra";
+              estatus = true;
+            });
+          } else if (response.body == "ok") {
+            setState(() {
+              mensanje = "Compra realizada";
+              closedialog = !closedialog;
+              estatus = true;
+            });
+          }
+        })
+        .timeout(Duration(seconds: 40))
+        .catchError((onError) {
+          setState(() {
+            mensanje = "Error Conection";
+            estatus = true;
+          });
         });
-      } else if (response.body == "ok") {
-        setState(() {
-          mensanje = "Compra realizada";
-          closedialog = !closedialog;
-          estatus = true;
-        });
-      }
-    }).catchError((onError) {
-      setState(() {
-        mensanje = "Error Api";
-      });
+  }
+
+  Future getPrecios() async {
+    SharedPreferences disk = await SharedPreferences.getInstance();
+    setState(() {
+      this.preciogarrafon = disk.getDouble('keypreciogarr');
     });
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    this.preciogarrafon = context.watch<User>().getpreciogarrafon;
+    getPrecios();
     return new Scaffold(
-      bottomNavigationBar: InkWell(
-        onTap: () {
-          addventa(
-            Provider.of<User>(context, listen: false).getid,
-            int.parse(widget.id),
-          );
-          print("llamando datos");
-        },
-        child: Container(
+      bottomNavigationBar: AnimatedOpacity(
+        duration: Duration(seconds: 1),
+        opacity: estatus ? 0.0 : 1.0,
+        child: InkWell(
+          onTap: () {
+            addventa(
+              Provider.of<User>(context, listen: false).getid,
+              int.parse(widget.id),
+            );
+          },
+          child: Container(
             height: 70,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -143,19 +158,14 @@ class _IuQRlectorrState extends State<IuQRlector> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Confirmar compra',
+                  estatus ? mensanje : 'Confirmar compra',
                   style: texttitle,
                   textScaleFactor: 1.5,
                 ),
-                mensanje != ""
-                    ? estatus
-                        ? Icon(Icons.check, color: Colors.white)
-                        : CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                          )
-                    : SizedBox(width: 1),
               ],
-            )),
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -433,13 +443,20 @@ class _IuQRlectorrState extends State<IuQRlector> {
             ),
             closedialog
                 ? Container(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    margin: EdgeInsets.only(top: 150),
+                    height: size.height,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      gradient: mask,
+                    ),
                     child: AlertDialog(
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Compra Realizada con exito"),
+                          Text(
+                            "Compra Realizada con exito",
+                            style: texttitle2,
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                       content: Column(
@@ -450,41 +467,32 @@ class _IuQRlectorrState extends State<IuQRlector> {
                             height: 80,
                           ),
                           Text(
-                              "Gracias por su compra. \nUsted a sumado un punto a su cuenta. En total tiene:\n"),
+                            "Gracias por su compra. \nUsted a sumado un punto a su cuenta. En total tiene:\n",
+                          ),
                           TextButton(
-                              onPressed: () => null,
-                              child: Text(
-                                '' +
-                                    (int.parse(widget.puntos) + countgarrafones)
-                                        .toString(),
-                                style: TextStyle(color: contraste),
-                                textScaleFactor: 1.5,
-                              )),
+                            onPressed: () => null,
+                            child: Text(
+                              '' +
+                                  (int.parse(widget.puntos) + countgarrafones)
+                                      .toString(),
+                              style: TextStyle(color: contraste),
+                              textScaleFactor: 1.5,
+                            ),
+                          ),
                           Text('¡¡¡Gracias!!!'),
                         ],
                       ),
                       actions: [
-                        InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Inicio'),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()));
+                        TextButton(
+                          onPressed: () {
+                            closeAlertDialog();
+                            Navigator.pop(context);
                           },
-                        ),
-                        InkWell(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text('Cerrar'),
                           ),
-                          onTap: () {
-                            closeAlertDialog();
-                          },
-                        )
+                        ),
                       ],
                     ),
                   )

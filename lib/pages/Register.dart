@@ -500,5 +500,3 @@ class _RegisterState extends State<Register> {
     );
   }
 }
-
-class TextButtton {}

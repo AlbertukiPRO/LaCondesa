@@ -4,10 +4,15 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lacondesa/pages/Compra.dart';
+import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vibration/vibration.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import 'Home.dart';
 
 class QRLector extends StatefulWidget {
   const QRLector({Key key}) : super(key: key);
@@ -22,6 +27,14 @@ class _QRLectorState extends State<QRLector> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   bool flash = false;
   bool showcamera = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<User>(context, listen: false).getid == null
+        ? buildProvier(context)
+        : print('');
+  }
 
   var bodyhtp;
   @override
@@ -54,10 +67,21 @@ class _QRLectorState extends State<QRLector> {
     setState(() {
       bodyhtp = json.decode(body.body);
     });
-    if (body.statusCode == 200) {
-      Vibration.vibrate(duration: 1000, amplitude: 1);
-    }
     return json.decode(body.body);
+  }
+
+  buildProvier(BuildContext context) async {
+    SharedPreferences disk = await SharedPreferences.getInstance();
+    context.read<User>().setnombre = disk.getString('nombrekey');
+    context.read<User>().setavatar = disk.getString('avatarkey');
+    context.read<User>().setisLogin = true;
+    context.read<User>().setid = disk.getString('idkey');
+    context.read<User>().setCostoRecarga = disk.getDouble("keyrecarga");
+    context.read<User>().setMinpoint = disk.getInt("keyminpt");
+    context.read<User>().setPreciogarrafon = disk.getDouble("keypreciogarr");
+    print("Logeado como = " +
+        disk.getString('nombrekey') +
+        disk.getString('avatarkey'));
   }
 
   @override
@@ -87,19 +111,20 @@ class _QRLectorState extends State<QRLector> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => IuQRlector(
-                                        id: '' +
-                                            mydata[0]['idCliente'].toString(),
-                                        nombre: '' +
-                                            mydata[0]['nombreCliente']
-                                                .toString(),
-                                        puntos: mydata[0]['puntos']
-                                                    .toString() ==
-                                                'null'
-                                            ? "null"
-                                            : mydata[0]['puntos'].toString()),
+                                      id: '' +
+                                          mydata[0]['idCliente'].toString(),
+                                      nombre: '' +
+                                          mydata[0]['nombreCliente'].toString(),
+                                      puntos: mydata[0]['puntos'].toString() ==
+                                              'null'
+                                          ? "null"
+                                          : mydata[0]['puntos'].toString(),
+                                      preciogarrafon: Provider.of<User>(context,
+                                              listen: false)
+                                          .getpreciogarrafon,
+                                    ),
                                   ),
                                 );
-                                stopCamera();
                               },
                             ),
                           )
@@ -208,7 +233,27 @@ class _QRLectorState extends State<QRLector> {
                 ),
               ],
             ),
-          )
+          ),
+          Positioned(
+            left: 5,
+            top: 20,
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: primarycolor,
+                size: 28,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Home(),
+                  ),
+                );
+                stopCamera();
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -242,6 +287,8 @@ class _QRLectorState extends State<QRLector> {
       setState(() {
         result = scanData;
       });
+      stopCamera();
+      Vibration.vibrate(duration: 100);
     });
   }
 }

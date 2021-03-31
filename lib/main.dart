@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/pages/Login.dart';
+import 'package:lacondesa/pages/QR_Lector.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:provider/provider.dart';
@@ -69,7 +69,9 @@ class MyApp extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                return snapshot.data == false ? const Login() : const Home();
+                return snapshot.data == false
+                    ? const Login()
+                    : const QRLector();
               default:
                 return Center(child: Text(snapshot.data.toString()));
             }

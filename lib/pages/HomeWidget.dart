@@ -155,11 +155,12 @@ class _HomeWidgetState extends State<HomeWidget> {
                     if (snapshot.connectionState == ConnectionState.done) {
                       var mydata = snapshot.data;
                       return Center(
-                          child: Text(
-                        'x ${mydata[0]['Puntos']}',
-                        style: texttitle2,
-                        textScaleFactor: 2,
-                      ));
+                        child: Text(
+                          'x ${mydata[0]['Puntos']}',
+                          style: texttitle2,
+                          textScaleFactor: 2,
+                        ),
+                      );
                     } else {
                       return Center(child: CircularProgressIndicator());
                     }
@@ -190,7 +191,8 @@ class _HomeWidgetState extends State<HomeWidget> {
                   height: 100,
                 ),
                 FutureBuilder(
-                  future: mydata,
+                  future: getDataPoints(
+                      '' + context.watch<User>().getid.toString()),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasError) {
                       return Center(child: Text('Error'));
