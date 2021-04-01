@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,7 @@ class _RegisterState extends State<Register> {
   TextEditingController claveinput = new TextEditingController();
   TextEditingController claveinputrepete = new TextEditingController();
 
-  void showpassword() {
-    setState(() => showtextpassword = !showtextpassword);
-  }
+  void showpassword() => setState(() => showtextpassword = !showtextpassword);
 
   void editnumber() {
     PhoneInputFormatter.replacePhoneMask(
@@ -45,6 +44,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  /// url (API)=> registro.php
   static final String uploadEndPoint =
       'https://enfastmx.com/lacondesa/registro_repartidor.php';
   final picker = ImagePicker();
@@ -80,37 +80,8 @@ class _RegisterState extends State<Register> {
     });
   }
 
-  Future _ackAlert(BuildContext context, String title, String cuerpo) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title),
-              Icon(Icons.warning_amber_rounded, size: 25),
-            ],
-          ),
-          content: Text(cuerpo),
-          actions: [
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Aceptar'),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
-
   startUpload(BuildContext context) {
-    setStatus('Listo.');
+    setStatus('Inciando..');
     if (null == tmpFile) {
       setStatus(errMessage);
       return;
@@ -122,55 +93,51 @@ class _RegisterState extends State<Register> {
   }
 
   upload(String fileName, context) {
-    try {
-      http
-          .post(Uri.parse(uploadEndPoint), body: {
-            "image": base64Image,
-            "name": fileName,
-            "nombre": nombreInput.text,
-            "phone": phoneInput.text,
-            "clave": claveinput.text,
-          })
-          .then((conect) {
-            if (conect.statusCode == 200) {
-              print("Register <starupload> => " + conect.body);
-              if (conect.body == "ok") {
-                setState(() => succesfull = !succesfull);
-              } else {
-                setState(() {
-                  errorregiter = true;
-                  _ackAlert(context, "Upps !!!",
-                      "Estamos teniendo problemas inténtalo más tarde");
-                });
-              }
+    http
+        .post(Uri.parse(uploadEndPoint), body: {
+          "image": base64Image,
+          "name": fileName,
+          "nombre": nombreInput.text,
+          "phone": phoneInput.text,
+          "clave": claveinput.text,
+        })
+        .then((conect) {
+          if (conect.statusCode == 200) {
+            print("Register <starupload> => " + conect.body);
+            if (conect.body == "ok") {
+              setState(() => succesfull = !succesfull);
             } else {
-              _ackAlert(
-                  context,
-                  "Sin conexión",
-                  "No pudimos conectar con los servidores de la condesa verifica tu conexión. \n " +
-                      conect.body.toString());
               setState(() => errorregiter = true);
-            }
-          })
-          .timeout(Duration(seconds: 40))
-          .catchError((error) {
-            _ackAlert(
+              showMyDialog(
+                "No se pudo conectar..",
                 context,
-                "Tiempo de espera superado",
-                "El servidor tardo mucho en responder, comprueba tu conexión o inténtalo más tarde.\n error:" +
-                    error.toString());
+                "No pudimos conectar con los servidores de la condesa verifica tu conexión o inténtalo más tarde \nCodigo: " +
+                    conect.body,
+                2,
+              );
+            }
+          } else {
             setState(() => errorregiter = true);
-          });
-    } on TimeoutException catch (e) {
-      setStatus(
-          "La conexion tardo demasiado \n codigo de error:" + e.toString());
-      setState(() => errorregiter = true);
-    } on Error catch (e) {
-      setStatus(
-          "Parece que estamos teniedo problemas revisa tu conexion a internet, codigo de error: " +
-              e.toString());
-      setState(() => errorregiter = true);
-    }
+            showMyDialog(
+              "Sin respuesta",
+              context,
+              "No pudimos conectar con los servidores de la condesa verifica tu conexión o inténtalo más tarde \nCodigo: " +
+                  conect.body,
+              2,
+            );
+          }
+        })
+        .timeout(Duration(seconds: 40))
+        .catchError((error) {
+          showMyDialog(
+            "Sin conexión",
+            context,
+            "No pudimos conectar con los servidores de la condesa verifica tu conexión o recarge esta ventana \nCodigo: " +
+                error.toString(),
+            2,
+          );
+          setState(() => errorregiter = true);
+        });
   }
 
   @override
@@ -188,7 +155,7 @@ class _RegisterState extends State<Register> {
           },
           child: succesfull == false
               ? Container(
-                  height: size.height,
+                  height: size.height * 1.8,
                   width: double.infinity,
                   child: Stack(
                     alignment: Alignment.topCenter,
@@ -199,7 +166,7 @@ class _RegisterState extends State<Register> {
                       Positioned(
                         top: 70,
                         child: Container(
-                          height: size.height * 1.5,
+                          height: size.height * 2,
                           width: size.width,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -363,7 +330,9 @@ class _RegisterState extends State<Register> {
                                                 ),
                                               ),
                                               _images == null
-                                                  ? const Text('No imagen.')
+                                                  ? const Text(
+                                                      'Imagen no seleccionada.',
+                                                    )
                                                   : Container(
                                                       height: 80,
                                                       width: 80,
@@ -398,26 +367,44 @@ class _RegisterState extends State<Register> {
                                                 // Si el formulario es válido, queremos mostrar un Snackbar
                                                 if (claveinput.text ==
                                                     claveinputrepete.text) {
-                                                  startUpload(context);
-                                                } else {
-                                                  _ackAlert(
+                                                  if (_images == null) {
+                                                    showMyDialog(
+                                                      "Atención",
                                                       context,
-                                                      "Problemas",
-                                                      "Las contraseñas no son validas por favor verifique que sean iguales");
+                                                      "La imagen es requirida",
+                                                      3,
+                                                    );
+                                                  } else {
+                                                    startUpload(context);
+                                                  }
+                                                } else {
+                                                  showMyDialog(
+                                                    "Problemas",
+                                                    context,
+                                                    "Las contraseñas no son validas por favor verifique que sean iguales",
+                                                    3,
+                                                  );
                                                 }
                                               }
                                             },
-                                            child: errorregiter == false
-                                                ? const ButtonForm(
-                                                    txtbutton:
-                                                        'Regístrame ahora',
-                                                    colorbtn: contraste,
-                                                  )
-                                                : const ButtonForm(
-                                                    txtbutton:
-                                                        'No se pudo registrar',
-                                                    colorbtn: contraste,
-                                                  ),
+                                            child: AnimatedOpacity(
+                                              opacity: errorregiter == false
+                                                  ? 1.0
+                                                  : 0.0,
+                                              duration: Duration(seconds: 1),
+                                              child: errorregiter == false
+                                                  ? const ButtonForm(
+                                                      txtbutton:
+                                                          'Regístrame ahora',
+                                                      colorbtn: contraste,
+                                                    )
+                                                  : TextButton(
+                                                      onPressed: () =>
+                                                          startUpload(context),
+                                                      child:
+                                                          Text('Reintertarlo.'),
+                                                    ),
+                                            ),
                                           ),
                                         ],
                                       ),

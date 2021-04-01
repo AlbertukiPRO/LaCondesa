@@ -57,3 +57,75 @@ const primarycolorGradient = LinearGradient(
     terciarycolor,
   ],
 );
+
+// Type Dialog (1) => Normal
+// Type Dialog (2) => Warning
+// Type Dialog (3) => Error
+// Type Dialog (4) => Info
+// ignore: unused_element
+Future<void> showMyDialog(String title, BuildContext context, String cuerpo,
+        int typeDialog) async =>
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  cuerpo,
+                  textAlign: TextAlign.justify,
+                ),
+                typeDialog == 1
+                    ? Icon(
+                        Icons.message,
+                        size: 25,
+                        color: primarycolor,
+                      )
+                    : SizedBox(
+                        height: 1,
+                      ),
+                typeDialog == 2
+                    ? Icon(
+                        Icons.warning_outlined,
+                        size: 25,
+                        color: Colors.yellowAccent,
+                      )
+                    : SizedBox(
+                        height: 1,
+                      ),
+                typeDialog == 3
+                    ? Icon(
+                        Icons.error,
+                        size: 45,
+                        color: Colors.redAccent,
+                      )
+                    : SizedBox(
+                        height: 1,
+                      ),
+                typeDialog == 4
+                    ? Icon(
+                        Icons.info_outline_rounded,
+                        size: 25,
+                        color: Colors.greenAccent,
+                      )
+                    : SizedBox(
+                        height: 1,
+                      ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cerrar'),
+            )
+          ],
+        );
+      },
+    );

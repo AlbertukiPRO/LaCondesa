@@ -387,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.5"
+  qr_utils:
+    dependency: "direct main"
+    description:
+      name: qr_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   rive:
     dependency: "direct main"
     description:

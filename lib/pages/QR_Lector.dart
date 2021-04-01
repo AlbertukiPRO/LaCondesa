@@ -100,13 +100,15 @@ class _QRLectorState extends State<QRLector> {
                               elevation: 8,
                               backgroundColor: contraste,
                               child: Icon(Icons.arrow_forward_ios_outlined),
-                              onPressed: () {
+                              onPressed: () async {
                                 var mydata = snapshot.data;
                                 print(
                                     "QR_Lector => \"Datos del Cliente Segun su QR\":" +
                                         mydata[0]['idCliente'] +
                                         mydata[0]['nombreCliente'] +
                                         mydata[0]['puntos']);
+                                await controller.pauseCamera();
+                                await controller.stopCamera();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -155,7 +157,35 @@ class _QRLectorState extends State<QRLector> {
                               ),
                             ),
                           )
-                    : Center(child: CircularProgressIndicator());
+                    : snapshot.hasError
+                        ? Center(
+                            child: Container(
+                              width: size.width * 0.5,
+                              child: TextButton(
+                                onPressed: () => null,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'No es posible conectar',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Icon(Icons.not_interested_sharp),
+                                  ],
+                                ),
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.red[700]),
+                                  overlayColor:
+                                      MaterialStateProperty.all(contraste),
+                                  foregroundColor:
+                                      MaterialStateProperty.all(Colors.white),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Center(child: CircularProgressIndicator());
               })
           : Text(''),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

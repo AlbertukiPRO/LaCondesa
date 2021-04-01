@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/pages/Register.dart';
-import 'package:lacondesa/pages/test_img_pick.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Formulario.dart';
 
@@ -16,6 +15,17 @@ class _LoginState extends State<Login> {
   closeAlertDialog() {
     setState(() => closedialog = !closedialog);
   }
+
+  /*@override
+  void initState() {
+    super.initState();
+    showMyDialog(
+      "Bienvenido a purificadora la condesa",
+      context,
+      "Al ser miembro de purificadora la condesa tendrás beneficios asombrosos, pero primero deberás registrarte",
+      1,
+    );
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -83,75 +93,43 @@ class _LoginState extends State<Login> {
                       child: const Formulario(),
                     ),
                     SizedBox(height: 15),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyHomePage(),
+                    Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Register(),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Registrarse',
+                                  style: TextStyle(
+                                    color: textcolorsubtitle,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 15,
+                                  ),
+                                  onPressed: null,
+                                )
+                              ],
                             ),
                           ),
-                          child: Text(
-                            'Ver términos y condiciones',
-                            style: TextStyle(
-                              color: textcolorsubtitle,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Register(),
-                            ),
-                          ),
-                          child: Text(
-                            'Registrarse',
-                            style: TextStyle(
-                              color: textcolorsubtitle,
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),
               ),
-              closedialog
-                  ? Container(
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment(0.0,
-                              0.0), // 10% of the width, so there are ten blinds.
-                          colors: [
-                            const Color.fromRGBO(0, 0, 0, 0.7),
-                            const Color.fromRGBO(0, 0, 0, 0.9),
-                          ],
-                        ),
-                      ),
-                      child: AlertDialog(
-                        title: Text('Bienvenido a purificadora la condesa'),
-                        content: Text(
-                          'Al ser miembro de purificadora la condesa tendrás beneficios asombrosos, pero primero deberás registrarte',
-                          textAlign: TextAlign.justify,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => closeAlertDialog(),
-                            child: Text('Aceptar'),
-                          )
-                        ],
-                      ),
-                    )
-                  : SizedBox(
-                      height: 0,
-                    ),
             ],
           ),
         ),

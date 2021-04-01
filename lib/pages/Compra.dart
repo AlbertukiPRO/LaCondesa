@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/pages/Premios.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
@@ -107,9 +108,9 @@ class _IuQRlectorrState extends State<IuQRlector> {
           } else if (response.body == "ok") {
             setState(() {
               mensanje = "Compra realizada";
-              closedialog = !closedialog;
               estatus = true;
             });
+            showMyDialog1();
           }
         })
         .timeout(Duration(seconds: 40))
@@ -118,6 +119,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
             mensanje = "Error Conection";
             estatus = true;
           });
+          showMyDialog1();
         });
   }
 
@@ -441,67 +443,124 @@ class _IuQRlectorrState extends State<IuQRlector> {
                 ],
               ),
             ),
-            closedialog
-                ? Container(
-                    height: size.height,
-                    width: size.width,
-                    decoration: BoxDecoration(
-                      gradient: mask,
-                    ),
-                    child: AlertDialog(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Compra Realizada con exito",
-                            style: texttitle2,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      content: Column(
-                        children: [
-                          Image.asset(
-                            "assets/icons/success.gif",
-                            width: 80,
-                            height: 80,
-                          ),
-                          Text(
-                            "Gracias por su compra. \nUsted a sumado un punto a su cuenta. En total tiene:\n",
-                          ),
-                          TextButton(
-                            onPressed: () => null,
-                            child: Text(
-                              '' +
-                                  (int.parse(widget.puntos) + countgarrafones)
-                                      .toString(),
-                              style: TextStyle(color: contraste),
-                              textScaleFactor: 1.5,
-                            ),
-                          ),
-                          Text('¡¡¡Gracias!!!'),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            closeAlertDialog();
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Cerrar'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : SizedBox(
-                    height: 0,
-                  ),
           ],
         ),
       ),
     );
   }
+
+  Future<void> showMyDialogError() async => showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                Text(
+                  "No es posible contectar",
+                  style: texttitle2,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Icon(
+                    Icons.error_outline_outlined,
+                    color: Colors.redAccent,
+                    size: 40,
+                  ),
+                  Text(
+                    "Error con la conexión, comprueba tu conexión y vuelve a intentarlo \nCodigo de error: #CO.LA.5",
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  closeAlertDialog();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Home(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Cerrar'),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+
+  Future<void> showMyDialog1() async => showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Row(
+              children: [
+                Text(
+                  "Compra Realizada con exito",
+                  style: texttitle2,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Image.asset(
+                    "assets/icons/success.gif",
+                    width: 80,
+                    height: 80,
+                  ),
+                  Text(
+                    "Gracias por su compra. \nUsted a sumado un punto a su cuenta. En total tiene:\n",
+                  ),
+                  TextButton(
+                    onPressed: () => null,
+                    child: Text(
+                      '' +
+                          (int.parse(widget.puntos) + countgarrafones)
+                              .toString(),
+                      style: TextStyle(color: contraste),
+                      textScaleFactor: 1.5,
+                    ),
+                  ),
+                  Text('¡¡¡Gracias!!!'),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  closeAlertDialog();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Home(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Cerrar'),
+                ),
+              ),
+            ],
+          );
+        },
+      );
 }
