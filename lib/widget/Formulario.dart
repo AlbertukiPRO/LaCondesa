@@ -160,7 +160,7 @@ class _FormularioState extends State<Formulario> {
         .then((resulta) async {
           if (resulta.statusCode == 200) {
             if (resulta.body == "nothing") {
-              setState(() => status = "No");
+              setState(() => status = "");
               showMyDialog(
                 "No se encuentra al usuario",
                 context,
