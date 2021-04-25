@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                return snapshot.data == false ? const Login() : QRLector();
+                return snapshot.data == false ? const Login() : const QRNEW();
               default:
                 return Center(child: Text(snapshot.data.toString()));
             }

@@ -153,6 +153,9 @@ class _ListaState extends State<Lista> {
     await disk.remove('avatarkey');
     await disk.remove('idkey');
     await disk.remove('puntoskey');
+    await disk.remove('keypreciogarr');
+    await disk.remove('keyminpt');
+    await disk.remove('keyrecarga');
   }
 }
 

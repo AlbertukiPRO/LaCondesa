@@ -44,6 +44,8 @@ dependencies:
   modal_bottom_sheet: ^2.0.0
   vibration: ^1.7.3
   qr_utils: ^0.1.5
+  flutter_barcode_scanner: ^2.0.0
+  alert: ^2.0.0
 
 dev_dependencies:
   flutter_test:

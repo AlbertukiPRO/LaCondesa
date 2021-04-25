@@ -8,7 +8,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'Garrafones.dart';
 import 'HomeWidget.dart';
-import 'QR_Lector.dart';
+import 'NewQR_Lector.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -108,9 +108,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             _animationController.forward();
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const QRLector(),
-              ),
+              MaterialPageRoute(builder: (context) => QRNEW()),
             );
           },
         ),
