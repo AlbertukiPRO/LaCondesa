@@ -45,35 +45,6 @@ class _HomeWidgetState extends State<HomeWidget> {
     }
   }
 
-  Future _ackAlert(BuildContext context, String title, String cuerpo) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title),
-              Icon(Icons.warning_amber_rounded, size: 25),
-            ],
-          ),
-          content: Text(cuerpo),
-          actions: [
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Aceptar'),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
-
   Future getDataPoints(String id) async {
     try {
       http.Response response = await http.post(

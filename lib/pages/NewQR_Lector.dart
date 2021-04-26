@@ -9,6 +9,7 @@ import 'package:lacondesa/pages/Compra.dart';
 import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
+import 'package:lacondesa/widget/IU_NEW.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:alert/alert.dart';
@@ -149,7 +150,7 @@ class _QRNEWState extends State<QRNEW> {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const Home(),
+              builder: (context) => const Inicio(),
             ),
           ),
         ),
