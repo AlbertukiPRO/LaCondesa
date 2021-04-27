@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ButtonForm.dart';
 import 'package:provider/provider.dart';
 
+import 'IU_NEW.dart';
+
 class Formulario extends StatefulWidget {
   const Formulario({
     Key key,
@@ -164,7 +166,7 @@ class _FormularioState extends State<Formulario> {
               showMyDialog(
                 "No se encuentra al usuario",
                 context,
-                "Lo centimos parece que no esta registrado en la base de datos, registrece e intentelo de nuevo \nCodigo" +
+                "Lo sentimos parece que no esta registrado en la base de datos, registrece e intentelo de nuevo \nCodigo" +
                     resulta.body,
                 3,
               );
@@ -178,7 +180,7 @@ class _FormularioState extends State<Formulario> {
                 () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Home(),
+                    builder: (context) => const Inicio(),
                   ),
                 ),
               );

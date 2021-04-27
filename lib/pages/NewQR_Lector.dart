@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lacondesa/pages/Compra.dart';
-import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/IU_NEW.dart';
+import 'package:lacondesa/widget/Venta_newvercion.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:alert/alert.dart';
@@ -30,10 +29,6 @@ class _QRNEWState extends State<QRNEW> {
   Artboard _artboard;
   var mydata;
 
-  void changeStado(status) {
-    setState(() => this.estado = status);
-  }
-
   fetchData(context) async {
     SharedPreferences disk = await SharedPreferences.getInstance();
 
@@ -43,7 +38,7 @@ class _QRNEWState extends State<QRNEW> {
       downloadPrices(context);
     } else {
       var res = _scanBarcode.split(".");
-      if (res.length != 1 && res[0] == "cliente") {
+      if (res[0] == "http://cliente") {
         barboottom(context);
       }
     }
@@ -70,9 +65,10 @@ class _QRNEWState extends State<QRNEW> {
     context.read<User>().setCostoRecarga = disk.getDouble("keyrecarga");
     context.read<User>().setMinpoint = disk.getInt("keyminpt");
     context.read<User>().setPreciogarrafon = disk.getDouble("keypreciogarr");
-    print("Logeado como = " +
+    print("Lector QR ()=> dice [ " +
         disk.getString('nombrekey') +
-        disk.getString('avatarkey'));
+        disk.getString('avatarkey') +
+        "]");
   }
 
   void _loadRiveFile(String animation) async {
@@ -90,18 +86,14 @@ class _QRNEWState extends State<QRNEW> {
 
   Future<void> scanQR() async {
     String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cerrar', true, ScanMode.QR);
       print(barcodeScanRes);
     } on PlatformException {
-      barcodeScanRes = 'La versión de este andriod es invalida';
+      toast('La versión de este andriod es invalida');
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
@@ -110,16 +102,13 @@ class _QRNEWState extends State<QRNEW> {
   }
 
   Future<void> getdatauser() async {
+    toast("Espere...");
     var arr = _scanBarcode.split(".");
-    arr[0] != "cliente" ??
-        Alert(message: "Este QR no pertenese al sistema").show();
-    if (arr.length != 3 && arr[0] != "cliente") {
+    if (arr[0] != "http://cliente") {
       _loadRiveFile('ERROR');
-      Alert(message: 'El qr no pertencese a Purificadora la condesa').show();
-    } else {
+      toast("Este QR no pertenece a purificadora la condesa");
+    } else
       _loadRiveFile('Succes');
-    }
-    print("Lector_QR ()=> contenido: " + arr[0] + arr[1] + arr[2]);
     await http
         .post(Uri.parse("https://enfastmx.com/lacondesa/get_data_qr.php"),
             body: {
@@ -130,17 +119,58 @@ class _QRNEWState extends State<QRNEW> {
               this.estado = true;
             }))
         .timeout(Duration(seconds: 40))
-        .catchError((onError) {
-          Alert(
-                  message:
-                      'Error, la conexion de red fallo o el qr esta corronpido')
-              .show();
-        });
+        .catchError((onError) =>
+            toast('Error, la conexión de red fallo o el QR esta dañado'));
   }
+
+  void toast(sms) => Alert(message: sms).show();
+
+  double _hide = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+            height: 80,
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () => toast(_scanBarcode),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.construction_outlined, color: primarycolor),
+                      Text(
+                        'Mostrar datos',
+                        style: textligth,
+                      )
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => QRNEW())),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.qr_code_scanner,
+                        color: primarycolor,
+                      ),
+                      Text(
+                        'Scanear de nuevo',
+                        style: textligth,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
           child: Icon(
@@ -154,13 +184,20 @@ class _QRNEWState extends State<QRNEW> {
             ),
           ),
         ),
-        body: Center(
-          child: Container(
-            width: 800,
-            height: 800,
-            child: Rive(
-              artboard: _artboard,
-              fit: BoxFit.contain,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image:
+                  AssetImage("assets/img/b216c450da0e3bd5ca578f0bdccd841f.png"),
+            ),
+          ),
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.only(right: 11),
+              child: Rive(
+                artboard: _artboard,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ));
@@ -249,7 +286,7 @@ class _QRNEWState extends State<QRNEW> {
             Container(
               padding: EdgeInsets.only(bottom: 15.0),
               child: Text(
-                "Selecciona el garrafon",
+                "Selecciona el garrafón",
                 style: texttitle2,
                 textScaleFactor: 1.2,
               ),
@@ -258,7 +295,7 @@ class _QRNEWState extends State<QRNEW> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => IuQRlector(
+                  builder: (context) => VentaIUX(
                     id: '' + mydata[0]['idCliente'].toString(),
                     nombre: '' + mydata[0]['nombreCliente'].toString(),
                     puntos: mydata[0]['puntos'].toString() == 'null'
@@ -368,7 +405,7 @@ class _QRNEWState extends State<QRNEW> {
 
                 status = true;
 
-                Alert(message: 'Server ready: ').show();
+                toast("Listo.");
               } catch (e) {
                 Alert(message: 'Error Descargando: ' + e.toString()).show();
                 status = false;
@@ -377,11 +414,11 @@ class _QRNEWState extends State<QRNEW> {
 
               break;
             case 400:
-              Alert(message: 'Descarga fallida, sin servicio').show();
+              toast("Descarga fallida, Inténtelo más tarde");
               status = false;
               break;
             case 500:
-              Alert(message: 'Error en el servidor').show();
+              toast("Error con el servidor");
               break;
             default:
               status = false;
@@ -389,7 +426,7 @@ class _QRNEWState extends State<QRNEW> {
         })
         .timeout(Duration(seconds: 60))
         .catchError((onError) {
-          Alert(message: 'Descarga fallida reinicia la aplicación').show();
+          toast("Descarga fallida reinicia la aplicación");
           status = false;
         });
     return status;

@@ -8,6 +8,7 @@ import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Balance.dart';
 import 'package:lacondesa/widget/Catalogo.dart';
 import 'package:lacondesa/widget/Historial.dart';
+import 'package:lacondesa/widget/Venta_newvercion.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

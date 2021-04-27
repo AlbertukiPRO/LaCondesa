@@ -112,7 +112,7 @@ class _QRLectorState extends State<QRLector> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => IuQRlector(
+                                    builder: (context) => MakeCompra(
                                       id: '' +
                                           mydata[0]['idCliente'].toString(),
                                       nombre: '' +

@@ -5,19 +5,19 @@ import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/pages/Premios.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
+import 'package:lacondesa/widget/IU_NEW.dart';
 import 'package:rive/rive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: must_be_immutable
-class IuQRlector extends StatefulWidget {
+class MakeCompra extends StatefulWidget {
   final String nombre;
   final String id;
   final String puntos;
   final double preciogarrafon;
 
-  IuQRlector({
+  MakeCompra({
     Key key,
     this.nombre,
     this.id,
@@ -26,10 +26,10 @@ class IuQRlector extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _IuQRlectorrState createState() => _IuQRlectorrState();
+  _MakeComprarState createState() => _MakeComprarState();
 }
 
-class _IuQRlectorrState extends State<IuQRlector> {
+class _MakeComprarState extends State<MakeCompra> {
   int countgarrafones = 1;
   double preciogarrafon = 0;
   double preciotal = 0;
@@ -487,7 +487,7 @@ class _IuQRlectorrState extends State<IuQRlector> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Home(),
+                      builder: (context) => const Inicio(),
                     ),
                   );
                 },
