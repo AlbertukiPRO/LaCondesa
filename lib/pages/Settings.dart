@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:async/async.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lacondesa/main.dart';
 import 'package:lacondesa/variables/User.dart';
-import 'package:lacondesa/widget/Bar.dart';
-import 'package:lacondesa/widget/NavBar.dart';
+import 'package:lacondesa/notuse/Bar.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,24 +20,88 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Stack(
+      alignment: Alignment.topCenter,
       children: [
-        const NavBar(
-          backbutton: false,
-        ),
         Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(
-              height: 70,
-            ),
-            BarRepartidor(
-              nombre: "Configuraciones",
-              avatar: context.watch<User>().getavatar,
-            ),
+            Header(size: size),
             const Lista(),
           ],
         )
+      ],
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Container(
+          height: size.height * 0.25,
+          alignment: Alignment.topCenter,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/img/texture.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          height: size.height * 0.25,
+          decoration:
+              BoxDecoration(color: Color(0xFFF3B5FFE).withOpacity(0.80)),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50.0),
+                child: CircleAvatar(
+                  radius: 40.0,
+                  child: CachedNetworkImage(
+                    imageUrl: context.watch<User>().getavatar == null
+                        ? "https://www.w3schools.com/howto/img_avatar2.png"
+                        : context
+                            .watch<User>()
+                            .getavatar, //Provider.of<User>(context).getavatar,
+                    fit: BoxFit.cover,
+                    width: size.width * 0.2,
+                    height: size.height * 0.2,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 40,
+              ),
+              Text(
+                '${context.watch<User>().getnombre}',
+                style: TextStyle(fontFamily: 'SFSemibold', color: Colors.white),
+                textScaleFactor: 1.2,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -56,7 +120,7 @@ class Lista extends StatefulWidget {
 class _ListaState extends State<Lista> {
   final AsyncMemoizer<bool> _memoizer = AsyncMemoizer();
   bool estatus = false;
-
+  bool switchdatos = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -73,6 +137,17 @@ class _ListaState extends State<Lista> {
             onTap: () {
               print('get location');
             },
+            subtitle: Container(
+              width: 40,
+              constraints: BoxConstraints(maxWidth: 40),
+              child: Switch(
+                value: switchdatos,
+                onChanged: (value) {
+                  setState(() => switchdatos = value);
+                },
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 90),
+            ),
           ),
           ListTile(
             leading: estatus == false

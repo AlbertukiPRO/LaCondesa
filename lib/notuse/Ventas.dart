@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/variables/BuilderVentas.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/widget/Bar.dart';
+import 'package:lacondesa/notuse/Bar.dart';
 import 'package:lacondesa/widget/NavBar.dart';
 
 class Ventas extends StatefulWidget {

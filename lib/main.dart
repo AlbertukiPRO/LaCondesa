@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lacondesa/pages/Login.dart';
-import 'package:lacondesa/pages/NewQR_Lector.dart';
-import 'package:lacondesa/pages/QR_Lector.dart';
+import 'package:lacondesa/pages/QRLector.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/widget/IU_NEW.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:async/async.dart';

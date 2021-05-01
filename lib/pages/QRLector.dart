@@ -7,8 +7,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/widget/IU_NEW.dart';
-import 'package:lacondesa/widget/Venta_newvercion.dart';
+import 'package:lacondesa/pages/Inicio.dart';
+import 'package:lacondesa/pages/SeleccionGarrafon.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:alert/alert.dart';
@@ -122,10 +122,6 @@ class _QRNEWState extends State<QRNEW> {
         .catchError((onError) =>
             toast('Error, la conexión de red fallo o el QR esta dañado'));
   }
-
-  void toast(sms) => Alert(message: sms).show();
-
-  double _hide = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -279,51 +275,88 @@ class _QRNEWState extends State<QRNEW> {
     return showBarModalBottomSheet(
       context: context,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.4,
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height * 0.4,
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
+        ),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 15.0),
-              child: Text(
-                "Selecciona el garrafón",
-                style: texttitle2,
-                textScaleFactor: 1.2,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(bottom: 15.0),
+                child: Text(
+                  "Selecciona el garrafón",
+                  style: texttitle2,
+                  textScaleFactor: 1.2,
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => VentaIUX(
-                    id: '' + mydata[0]['idCliente'].toString(),
-                    nombre: '' + mydata[0]['nombreCliente'].toString(),
-                    puntos: mydata[0]['puntos'].toString() == 'null'
-                        ? "null"
-                        : mydata[0]['puntos'].toString(),
-                    preciogarrafon: Provider.of<User>(context, listen: false)
-                        .getpreciogarrafon,
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VentaIUX(
+                      id: '' + mydata[0]['idCliente'].toString(),
+                      nombre: '' + mydata[0]['nombreCliente'].toString(),
+                      puntos: mydata[0]['puntos'].toString() == 'null'
+                          ? "null"
+                          : mydata[0]['puntos'].toString(),
+                      preciogarrafon: Provider.of<User>(context, listen: false)
+                          .getpreciogarrafon,
+                    ),
+                  ),
+                ),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/water-bottle.svg",
+                        width: 80,
+                        height: 80,
+                      ),
+                      Text(
+                        'Garrafon Nuevo',
+                        style: subtext,
+                        textScaleFactor: 1.1,
+                      ),
+                      Text(
+                        '\$${Provider.of<User>(context, listen: false).getpreciogarrafon}',
+                        style: dinerofont,
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1.0,
+                        color: Color(0xfffdcdde1),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              child: Container(
+              Container(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
-                      "assets/icons/water-bottle.svg",
+                      "assets/icons/hydro-power.svg",
                       width: 80,
                       height: 80,
                     ),
                     Text(
-                      'Garrafon Nuevo',
+                      'Garrafon recargado',
                       style: subtext,
                       textScaleFactor: 1.1,
                     ),
                     Text(
-                      '\$${Provider.of<User>(context, listen: false).getpreciogarrafon}',
+                      '\$ ${Provider.of<User>(context, listen: false).getpreciogarrafon}',
+                      /*{context.watch<User>().getcostoRecarga}*/
                       style: dinerofont,
                     ),
                   ],
@@ -337,40 +370,8 @@ class _QRNEWState extends State<QRNEW> {
                   ),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/hydro-power.svg",
-                    width: 80,
-                    height: 80,
-                  ),
-                  Text(
-                    'Garrafon recargado',
-                    style: subtext,
-                    textScaleFactor: 1.1,
-                  ),
-                  Text(
-                    '\$ ${Provider.of<User>(context, listen: false).getpreciogarrafon}',
-                    /*{context.watch<User>().getcostoRecarga}*/
-                    style: dinerofont,
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 1.0,
-                    color: Color(0xfffdcdde1),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

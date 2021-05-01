@@ -2,16 +2,18 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lacondesa/pages/NewQR_Lector.dart';
+import 'package:lacondesa/pages/QRLector.dart';
+import 'package:lacondesa/pages/Settings.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/widget/Balance.dart';
-import 'package:lacondesa/widget/Catalogo.dart';
-import 'package:lacondesa/widget/Historial.dart';
-import 'package:lacondesa/widget/Venta_newvercion.dart';
+import 'package:lacondesa/pages/PageView/Balance.dart';
+import 'package:lacondesa/pages/PageView/Catalogo.dart';
+import 'package:lacondesa/pages/PageView/Historial.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'PageView/VistasoPremios.dart';
 
 class Inicio extends StatefulWidget {
   const Inicio({Key key}) : super(key: key);
@@ -24,6 +26,7 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
   PageController _pageController = PageController(
     initialPage: 0,
     viewportFraction: 1,
+    keepPage: false,
   );
 
   @override
@@ -178,10 +181,10 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
         },
         controller: _pageController,
         children: [
-          Balance(),
-          Catalogo(),
-          Historial(),
-          Historial(),
+          const Balance(),
+          const Catalogo(),
+          const VistasoClientes(),
+          const Settings(),
         ],
       ),
     );

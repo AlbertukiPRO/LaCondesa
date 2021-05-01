@@ -1,3 +1,5 @@
+/*
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -48,10 +50,11 @@ class _HomeWidgetState extends State<HomeWidget> {
   Future getDataPoints(String id) async {
     try {
       http.Response response = await http.post(
-          Uri.parse("https://enfastmx.com/lacondesa/getsaldoandpoints.php"),
-          body: {
-            "idrepartidor": id,
-          });
+        Uri.parse("https://enfastmx.com/lacondesa/getsaldoandpoints.php"),
+        body: {
+          "idrepartidor": id,
+        },
+      );
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
         print(result);
@@ -193,3 +196,5 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 }
+
+*/

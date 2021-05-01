@@ -1,3 +1,5 @@
+/*
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -322,3 +324,6 @@ class _QRLectorState extends State<QRLector> {
     });
   }
 }
+
+
+*/

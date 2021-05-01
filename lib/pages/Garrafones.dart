@@ -3,7 +3,7 @@ import 'package:lacondesa/variables/BuilderPromos.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:provider/provider.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/widget/Bar.dart';
+import 'package:lacondesa/notuse/Bar.dart';
 import 'package:lacondesa/widget/NavBar.dart';
 
 class Garrafones extends StatelessWidget {

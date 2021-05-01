@@ -1,3 +1,4 @@
+import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
 
 /* Estilos para los parrafos textos y titulos */
@@ -60,6 +61,8 @@ const primarycolorGradient = LinearGradient(
   ],
 );
 
+void toast(sms) => Alert(message: sms).show();
+
 // Type Dialog (1) => Normal
 // Type Dialog (2) => Warning
 // Type Dialog (3) => Error
@@ -69,12 +72,12 @@ Future<void> showMyDialog(String title, BuildContext context, String cuerpo,
         int typeDialog) async =>
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
           content: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,

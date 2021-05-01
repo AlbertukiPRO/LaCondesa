@@ -46,14 +46,31 @@ class Promos {
   }
 }
 
-class GetPromos extends StatelessWidget {
+class GetPromos extends StatefulWidget {
   const GetPromos({Key key}) : super(key: key);
+
+  @override
+  _GetPromosState createState() => _GetPromosState();
+}
+
+class _GetPromosState extends State<GetPromos> {
+  Future<List<Promos>> listasave;
+
+  @override
+  void initState() {
+    super.initState();
+    listasave = _getData();
+  }
+
+  Future<List<Promos>> _getData() async {
+    return await fetch(http.Client());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: fetch(http.Client()),
+        future: listasave,
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
@@ -67,63 +84,64 @@ class GetPromos extends StatelessWidget {
 
 class PromoList extends StatelessWidget {
   final List<Promos> lista;
-  PromoList({Key key, this.lista}) : super(key: key);
+  const PromoList({Key key, this.lista}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: lista.length,
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-            child: InkWell(
-              onTap: () => print(lista[index].id),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(lista[index].img),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          lista[index].nombre,
-                          style: textsubtitlemini,
-                          textScaleFactor: 1.2,
-                        ),
-                        Text(
-                          'Precio viejo: \$' + lista[index].precioviejo,
-                          style: texttitle2,
-                        ),
-                      ],
+    return SingleChildScrollView(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: lista.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+              child: InkWell(
+                onTap: () => print(lista[index].id),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.white,
+                      backgroundImage: NetworkImage(lista[index].img),
                     ),
-                  ),
-                  Text(
-                    'Ahora:',
-                    style: textsubtitlemini,
-                  ),
-                  Text(
-                    '\$' + lista[index].precionuevo,
-                    style: TextStyle(color: contraste),
-                    textScaleFactor: 1.4,
-                  )
-                ],
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            lista[index].nombre,
+                            style: textsubtitlemini,
+                            textScaleFactor: 1.2,
+                          ),
+                          Text(
+                            'Precio viejo: \$' + lista[index].precioviejo,
+                            style: texttitle2,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      'Ahora:',
+                      style: textsubtitlemini,
+                    ),
+                    Text(
+                      '\$' + lista[index].precionuevo,
+                      style: TextStyle(color: contraste),
+                      textScaleFactor: 1.4,
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

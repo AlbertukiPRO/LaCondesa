@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/TextBox.dart';
@@ -11,13 +10,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ButtonForm.dart';
 import 'package:provider/provider.dart';
-
-import 'IU_NEW.dart';
+import 'package:lacondesa/pages/Inicio.dart';
 
 class Formulario extends StatefulWidget {
-  const Formulario({
-    Key key,
-  }) : super(key: key);
+  const Formulario();
 
   @override
   _FormularioState createState() => _FormularioState();
@@ -166,7 +162,7 @@ class _FormularioState extends State<Formulario> {
               showMyDialog(
                 "No se encuentra al usuario",
                 context,
-                "Lo sentimos parece que no esta registrado en la base de datos, registrece e intentelo de nuevo \nCodigo" +
+                "Lo sentimos parece que no está registrado en la base de datos, regístrese e inténtelo de nuevo. \n[ respuesta ] (servidor) => " +
                     resulta.body,
                 3,
               );
@@ -193,21 +189,14 @@ class _FormularioState extends State<Formulario> {
             showMyDialog(
               "Uppss problemas",
               context,
-              "No fue posible conectar con el servidor, verifique su conexion e intentelo de nuevo\nCodigo: " +
+              "No fue posible conectar con el servidor, verifique su conexión e inténtelo de nuevo\n[ respuesta ] (servidor) => : " +
                   resulta.body,
               3,
             );
           }
         })
         .timeout(Duration(seconds: 40))
-        .catchError(
-          (onError) => showMyDialog(
-            "Uppss problemas",
-            context,
-            "No fue posible conectar con el servidor, verifique su conexion e intentelo de nuevo\nCodigo error: " +
-                onError.toString(),
-            4,
-          ),
-        );
+        .catchError((onError) =>
+            toast("Tiempo de espera agotado, compruebe su conexión de red."));
   }
 }

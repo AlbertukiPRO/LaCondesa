@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lacondesa/pages/Settings.dart';
@@ -7,7 +8,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:line_icons/line_icons.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'Garrafones.dart';
-import 'HomeWidget.dart';
+import '../notuse/HomeWidget.dart';
 import 'NewQR_Lector.dart';
 
 class Home extends StatefulWidget {
@@ -162,3 +163,5 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     );
   }
 }
+
+*/

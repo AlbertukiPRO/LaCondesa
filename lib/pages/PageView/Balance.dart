@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lacondesa/variables/BuilderVentas.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:rive/rive.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ import 'package:lacondesa/variables/User.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Balance extends StatefulWidget {
-  Balance({Key key}) : super(key: key);
+  const Balance({Key key}) : super(key: key);
 
   @override
   _BalanceState createState() => _BalanceState();
@@ -21,10 +21,14 @@ class _BalanceState extends State<Balance> {
   final riveFileName = 'assets/img/poins.riv';
   Artboard _artboard;
 
+  Future httpresponsedata;
+
   @override
   void initState() {
     super.initState();
     _loadRiveFile();
+    httpresponsedata = getDataPoints(
+        Provider.of<User>(context, listen: false).getid.toString());
   }
 
   void _loadRiveFile() async {
@@ -48,7 +52,7 @@ class _BalanceState extends State<Balance> {
             "idrepartidor": id,
           });
       if (response.statusCode == 200) {
-        var result = jsonDecode(response.body);
+        var result = await jsonDecode(response.body);
         print(result);
 
         //context.read<User>().setpuntos =
@@ -60,6 +64,7 @@ class _BalanceState extends State<Balance> {
       }
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
@@ -96,8 +101,7 @@ class _BalanceState extends State<Balance> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           FutureBuilder(
-                            future: getDataPoints(
-                                '' + context.watch<User>().getid.toString()),
+                            future: httpresponsedata,
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.hasError) {
@@ -214,8 +218,7 @@ class _BalanceState extends State<Balance> {
                       Column(
                         children: [
                           FutureBuilder(
-                            future: getDataPoints(
-                                '' + context.watch<User>().getid.toString()),
+                            future: httpresponsedata,
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.hasError) {
@@ -260,10 +263,7 @@ class _BalanceState extends State<Balance> {
           ),
           Container(
             width: size.width,
-            child: ListView(
-              shrinkWrap: true,
-              children: [Item_last_venta(), Item_last_venta()],
-            ),
+            child: const GetVentas(),
           )
         ],
       ),
@@ -346,61 +346,6 @@ class Header extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// ignore: camel_case_types
-class Item_last_venta extends StatelessWidget {
-  const Item_last_venta({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 30),
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SvgPicture.asset(
-            "assets/icons/water-bottle.svg",
-            height: 50,
-            width: 50,
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            width: MediaQuery.of(context).size.width * 0.3,
-            child: Text(
-              'Garrafon rellenado',
-              style: subtext,
-              textAlign: TextAlign.left,
-              maxLines: 2,
-              softWrap: true,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '03:00 Mayo 17',
-                style: textligth,
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                '+ \$ 45.50',
-                style: TextStyle(fontFamily: 'SFBlack', color: secundarycolor),
-                textScaleFactor: 1.2,
-              ),
-            ],
-          )
-        ],
-      ),
     );
   }
 }

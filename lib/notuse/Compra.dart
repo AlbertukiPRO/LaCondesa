@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lacondesa/pages/Home.dart';
 import 'package:lacondesa/pages/Premios.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/widget/IU_NEW.dart';
+import 'package:lacondesa/pages/Inicio.dart';
 import 'package:rive/rive.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -550,7 +549,7 @@ class _MakeComprarState extends State<MakeCompra> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Home(),
+                      builder: (context) => const Inicio(),
                     ),
                   );
                 },

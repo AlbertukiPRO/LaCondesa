@@ -29,6 +29,7 @@ class Ventas {
   final String fecha;
   final String total;
   final String idVenta;
+  final String tipoGarrafon;
 
   Ventas({
     this.cliente,
@@ -36,6 +37,7 @@ class Ventas {
     this.fecha,
     this.total,
     this.idVenta,
+    this.tipoGarrafon,
   });
 
   factory Ventas.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class Ventas {
       fecha: json['fecha_venta'] as String,
       cliente: json['nombreClientel'] as String,
       idVenta: json['idVenta'] as String,
+      tipoGarrafon: json['tipoGarrafon'] as String,
     );
   }
 }
@@ -55,17 +58,16 @@ class GetVentas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height,
       child: FutureBuilder(
         future:
             fetch(http.Client(), Provider.of<User>(context).getid.toString()),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              return Center(
-                child: TextButton(
-                  onPressed: () => null,
-                  child: Text('Comprueba tu conexión'),
-                ),
+              toast("Compruebe su conexión de red.");
+              return SizedBox(
+                width: 1,
               );
             case ConnectionState.waiting:
               return Center(child: CircularProgressIndicator());
@@ -74,6 +76,7 @@ class GetVentas extends StatelessWidget {
                   ? VentasList(lista: snapshot.data)
                   : CircularProgressIndicator();
             default:
+              toast(snapshot.data.toString());
               return Center(child: Text(snapshot.data.toString()));
           }
         },
@@ -90,71 +93,69 @@ class VentasList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemCount: lista.length,
       itemBuilder: (context, index) {
-        return Card(
-          elevation: 1,
+        return Container(
+          margin: EdgeInsets.only(bottom: 30),
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 40),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                height: 80,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
                   children: [
-                    TextButton(
-                      onPressed: () => null,
-                      child: Text(
-                        'Código de venta: #CONSA.${lista[index].idVenta}',
-                      ),
-                    ),
-                    Text(
-                      'Cantidad de Garrafones: ${lista[index].numeroGarrafones}',
-                      style: subtext,
-                      textScaleFactor: 1,
-                    ),
                     SvgPicture.asset(
-                      "assets/img/botella-de-agua.svg",
-                      width: MediaQuery.of(context).size.width * 0.1,
-                      height: MediaQuery.of(context).size.height * 0.1,
+                      "assets/icons/water-bottle.svg",
+                      height: 70,
+                      width: 70,
                     ),
-                    Text(
-                      'Nombre del Cliente:',
-                      style: subtext,
-                      textScaleFactor: 1,
-                    ),
-                    Text(
-                      '${lista[index].cliente}:',
-                      style: textligth,
-                      textScaleFactor: 1,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Total de la compra: ',
-                          style: subtext,
-                          textScaleFactor: 1,
-                        ),
-                        Text(
-                          '\$${lista[index].total}',
-                          style: textligth,
-                          textScaleFactor: 1.8,
-                        ),
-                      ],
-                    ),
+                    Container(
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        color: terciarycolor,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Text(
+                        'x${lista[index].numeroGarrafones}',
+                      ),
+                    )
                   ],
                 ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: Text(
+                  'Garrafon ${lista[index].tipoGarrafon}',
+                  style: subtext,
+                  textAlign: TextAlign.left,
+                  maxLines: 2,
+                  softWrap: true,
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '${lista[index].fecha}',
+                    style: textligth,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    '+ \$ ${lista[index].total}',
+                    style:
+                        TextStyle(fontFamily: 'SFBlack', color: secundarycolor),
+                    textScaleFactor: 1.2,
+                  ),
+                ],
               )
             ],
           ),
