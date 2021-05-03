@@ -35,7 +35,7 @@ class _CatalogoState extends State<Catalogo> {
                 children: [
                   Text(
                     'NUEVAS OFERTAS',
-                    style: texttitle2,
+                    style: Semibol_negra,
                     textScaleFactor: 1.3,
                   ),
                   const GetPromos()

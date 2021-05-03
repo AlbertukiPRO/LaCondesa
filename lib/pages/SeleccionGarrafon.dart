@@ -305,7 +305,7 @@ class _VentaIUXState extends State<VentaIUX>
               children: [
                 Text(
                   "Compra Realizada con exito",
-                  style: texttitle2,
+                  style: Semibol_negra,
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -388,11 +388,11 @@ class ContainerPuntos extends StatelessWidget {
                           context.watch<User>().getMinPoint
                       ? Text(
                           'Premios disponibles: 1',
-                          style: textsubtitle,
+                          style: Regular_negra,
                         )
                       : Text(
                           'Premios disponibles: 0',
-                          style: texttitle2,
+                          style: Semibol_negra,
                         ),
                 ),
                 Container(

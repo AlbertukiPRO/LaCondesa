@@ -54,16 +54,14 @@ class _BalanceState extends State<Balance> {
       if (response.statusCode == 200) {
         var result = await jsonDecode(response.body);
         print(result);
-
-        //context.read<User>().setpuntos =
-        //context.read<User>().setPay =
-
         return result;
       } else {
+        toast("Comprueba su conexión de red");
         return false;
       }
     } catch (e) {
       print(e);
+      toast("Balance (error) => dice: [ ${e.toString()} ]");
       return false;
     }
   }
@@ -101,28 +99,27 @@ class _BalanceState extends State<Balance> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           FutureBuilder(
-                            future: httpresponsedata,
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasError) {
-                                return Center(child: Text('Error'));
-                              }
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                var mydata = snapshot.data;
-                                return Text(
-                                  '\$ ${mydata[0]['Ganancias']}',
-                                  style: TextStyle(
-                                      fontFamily: 'SFBlack',
-                                      color: Colors.white),
-                                  textScaleFactor: 2,
-                                );
-                              } else {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
-                            },
-                          ),
+                              future: httpresponsedata,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.active:
+                                    return Text('Conectando al servidor');
+                                    break;
+                                  case ConnectionState.done:
+                                    var mydata = snapshot.data;
+                                    return Text(
+                                      '\$ ${mydata[0]['Ganancias']}',
+                                      style: Black_negra,
+                                      textScaleFactor: 2,
+                                    );
+                                  case ConnectionState.waiting:
+                                    return CircularProgressIndicator();
+                                  default:
+                                    return Icon(Icons
+                                        .signal_cellular_connected_no_internet_4_bar_outlined);
+                                }
+                              }),
                           Icon(
                             Icons.bar_chart_outlined,
                             color: Colors.white,
@@ -144,7 +141,7 @@ class _BalanceState extends State<Balance> {
                           RichText(
                               text: TextSpan(
                             text:
-                                'Excelente trabajo ${context.watch<User>().getnombre}, el saldo de dia de hoy es de ',
+                                'Excelente trabajo ${context.watch<User>().getnombre}, recuerda que al final del día debes presentar esta cantidad para hacer el corte de caja del día de hoy.  \n\n',
                             style: TextStyle(
                                 fontFamily: 'SFSemibold',
                                 color: textcolortitle,
@@ -152,19 +149,13 @@ class _BalanceState extends State<Balance> {
                                 wordSpacing: 1.2),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: '\$500',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: secundarycolor,
-                                      fontSize: 16)),
+                                text:
+                                    '"Miles de personas han sobrevivido sin amor, }',
+                                style: Semibol_negra,
+                              ),
                               TextSpan(
-                                  text:
-                                      ' recuerda que debes precentar esta cantidad',
-                                  style: TextStyle(
-                                      fontFamily: 'SFSemibold',
-                                      color: textcolortitle,
-                                      fontSize: 15,
-                                      wordSpacing: 1.2)),
+                                  text: 'ninguna sin agua.',
+                                  style: Semibol_gris),
                             ],
                           )),
                           SizedBox(
@@ -221,29 +212,28 @@ class _BalanceState extends State<Balance> {
                             future: httpresponsedata,
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasError) {
-                                return Center(child: Text('Error'));
-                              }
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                var mydata = snapshot.data;
-                                return Text(
-                                  '${mydata[0]['Puntos']}',
-                                  style: TextStyle(
-                                    fontFamily: 'SFBold',
-                                    color: primarycolor,
-                                  ),
-                                  textScaleFactor: 3,
-                                );
-                              } else {
-                                return Center(
-                                    child: CircularProgressIndicator());
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.active:
+                                  return Text('Conectando al servidor');
+                                  break;
+                                case ConnectionState.done:
+                                  var mydata = snapshot.data;
+                                  return Text(
+                                    '${mydata[0]['Puntos']}',
+                                    style: Black_negra,
+                                    textScaleFactor: 2,
+                                  );
+                                case ConnectionState.waiting:
+                                  return CircularProgressIndicator();
+                                default:
+                                  return Icon(Icons
+                                      .signal_cellular_connected_no_internet_4_bar_outlined);
                               }
                             },
                           ),
                           Text(
                             'Puntos totales',
-                            style: texttitle2,
+                            style: Semibol_negra,
                             textScaleFactor: 1.3,
                           ),
                         ],
@@ -257,7 +247,7 @@ class _BalanceState extends State<Balance> {
             width: size.width,
             child: Text(
               'Ultimas ventas',
-              style: textsubtitlemini,
+              style: Semibold_blanca,
               textScaleFactor: 1.2,
             ),
           ),

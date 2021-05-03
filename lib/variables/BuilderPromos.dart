@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -98,17 +99,22 @@ class PromoList extends StatelessWidget {
           itemCount: lista.length,
           itemBuilder: (context, index) {
             return Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               child: InkWell(
                 onTap: () => print(lista[index].id),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(lista[index].img),
+                    CachedNetworkImage(
+                      imageUrl: lista[index].img,
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                        backgroundImage: imageProvider,
+                        radius: 40,
+                      ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                     Container(
                       child: Column(
@@ -117,23 +123,23 @@ class PromoList extends StatelessWidget {
                         children: [
                           Text(
                             lista[index].nombre,
-                            style: textsubtitlemini,
+                            style: Semibol_negra,
                             textScaleFactor: 1.2,
                           ),
                           Text(
                             'Precio viejo: \$' + lista[index].precioviejo,
-                            style: texttitle2,
+                            style: Semibol_gris,
                           ),
                         ],
                       ),
                     ),
                     Text(
                       'Ahora:',
-                      style: textsubtitlemini,
+                      style: Regular_negra,
                     ),
                     Text(
                       '\$' + lista[index].precionuevo,
-                      style: TextStyle(color: contraste),
+                      style: Black_contraste,
                       textScaleFactor: 1.4,
                     )
                   ],

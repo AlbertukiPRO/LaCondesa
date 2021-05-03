@@ -3,7 +3,6 @@ import 'package:lacondesa/variables/BuilderPromos.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:provider/provider.dart';
 import 'package:lacondesa/variables/styles.dart';
-import 'package:lacondesa/notuse/Bar.dart';
 import 'package:lacondesa/widget/NavBar.dart';
 
 class Garrafones extends StatelessWidget {
@@ -22,10 +21,6 @@ class Garrafones extends StatelessWidget {
             SizedBox(
               height: 70,
             ),
-            BarRepartidor(
-                nombre: "Garrafones",
-                avatar:
-                    "https://aquaclyva.mx/wp-content/uploads/2018/03/garrafon-19l-1.jpg"),
             SizedBox(
               height: 10,
             ),
@@ -43,7 +38,7 @@ class Garrafones extends StatelessWidget {
               width: size.width * 0.8,
               child: Text(
                 'Promociones',
-                style: texttitle2,
+                style: Semibol_negra,
                 textScaleFactor: 1.1,
               ),
             ),

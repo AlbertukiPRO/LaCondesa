@@ -1,25 +1,23 @@
 import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 
 /* Estilos para los parrafos textos y titulos */
 const textligth = TextStyle(fontFamily: 'SFLigera', color: primarycolor);
-
 const titleapp = "Purificadora la Condesa";
-
-const texttitle = TextStyle(
-  fontFamily: 'SFSemibold',
-  color: Colors.white,
-);
-
-const textsubtitle = TextStyle(fontFamily: 'SFBlack', color: textcolorsubtitle);
-const textsubtitlemini =
+const texttitle = TextStyle(fontFamily: 'SFSemibold', color: Colors.white);
+const Semibol_gris =
     TextStyle(fontFamily: 'SFSemibold', color: textcolorsubtitle);
-
-const texttitle2 = TextStyle(fontFamily: 'SFSemibold', color: textcolortitle);
-
-const subtext = TextStyle(fontFamily: 'SFRegular', color: textcolortitle);
-
-const dinerofont = TextStyle(fontFamily: 'SFBlack', color: contraste);
+const Semibol_negra =
+    TextStyle(fontFamily: 'SFSemibold', color: textcolortitle);
+const Semibold_blanca =
+    TextStyle(fontFamily: 'SFSemibold', color: Colors.white);
+const Regular_negra = TextStyle(fontFamily: 'SFRegular', color: textcolortitle);
+const Regular_gris =
+    TextStyle(fontFamily: 'SFRegular', color: textcolorsubtitle);
+const Regular_contraste = TextStyle(fontFamily: 'SFRegular', color: contraste);
+const Black_contraste = TextStyle(fontFamily: 'SFBlack', color: contraste);
+const Black_negra = TextStyle(fontFamily: 'SFBlack', color: textcolortitle);
 
 const gradient = LinearGradient(
   begin: Alignment.topCenter,
@@ -60,6 +58,8 @@ const primarycolorGradient = LinearGradient(
     terciarycolor,
   ],
 );
+
+void vibrar() => Vibration.vibrate(amplitude: 100, duration: 600);
 
 void toast(sms) => Alert(message: sms).show();
 

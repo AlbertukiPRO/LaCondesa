@@ -357,7 +357,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                         children: [
                                           Text(
                                             'Usted recibirá',
-                                            style: textsubtitlemini,
+                                            style: Semibol_negra,
                                             textScaleFactor: 1.5,
                                           ),
                                           TextButton(
@@ -409,7 +409,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                             ),
                                             Text(
                                               'Usted a canjeado ${widget.puntosReque}',
-                                              style: texttitle2,
+                                              style: Semibol_gris,
                                               textScaleFactor: 1.5,
                                               textAlign: TextAlign.center,
                                             )

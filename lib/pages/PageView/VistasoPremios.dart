@@ -53,7 +53,7 @@ class _VistasoClientesState extends State<VistasoClientes> {
             children: [
               Text(
                 'PREMIOS',
-                style: texttitle2,
+                style: Semibol_negra,
                 textScaleFactor: 1.3,
               ),
               SingleChildScrollView(

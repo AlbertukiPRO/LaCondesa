@@ -133,7 +133,7 @@ class VentasList extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.3,
                 child: Text(
                   'Garrafon ${lista[index].tipoGarrafon}',
-                  style: subtext,
+                  style: Semibol_negra,
                   textAlign: TextAlign.left,
                   maxLines: 2,
                   softWrap: true,

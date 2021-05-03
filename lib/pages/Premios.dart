@@ -58,7 +58,7 @@ class _PremiosState extends State<Premios> {
                 children: [
                   Text(
                     'Seleccione su premio:',
-                    style: texttitle2,
+                    style: Semibol_negra,
                     textScaleFactor: 1.1,
                   )
                 ],

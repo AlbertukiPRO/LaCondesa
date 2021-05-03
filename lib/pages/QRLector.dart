@@ -15,6 +15,7 @@ import 'package:alert/alert.dart';
 import 'package:http/http.dart' as http;
 import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vibration/vibration.dart';
 
 class QRNEW extends StatefulWidget {
   const QRNEW();
@@ -98,6 +99,7 @@ class _QRNEWState extends State<QRNEW> {
 
     setState(() {
       _scanBarcode = barcodeScanRes;
+      vibrar();
     });
   }
 
@@ -205,7 +207,7 @@ class _QRNEWState extends State<QRNEW> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          titleTextStyle: texttitle2,
+          titleTextStyle: Semibol_negra,
           title: Text(
             "Actualizando Precios",
             textAlign: TextAlign.center,
@@ -287,7 +289,7 @@ class _QRNEWState extends State<QRNEW> {
                 padding: EdgeInsets.only(bottom: 15.0),
                 child: Text(
                   "Selecciona el garrafón",
-                  style: texttitle2,
+                  style: Semibol_negra,
                   textScaleFactor: 1.2,
                 ),
               ),
@@ -319,12 +321,12 @@ class _QRNEWState extends State<QRNEW> {
                       ),
                       Text(
                         'Garrafon Nuevo',
-                        style: subtext,
+                        style: Regular_negra,
                         textScaleFactor: 1.1,
                       ),
                       Text(
                         '\$${Provider.of<User>(context, listen: false).getpreciogarrafon}',
-                        style: dinerofont,
+                        style: Black_contraste,
                       ),
                     ],
                   ),
@@ -351,13 +353,13 @@ class _QRNEWState extends State<QRNEW> {
                     ),
                     Text(
                       'Garrafon recargado',
-                      style: subtext,
+                      style: Regular_negra,
                       textScaleFactor: 1.1,
                     ),
                     Text(
                       '\$ ${Provider.of<User>(context, listen: false).getpreciogarrafon}',
                       /*{context.watch<User>().getcostoRecarga}*/
-                      style: dinerofont,
+                      style: Black_contraste,
                     ),
                   ],
                 ),

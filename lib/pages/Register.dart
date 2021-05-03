@@ -180,12 +180,12 @@ class _RegisterState extends State<Register> {
                                   children: [
                                     Text(
                                       'Registro',
-                                      style: textsubtitle,
+                                      style: Black_negra,
                                       textScaleFactor: 2,
                                     ),
                                     Text(
                                       'Repartidores',
-                                      style: textsubtitlemini,
+                                      style: Regular_negra,
                                     ),
                                     SizedBox(
                                       height: 25,
@@ -438,7 +438,7 @@ class _RegisterState extends State<Register> {
                       ),
                       Text(
                         'Gracias por registrarse, vamos a trabajar..',
-                        style: textsubtitlemini,
+                        style: Semibol_negra,
                         textScaleFactor: 1.6,
                         textAlign: TextAlign.center,
                       ),
