@@ -15,7 +15,6 @@ import 'package:alert/alert.dart';
 import 'package:http/http.dart' as http;
 import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vibration/vibration.dart';
 
 class QRNEW extends StatefulWidget {
   const QRNEW();

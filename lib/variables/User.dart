@@ -5,11 +5,10 @@ class User with ChangeNotifier {
   int idRepartidor;
   String nombre;
   String avatar;
-  String garrafonesVendidos;
   String puntos;
   bool isLogin;
   bool themeLight = true;
-  bool islectorQR = false;
+  //bool islectorQR = false;
   double preciogarrafon;
   double pay;
   int minimopunto;
@@ -38,11 +37,6 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  set setgarrafonesvendidos(data) {
-    this.garrafonesVendidos = data;
-    notifyListeners();
-  }
-
   set setpuntos(data) {
     this.puntos = data;
     notifyListeners();
@@ -58,10 +52,10 @@ class User with ChangeNotifier {
     notifyListeners();
   }
 
-  set setiscodelectorQR(data) {
+  /*set setiscodelectorQR(data) {
     this.islectorQR = data;
     notifyListeners();
-  }
+  }*/
 
   set setPreciogarrafon(data) {
     this.preciogarrafon = data;
@@ -88,11 +82,10 @@ class User with ChangeNotifier {
   int get getid => this.idRepartidor;
   String get getnombre => this.nombre;
   String get getavatar => this.avatar;
-  String get getgarrafonesvendidos => this.garrafonesVendidos;
   String get getpuntos => this.puntos;
   bool get getisLogin => this.isLogin;
   bool get geThemeLigth => this.themeLight;
-  bool get getislectorQR => this.islectorQR;
+  //bool get getislectorQR => this.islectorQR;
   double get getpreciogarrafon => this.preciogarrafon;
   double get getPay => this.pay;
   int get getMinPoint => this.minimopunto;

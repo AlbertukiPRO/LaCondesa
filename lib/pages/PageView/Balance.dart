@@ -151,11 +151,11 @@ class _BalanceState extends State<Balance> {
                               TextSpan(
                                 text:
                                     '"Miles de personas han sobrevivido sin amor, }',
-                                style: Semibol_negra,
+                                style: Semibold_blanca,
                               ),
                               TextSpan(
                                   text: 'ninguna sin agua.',
-                                  style: Semibol_gris),
+                                  style: Semibold_blanca),
                             ],
                           )),
                           SizedBox(

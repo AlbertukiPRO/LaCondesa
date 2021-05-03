@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lacondesa/main.dart';
 import 'package:lacondesa/variables/User.dart';
+import 'package:lacondesa/variables/styles.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -119,7 +120,7 @@ class Lista extends StatefulWidget {
 class _ListaState extends State<Lista> {
   final AsyncMemoizer<bool> _memoizer = AsyncMemoizer();
   bool estatus = false;
-  bool switchdatos = false;
+  bool switchdatos = true;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -131,8 +132,18 @@ class _ListaState extends State<Lista> {
       child: ListView(
         children: <Widget>[
           ListTile(
+            leading: Icon(Icons.dashboard_customize),
+            title: Text('Registrar Cliente'),
+            onTap: () => toast("sms"),
+          ),
+          ListTile(
+            leading: Icon(Icons.dashboard_customize),
+            title: Text('Enviar tarjeta en formato digital'),
+            onTap: () => toast("open whast app"),
+          ),
+          ListTile(
             leading: Icon(Icons.wifi_lock),
-            title: Text('Ahorro de datos [No disponible]'),
+            title: Text('Ahorro de datos'),
             onTap: () {
               print('get location');
             },
@@ -161,20 +172,14 @@ class _ListaState extends State<Lista> {
           ListTile(
             leading: Icon(Icons.dashboard_customize),
             title: Text('Terminos y Condiciones'),
-          ),
-          ListTile(
-            leading: Icon(Icons.qr_code_sharp),
-            title: Text('Lector QR - Pruebas'),
+            onTap: () => toast("Espere.."),
           ),
           ListTile(
             leading: Icon(Icons.close),
-            title: Text('Cerrar Sesion'),
-            onTap: () {
-              context.read<User>().setisLogin = null;
-              closesecion();
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyApp()));
-            },
+            title: Text('Cerrar sesión'),
+            onTap: () => closesecion().whenComplete(() =>
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => MyApp()))),
           ),
         ],
       ),
@@ -220,7 +225,7 @@ class _ListaState extends State<Lista> {
     });
   }
 
-  closesecion() async {
+  Future closesecion() async {
     SharedPreferences disk = await SharedPreferences.getInstance();
     await disk.remove('isloginkey');
     await disk.remove('nombrekey');
