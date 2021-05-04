@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:async/async.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -334,7 +333,6 @@ class _ItemPageViewState extends State<ItemPageView> {
                               widget.nombre,
                             ).whenComplete(() {
                               showMaterialModalBottomSheet(
-                                expand: true,
                                 context: context,
                                 builder: (context) => Container(
                                   padding: EdgeInsets.symmetric(
@@ -342,290 +340,308 @@ class _ItemPageViewState extends State<ItemPageView> {
                                     vertical: 20,
                                   ),
                                   height: MediaQuery.of(context).size.height,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Usted recibirá',
-                                            style: Semibol_negra,
-                                            textScaleFactor: 1.5,
-                                          ),
-                                          TextButton(
-                                            onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const Inicio(),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Listo',
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                Icon(Icons.check),
-                                              ],
-                                            ),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      primarycolor),
-                                              overlayColor:
-                                                  MaterialStateProperty.all(
-                                                      contraste),
-                                              foregroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.white),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        width: sizewidth,
-                                        child: Row(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            SvgPicture.asset(
-                                              "assets/icons/coins.svg",
-                                              width: 70,
-                                              height: 70,
-                                            ),
                                             Text(
-                                              'Usted a canjeado ${widget.puntosReque}',
-                                              style: Semibol_gris,
+                                              'Usted recibirá',
+                                              style: Semibol_negra,
                                               textScaleFactor: 1.5,
-                                              textAlign: TextAlign.center,
-                                            )
+                                            ),
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Inicio(),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Listo',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  Icon(Icons.check),
+                                                ],
+                                              ),
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        primarycolor),
+                                                overlayColor:
+                                                    MaterialStateProperty.all(
+                                                        contraste),
+                                                foregroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.white),
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                      Container(
-                                        width: sizewidth * 0.8,
-                                        height: sizealto * 0.5,
-                                        child: InkWell(
-                                          child: Stack(
+                                        Container(
+                                          width: sizewidth,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             children: [
-                                              CachedNetworkImage(
-                                                imageUrl: widget.image,
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Container(
-                                                    width: sizewidth,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
-                                                    CircularProgressIndicator(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
+                                              SvgPicture.asset(
+                                                "assets/icons/coins.svg",
+                                                width: 70,
+                                                height: 70,
                                               ),
-                                              Container(
-                                                height: MediaQuery.of(context)
-                                                    .size
-                                                    .height,
-                                                width: sizewidth,
-                                                decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                    begin:
-                                                        Alignment.bottomCenter,
-                                                    end: Alignment(0.0, 0.0),
-                                                    colors: [
-                                                      const Color.fromRGBO(
-                                                          0, 0, 0, 0.9595),
-                                                      const Color.fromRGBO(
-                                                          0, 0, 0, 0),
-                                                    ],
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: sizewidth,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 15,
-                                                    vertical: 15),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 5,
-                                                              horizontal: 10),
+                                              Text(
+                                                'Usted a canjeado ${widget.puntosReque} puntos de su cuenta',
+                                                style: Semibol_gris,
+                                                textScaleFactor: 1.5,
+                                                textAlign: TextAlign.center,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          width: sizewidth * 0.8,
+                                          height: sizealto * 0.5,
+                                          child: InkWell(
+                                            child: Stack(
+                                              children: [
+                                                CachedNetworkImage(
+                                                  imageUrl: widget.image,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    child: Container(
+                                                      width: sizewidth,
                                                       decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(25),
-                                                        color: Color.fromRGBO(
-                                                            0, 0, 0, 0.3),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          SvgPicture.asset(
-                                                            "assets/icons/coins.svg",
-                                                            width: 10,
-                                                            height: 10,
-                                                          ),
-                                                          Text(
-                                                            widget.puntosReque,
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    'SFBold',
-                                                                color: Colors
-                                                                    .white),
-                                                            textScaleFactor: 1,
-                                                          ),
-                                                        ],
+                                                        image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
-                                                    Spacer(),
-                                                    InkWell(
-                                                      onTap: () =>
-                                                          print('beto'),
-                                                      child: Container(
-                                                        padding:
-                                                            EdgeInsets.all(5),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                        child: Icon(
-                                                          LineIcons.heart,
-                                                          color: Colors.pink,
-                                                          size: 20,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
+                                                  ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
                                                 ),
-                                              ),
-                                              Positioned(
-                                                bottom: sizealto * 0.03,
-                                                child: Container(
+                                                Container(
+                                                  height: MediaQuery.of(context)
+                                                      .size
+                                                      .height,
                                                   width: sizewidth,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      begin: Alignment
+                                                          .bottomCenter,
+                                                      end: Alignment(0.0, 0.0),
+                                                      colors: [
+                                                        const Color.fromRGBO(
+                                                            0, 0, 0, 0.9595),
+                                                        const Color.fromRGBO(
+                                                            0, 0, 0, 0),
+                                                      ],
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: sizewidth,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 15),
+                                                  child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                        MainAxisAlignment
+                                                            .spaceAround,
                                                     children: [
                                                       Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 10,
-                                                                  horizontal:
-                                                                      20),
-                                                          child: TextButton(
-                                                            onPressed: () =>
-                                                                null,
-                                                            style: ButtonStyle(
-                                                              backgroundColor:
-                                                                  MaterialStateProperty
-                                                                      .all(
-                                                                          primarycolor),
-                                                              overlayColor:
-                                                                  MaterialStateProperty
-                                                                      .all(
-                                                                          contraste),
-                                                              foregroundColor:
-                                                                  MaterialStateProperty
-                                                                      .all(Colors
-                                                                          .white),
-                                                            ),
-                                                            child:
-                                                                Text('Nuevo'),
-                                                          )),
-                                                      Container(
-                                                        width: sizewidth * 0.8,
-                                                        alignment: Alignment
-                                                            .centerLeft,
                                                         padding: EdgeInsets
                                                             .symmetric(
-                                                                vertical: 0,
-                                                                horizontal: 20),
-                                                        child: Text(
-                                                          widget.nombre,
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            height: 1,
-                                                          ),
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          textScaleFactor: 2.2,
-                                                          maxLines: 2,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                          softWrap: true,
+                                                                vertical: 5,
+                                                                horizontal: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(25),
+                                                          color: Color.fromRGBO(
+                                                              0, 0, 0, 0.3),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/icons/coins.svg",
+                                                              width: 10,
+                                                              height: 10,
+                                                            ),
+                                                            Text(
+                                                              widget
+                                                                  .puntosReque,
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'SFBold',
+                                                                  color: Colors
+                                                                      .white),
+                                                              textScaleFactor:
+                                                                  1,
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                      Container(
-                                                        width: sizewidth * 0.6,
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 10,
-                                                                horizontal: 20),
-                                                        child: Text(
-                                                          widget.descripcion,
-                                                          style: TextStyle(
-                                                              fontFamily:
-                                                                  'SFLigera',
-                                                              color:
-                                                                  Colors.white),
-                                                          textScaleFactor: 1,
+                                                      Spacer(),
+                                                      InkWell(
+                                                        onTap: () =>
+                                                            print('beto'),
+                                                        child: Container(
+                                                          padding:
+                                                              EdgeInsets.all(5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                          child: Icon(
+                                                            LineIcons.heart,
+                                                            color: Colors.pink,
+                                                            size: 20,
+                                                          ),
                                                         ),
                                                       )
                                                     ],
                                                   ),
                                                 ),
-                                              )
-                                            ],
+                                                Positioned(
+                                                  bottom: sizealto * 0.03,
+                                                  child: Container(
+                                                    width: sizewidth,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        10,
+                                                                    horizontal:
+                                                                        20),
+                                                            child: TextButton(
+                                                              onPressed: () =>
+                                                                  null,
+                                                              style:
+                                                                  ButtonStyle(
+                                                                backgroundColor:
+                                                                    MaterialStateProperty
+                                                                        .all(
+                                                                            primarycolor),
+                                                                overlayColor:
+                                                                    MaterialStateProperty
+                                                                        .all(
+                                                                            contraste),
+                                                                foregroundColor:
+                                                                    MaterialStateProperty
+                                                                        .all(Colors
+                                                                            .white),
+                                                              ),
+                                                              child:
+                                                                  Text('Nuevo'),
+                                                            )),
+                                                        Container(
+                                                          width:
+                                                              sizewidth * 0.8,
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 0,
+                                                                  horizontal:
+                                                                      20),
+                                                          child: Text(
+                                                            widget.nombre,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              height: 1,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            textScaleFactor:
+                                                                2.2,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            softWrap: true,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width:
+                                                              sizewidth * 0.6,
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 10,
+                                                                  horizontal:
+                                                                      20),
+                                                          child: Text(
+                                                            widget.descripcion,
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'SFLigera',
+                                                                color: Colors
+                                                                    .white),
+                                                            textScaleFactor: 1,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
                             })
-                          : print("object");
+                          : toast("Primero debe ganar puntos.");
                     },
                     child: this.isCanjeo
                         ? CircularProgressIndicator()

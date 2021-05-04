@@ -304,6 +304,7 @@ class _QRNEWState extends State<QRNEW> {
                           : mydata[0]['puntos'].toString(),
                       preciogarrafon: Provider.of<User>(context, listen: false)
                           .getpreciogarrafon,
+                      typeGarrafon: 'Nuevo',
                     ),
                   ),
                 ),
@@ -339,34 +340,51 @@ class _QRNEWState extends State<QRNEW> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/icons/hydro-power.svg",
-                      width: 80,
-                      height: 80,
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VentaIUX(
+                      id: '' + mydata[0]['idCliente'].toString(),
+                      nombre: '' + mydata[0]['nombreCliente'].toString(),
+                      puntos: mydata[0]['puntos'].toString() == 'null'
+                          ? "null"
+                          : mydata[0]['puntos'].toString(),
+                      preciogarrafon: Provider.of<User>(context, listen: false)
+                          .getcostoRecarga,
+                      typeGarrafon: 'Regarcado',
                     ),
-                    Text(
-                      'Garrafon recargado',
-                      style: Regular_negra,
-                      textScaleFactor: 1.1,
-                    ),
-                    Text(
-                      '\$ ${Provider.of<User>(context, listen: false).getpreciogarrafon}',
-                      /*{context.watch<User>().getcostoRecarga}*/
-                      style: Black_contraste,
-                    ),
-                  ],
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 1.0,
-                      color: Color(0xfffdcdde1),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/hydro-power.svg",
+                        width: 80,
+                        height: 80,
+                      ),
+                      Text(
+                        'Garrafon Rellenado',
+                        style: Regular_negra,
+                        textScaleFactor: 1.1,
+                      ),
+                      Text(
+                        '\$ ${Provider.of<User>(context, listen: false).getcostoRecarga}',
+                        /*{context.watch<User>().getcostoRecarga}*/
+                        style: Black_contraste,
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1.0,
+                        color: Color(0xfffdcdde1),
+                      ),
                     ),
                   ),
                 ),

@@ -110,7 +110,7 @@ class _BalanceState extends State<Balance> {
                                     var mydata = snapshot.data;
                                     return Text(
                                       '\$ ${mydata[0]['Ganancias']}',
-                                      style: Black_negra,
+                                      style: Black_contraste,
                                       textScaleFactor: 2,
                                     );
                                   case ConnectionState.waiting:
@@ -120,10 +120,11 @@ class _BalanceState extends State<Balance> {
                                         .signal_cellular_connected_no_internet_4_bar_outlined);
                                 }
                               }),
-                          Icon(
-                            Icons.bar_chart_outlined,
-                            color: Colors.white,
-                            size: 25,
+                          IconButton(
+                            icon: Icon(Icons.bar_chart_outlined,
+                                color: Colors.white, size: 25),
+                            onPressed: () =>
+                                toast("Esta es la suma de tus ventas de hoy"),
                           )
                         ],
                       ),
@@ -150,12 +151,12 @@ class _BalanceState extends State<Balance> {
                             children: <TextSpan>[
                               TextSpan(
                                 text:
-                                    '"Miles de personas han sobrevivido sin amor, }',
-                                style: Semibold_blanca,
+                                    '"Miles de personas han sobrevivido sin amor, ',
+                                style: Semibol_gris,
                               ),
                               TextSpan(
                                   text: 'ninguna sin agua.',
-                                  style: Semibold_blanca),
+                                  style: Semibol_gris),
                             ],
                           )),
                           SizedBox(
@@ -220,7 +221,7 @@ class _BalanceState extends State<Balance> {
                                   var mydata = snapshot.data;
                                   return Text(
                                     '${mydata[0]['Puntos']}',
-                                    style: Black_negra,
+                                    style: Black_contraste,
                                     textScaleFactor: 2,
                                   );
                                 case ConnectionState.waiting:
@@ -247,7 +248,7 @@ class _BalanceState extends State<Balance> {
             width: size.width,
             child: Text(
               'Ultimas ventas',
-              style: Semibold_blanca,
+              style: Semibol_negra,
               textScaleFactor: 1.2,
             ),
           ),

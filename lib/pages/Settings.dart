@@ -132,12 +132,12 @@ class _ListaState extends State<Lista> {
       child: ListView(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.dashboard_customize),
+            leading: Icon(Icons.add),
             title: Text('Registrar Cliente'),
             onTap: () => toast("sms"),
           ),
           ListTile(
-            leading: Icon(Icons.dashboard_customize),
+            leading: Icon(Icons.card_membership_outlined),
             title: Text('Enviar tarjeta en formato digital'),
             onTap: () => toast("open whast app"),
           ),
@@ -170,7 +170,7 @@ class _ListaState extends State<Lista> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.dashboard_customize),
+            leading: Icon(Icons.text_format_sharp),
             title: Text('Terminos y Condiciones'),
             onTap: () => toast("Espere.."),
           ),
@@ -250,7 +250,7 @@ class Perfil extends StatelessWidget {
     return Column(
       children: <Widget>[
         CircleAvatar(
-          radius: size.aspectRatio * 80,
+          radius: size.aspectRatio * 120,
           backgroundImage: NetworkImage(provider.getavatar),
         ),
         Container(

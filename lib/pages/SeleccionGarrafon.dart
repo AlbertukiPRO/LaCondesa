@@ -9,6 +9,7 @@ import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:lacondesa/pages/Inicio.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
@@ -17,6 +18,7 @@ class VentaIUX extends StatefulWidget {
   final String id;
   final String puntos;
   final double preciogarrafon;
+  final String typeGarrafon;
 
   VentaIUX({
     Key key,
@@ -24,20 +26,21 @@ class VentaIUX extends StatefulWidget {
     this.id,
     this.puntos,
     this.preciogarrafon,
+    this.typeGarrafon,
   }) : super(key: key);
 
   @override
   _VentaIUXState createState() => _VentaIUXState();
 }
 
-class _VentaIUXState extends State<VentaIUX>
-    with SingleTickerProviderStateMixin {
+class _VentaIUXState extends State<VentaIUX> {
   int countgarrafones = 1;
   double preciogarrafon = 0;
   double preciototal = 0;
   bool estatus = false;
   String mensanje = "";
   double _currentSlider = 1;
+  String puntosLocales;
 
   final riveFileName = 'assets/img/newagua.riv';
   Artboard _artboard;
@@ -45,6 +48,8 @@ class _VentaIUXState extends State<VentaIUX>
   @override
   void initState() {
     this.preciototal = widget.preciogarrafon * countgarrafones;
+    this.puntosLocales = widget.puntos;
+    _loadRiveFile();
     super.initState();
   }
 
@@ -71,7 +76,21 @@ class _VentaIUXState extends State<VentaIUX>
         opacity: estatus ? 0.0 : 1.0,
         child: InkWell(
           onTap: () => addventa(Provider.of<User>(context, listen: false).getid,
-              int.parse(widget.id)),
+                  int.parse(widget.id))
+              .whenComplete(
+            () => showBarModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Congratulations(
+                  puntos: this.puntosLocales,
+                  id: widget.id,
+                );
+              },
+            ).whenComplete(() {
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Inicio()));
+            }),
+          ),
           child:
               BotonAddCompra(size: size, estatus: estatus, mensanje: mensanje),
         ),
@@ -84,12 +103,12 @@ class _VentaIUXState extends State<VentaIUX>
           children: [
             Container(
               padding: EdgeInsets.only(bottom: 20),
-              height: size.height * 0.35,
+              height: size.height * 0.30,
               width: size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    "assets/img/ilustraciones-gratuitas.png",
+                    "assets/img/banner.png",
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -97,7 +116,7 @@ class _VentaIUXState extends State<VentaIUX>
             ),
             Container(
               padding: EdgeInsets.only(bottom: 20),
-              height: size.height * 0.35,
+              height: size.height * 0.30,
               decoration:
                   BoxDecoration(color: Color(0xFFF3B5FFE).withOpacity(0.80)),
             ),
@@ -120,22 +139,17 @@ class _VentaIUXState extends State<VentaIUX>
                   ),
                   ContainerCliente(
                     nombre: widget.nombre,
-                    puntos: widget.puntos,
+                    puntos: this.puntosLocales,
                     size: size,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ContainerPuntos(
-                        puntos: widget.puntos,
-                        id: widget.id,
-                        size: size,
-                      ),
                       _artboard != null
                           ? Container(
-                              padding: EdgeInsets.only(left: size.width * 0.12),
-                              width: 350,
-                              height: 350,
+                              padding: EdgeInsets.only(left: size.width * 0.09),
+                              width: 300,
+                              height: 300,
                               child: Rive(
                                 alignment: Alignment.centerLeft,
                                 artboard: _artboard,
@@ -150,7 +164,7 @@ class _VentaIUXState extends State<VentaIUX>
                               ),
                             ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Slider(
                           value: _currentSlider,
@@ -177,6 +191,33 @@ class _VentaIUXState extends State<VentaIUX>
                           width: size.width * 0.8,
                           child: Column(
                             children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Tipo de garrafón',
+                                    style: textligth,
+                                    textScaleFactor: 1.2,
+                                  ),
+                                  TextButton.icon(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              primarycolor),
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                    ),
+                                    onPressed: () => null,
+                                    icon: Icon(
+                                      Icons.shopping_bag_outlined,
+                                    ),
+                                    label: Text('${widget.typeGarrafon}'),
+                                  ),
+                                ],
+                              ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment:
@@ -239,11 +280,17 @@ class _VentaIUXState extends State<VentaIUX>
                               ),
                             ],
                           )),
+                      ContainerPuntos(
+                          puntos: this.puntosLocales,
+                          id: widget.id,
+                          size: size),
                       estatus
                           ? CircularProgressIndicator()
-                          : SizedBox(
-                              width: 1,
-                            ),
+                          : (estatus == null
+                              ? Text('Compre realizada')
+                              : SizedBox(
+                                  height: 1,
+                                )),
                     ],
                   ),
                 ],
@@ -255,21 +302,21 @@ class _VentaIUXState extends State<VentaIUX>
     );
   }
 
-  addventa(int idR, int idC) async {
+  Future addventa(int idR, int idC) async {
     setState(() => estatus = true);
     print("idCliente: " +
         idC.toString() +
         ", IdRepartidor: " +
         idR.toString() +
         ", N. garrafones" +
-        countgarrafones.toString() +
+        this._currentSlider.round().toString() +
         ", total: " +
         this.preciototal.toString());
     await http
         .post(Uri.parse("https://enfastmx.com/lacondesa/add_venta.php"), body: {
           "id_cliente": '' + idC.toString(),
           "id_repartidor": '' + idR.toString(),
-          "garrafones": '' + countgarrafones.toString(),
+          "garrafones": '' + this._currentSlider.round().toString(),
           "total": '' + this.preciototal.toString(),
         })
         .then((response) {
@@ -277,13 +324,19 @@ class _VentaIUXState extends State<VentaIUX>
             setState(() {
               mensanje = "No se pudo realizar la compra";
               estatus = true;
+              toast("El cliente no entrado");
             });
           } else if (response.body == "ok") {
             setState(() {
               mensanje = "Compra realizada";
               estatus = true;
             });
-            showMyDialog1();
+            setState(() {
+              int ptlocal = int.parse(widget.puntos.toString()) +
+                  int.parse(_currentSlider.round().toString());
+              this.puntosLocales = ptlocal.toString();
+            });
+            //showMyDialog1();
           }
         })
         .timeout(Duration(seconds: 40))
@@ -292,7 +345,8 @@ class _VentaIUXState extends State<VentaIUX>
             mensanje = "Error Conection";
             estatus = true;
           });
-          showMyDialog1();
+          toast(
+              "El servidor tardo mucho tiempo en responder intentalo de nuevo");
         });
   }
 
@@ -328,7 +382,7 @@ class _VentaIUXState extends State<VentaIUX>
                     onPressed: () => null,
                     child: Text(
                       '' +
-                          (int.parse(widget.puntos) + countgarrafones)
+                          (int.parse(this.puntosLocales) + countgarrafones)
                               .toString(),
                       style: TextStyle(color: contraste),
                       textScaleFactor: 1.5,
@@ -360,6 +414,61 @@ class _VentaIUXState extends State<VentaIUX>
       );
 }
 
+class Congratulations extends StatelessWidget {
+  final String puntos;
+  final String id;
+
+  Congratulations({
+    @required this.puntos,
+    @required this.id,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.6,
+        minHeight: MediaQuery.of(context).size.height * 0.4,
+      ),
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: Image.asset("assets/icons/success.gif",
+                    width: 50, height: 50)),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                'Compra realizada con exito. \nGracias por su preferencia',
+                style: Semibol_negra,
+                textScaleFactor: 1.3,
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.25,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/img/banner.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            ContainerPuntos(puntos: this.puntos, id: this.id, size: size),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class ContainerPuntos extends StatelessWidget {
   const ContainerPuntos({
     Key key,
@@ -375,56 +484,63 @@ class ContainerPuntos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return int.parse(this.puntos) >= context.watch<User>().getMinPoint
-        ? Container(
-            margin: EdgeInsets.symmetric(vertical: 20),
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () => null,
-                  child: int.parse(this.puntos) >=
-                          context.watch<User>().getMinPoint
-                      ? Text(
-                          'Premios disponibles: 1',
-                          style: Regular_negra,
-                        )
-                      : Text(
-                          'Premios disponibles: 0',
-                          style: Semibol_negra,
-                        ),
+        ? InkWell(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Premios(
+                  puntos: this.puntos,
+                  idcliente: this.id,
                 ),
-                Container(
-                  width: size.width * 0.35,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image.asset(
-                        "assets/icons/regalo.gif",
-                        fit: BoxFit.cover,
-                        width: 80,
-                      ),
-                      IconButton(
-                        icon: Icon(
+              ),
+            ),
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 20),
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => null,
+                    child: int.parse(this.puntos) >=
+                            context.watch<User>().getMinPoint
+                        ? Text(
+                            'Premios disponibles:    1',
+                            style: TextStyle(
+                                fontFamily: 'SFRegular',
+                                fontWeight: FontWeight.w600,
+                                color: primarycolor),
+                            textScaleFactor: 1.2,
+                          )
+                        : Text(
+                            'Premios disponibles: 0',
+                            style: Black_negra,
+                          ),
+                  ),
+                  Container(
+                    width: size.width * 0.35,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Image.asset(
+                          "assets/icons/regalo.gif",
+                          fit: BoxFit.cover,
+                          width: 80,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
                           Icons.arrow_forward_ios_outlined,
                           color: textcolorsubtitle,
                           size: 25,
                         ),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Premios(
-                              puntos: this.puntos,
-                              idcliente: this.id,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         : SizedBox(

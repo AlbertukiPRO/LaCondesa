@@ -123,6 +123,7 @@ class VentasList extends StatelessWidget {
                       ),
                       child: Text(
                         'x${lista[index].numeroGarrafones}',
+                        style: Semibold_blanca,
                       ),
                     )
                   ],
