@@ -8,7 +8,6 @@ import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/pages/PageView/Balance.dart';
 import 'package:lacondesa/pages/PageView/Catalogo.dart';
-import 'package:lacondesa/pages/PageView/Historial.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

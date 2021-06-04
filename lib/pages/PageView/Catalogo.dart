@@ -9,9 +9,11 @@ class Catalogo extends StatefulWidget {
   _CatalogoState createState() => _CatalogoState();
 }
 
-class _CatalogoState extends State<Catalogo> {
+class _CatalogoState extends State<Catalogo>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return Container(
       child: Stack(
@@ -129,4 +131,7 @@ class _CatalogoState extends State<Catalogo> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

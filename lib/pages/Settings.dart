@@ -134,12 +134,12 @@ class _ListaState extends State<Lista> {
           ListTile(
             leading: Icon(Icons.add),
             title: Text('Registrar Cliente'),
-            onTap: () => toast("sms"),
+            onTap: () => toast("Esta opcion esta en desarrollo"),
           ),
           ListTile(
             leading: Icon(Icons.card_membership_outlined),
             title: Text('Enviar tarjeta en formato digital'),
-            onTap: () => toast("open whast app"),
+            onTap: () => toast("Esta opcion esta en desarollo"),
           ),
           ListTile(
             leading: Icon(Icons.wifi_lock),
@@ -172,7 +172,7 @@ class _ListaState extends State<Lista> {
           ListTile(
             leading: Icon(Icons.text_format_sharp),
             title: Text('Terminos y Condiciones'),
-            onTap: () => toast("Espere.."),
+            onTap: () => toast("Esta opcion esta en desarrollo"),
           ),
           ListTile(
             leading: Icon(Icons.close),

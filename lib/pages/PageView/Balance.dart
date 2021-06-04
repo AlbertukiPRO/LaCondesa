@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:lacondesa/variables/BuilderVentas.dart';
 import 'package:lacondesa/variables/styles.dart';
@@ -17,7 +18,7 @@ class Balance extends StatefulWidget {
   _BalanceState createState() => _BalanceState();
 }
 
-class _BalanceState extends State<Balance> {
+class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
   final riveFileName = 'assets/img/poins.riv';
   Artboard _artboard;
 
@@ -68,6 +69,7 @@ class _BalanceState extends State<Balance> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
@@ -142,7 +144,7 @@ class _BalanceState extends State<Balance> {
                           RichText(
                               text: TextSpan(
                             text:
-                                'Excelente trabajo ${context.watch<User>().getnombre}, recuerda que al final del día debes presentar esta cantidad para hacer el corte de caja del día de hoy.  \n\n',
+                                'Excelente trabajo ${context.watch<User>().getnombre}, recuerda que al final del día las ventas se reinician.  \n\n',
                             style: TextStyle(
                                 fontFamily: 'SFSemibold',
                                 color: textcolortitle,
@@ -162,26 +164,6 @@ class _BalanceState extends State<Balance> {
                           SizedBox(
                             height: 20,
                           ),
-                          InkWell(
-                            highlightColor: Colors.greenAccent,
-                            borderRadius: BorderRadius.circular(15),
-                            splashColor: Colors.orangeAccent,
-                            onTap: () => print('object'),
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: size.width,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 25),
-                              decoration: BoxDecoration(
-                                  color: primarycolor,
-                                  borderRadius: BorderRadius.circular(25)),
-                              child: Text(
-                                'Corte de caja',
-                                style: TextStyle(
-                                    fontFamily: 'SFBlack', color: Colors.white),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -260,6 +242,9 @@ class _BalanceState extends State<Balance> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class Header extends StatelessWidget {
@@ -328,10 +313,6 @@ class Header extends StatelessWidget {
                     textScaleFactor: 1.2,
                   ),
                 ],
-              ),
-              Icon(
-                Icons.more_vert_outlined,
-                color: Colors.white,
               ),
             ],
           ),

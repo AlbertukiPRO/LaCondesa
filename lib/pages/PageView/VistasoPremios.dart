@@ -9,7 +9,8 @@ class VistasoClientes extends StatefulWidget {
   _VistasoClientesState createState() => _VistasoClientesState();
 }
 
-class _VistasoClientesState extends State<VistasoClientes> {
+class _VistasoClientesState extends State<VistasoClientes>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -78,4 +79,7 @@ class _VistasoClientesState extends State<VistasoClientes> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
