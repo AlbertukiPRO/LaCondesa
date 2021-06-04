@@ -231,7 +231,7 @@ class _QRNEWState extends State<QRNEW> {
                           SizedBox(
                             height: 10,
                           ),
-                          !snapshot.data
+                          !snapshot.data //hasData
                               ? CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Colors.amber),
