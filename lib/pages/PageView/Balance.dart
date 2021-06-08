@@ -189,38 +189,6 @@ class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
                       SizedBox(
                         width: 10,
                       ),
-                      Column(
-                        children: [
-                          FutureBuilder(
-                            future: httpresponsedata,
-                            builder:
-                                (BuildContext context, AsyncSnapshot snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.active:
-                                  return Text('Conectando al servidor');
-                                  break;
-                                case ConnectionState.done:
-                                  var mydata = snapshot.data;
-                                  return Text(
-                                    '${mydata[0]['Puntos']}',
-                                    style: Black_contraste,
-                                    textScaleFactor: 2,
-                                  );
-                                case ConnectionState.waiting:
-                                  return CircularProgressIndicator();
-                                default:
-                                  return Icon(Icons
-                                      .signal_cellular_connected_no_internet_4_bar_outlined);
-                              }
-                            },
-                          ),
-                          Text(
-                            'Puntos totales',
-                            style: Semibol_negra,
-                            textScaleFactor: 1.3,
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 )
@@ -236,6 +204,10 @@ class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
           ),
           Container(
             width: size.width,
+            constraints: BoxConstraints(
+              maxHeight: size.height * 0.5,
+              minHeight: 80,
+            ),
             child: const GetVentas(),
           )
         ],

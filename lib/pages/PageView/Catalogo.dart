@@ -64,7 +64,7 @@ class _CatalogoState extends State<Catalogo>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Tiempo restante',
+                        'Tiempo limitado',
                         style: TextStyle(
                             fontFamily: 'SFLigera', color: Colors.white),
                         textScaleFactor: 0.9,
@@ -86,7 +86,7 @@ class _CatalogoState extends State<Catalogo>
                       Container(
                         width: size.width * 0.4,
                         child: Text(
-                          'lorem impus sacalorem impus sacalorem impus sacalorem impus sacalorem impus saca',
+                          '¡Estas son las nuevas ofertas que la condesa tiene para ti, dale un vistazo!',
                           style: TextStyle(
                               fontFamily: 'SFLigera', color: Colors.white),
                           textScaleFactor: 0.9,
@@ -107,19 +107,21 @@ class _CatalogoState extends State<Catalogo>
                             color: Colors.white,
                           ),
                         ),
-                        child: Text(
-                          '3',
-                          style: TextStyle(
-                              fontFamily: 'SFRegular', color: Colors.white),
-                          textScaleFactor: 3,
+                        child: Icon(
+                          Icons.fiber_new,
+                          color: Colors.white,
+                          size: 25,
                         ),
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text(
-                        'dias restantes',
+                        'La condesa ®',
                         style: TextStyle(
                             fontFamily: 'SFRegular',
                             color: Colors.grey.shade300),
-                        textScaleFactor: 0.7,
+                        textScaleFactor: 0.9,
                       ),
                     ],
                   )

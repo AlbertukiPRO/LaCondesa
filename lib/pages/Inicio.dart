@@ -125,7 +125,7 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
             _animationController.forward();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => QRNEW()),
+              MaterialPageRoute(builder: (context) => const QRNEW()),
             );
           },
         ),

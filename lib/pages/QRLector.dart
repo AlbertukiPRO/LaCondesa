@@ -107,7 +107,7 @@ class _QRNEWState extends State<QRNEW> {
     var arr = _scanBarcode.split(".");
     if (arr[0] != "http://cliente") {
       _loadRiveFile('ERROR');
-      toast("Este QR no pertenece a purificadora la condesa");
+      toast("No se encontro nada en la base de datos");
     } else
       _loadRiveFile('Succes');
     await http
@@ -293,21 +293,25 @@ class _QRNEWState extends State<QRNEW> {
                 ),
               ),
               InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VentaIUX(
-                      id: '' + mydata[0]['idCliente'].toString(),
-                      nombre: '' + mydata[0]['nombreCliente'].toString(),
-                      puntos: mydata[0]['puntos'].toString() == 'null'
-                          ? "null"
-                          : mydata[0]['puntos'].toString(),
-                      preciogarrafon: Provider.of<User>(context, listen: false)
-                          .getpreciogarrafon,
-                      typeGarrafon: 'Nuevo',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VentaIUX(
+                        id: '' + mydata[0]['idCliente'].toString(),
+                        nombre: '' + mydata[0]['nombreCliente'].toString(),
+                        puntos: mydata[0]['puntos'].toString() == 'null'
+                            ? "null"
+                            : mydata[0]['puntos'].toString(),
+                        preciogarrafon:
+                            Provider.of<User>(context, listen: false)
+                                .getpreciogarrafon,
+                        typeGarrafon: 'Nuevo',
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                  print(mydata.toString());
+                },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   child: Row(

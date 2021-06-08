@@ -58,7 +58,8 @@ class GetVentas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height, minHeight: 80),
       child: FutureBuilder(
         future:
             fetch(http.Client(), Provider.of<User>(context).getid.toString()),

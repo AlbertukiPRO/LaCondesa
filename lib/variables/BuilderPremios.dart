@@ -83,16 +83,25 @@ class ShowPremiosState extends State<ShowPremios> {
       builder: (context, snapshot) {
         return snapshot.connectionState == ConnectionState.done
             ? snapshot.hasData
-                ? Container(
-                    width: size.width,
-                    height: size.height * 0.55,
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                    child: GetPremios(
-                      lista: snapshot.data,
-                      idCliente: widget.idcliente,
-                      scrool: widget.scrollIs,
-                    ),
-                  )
+                ? snapshot.data.length != 0
+                    ? Container(
+                        width: size.width,
+                        constraints: BoxConstraints(
+                          maxHeight: size.height * 0.55,
+                          minHeight: 50,
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                        child: GetPremios(
+                          lista: snapshot.data,
+                          idCliente: widget.idcliente,
+                          scrool: widget.scrollIs,
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text('Sin premios disponibles'),
+                      )
                 : Container(
                     padding: EdgeInsets.all(20),
                     alignment: Alignment.center,
@@ -143,7 +152,9 @@ class _GetPremiosState extends State<GetPremios> {
     return PageView.builder(
       controller: _pageController,
       allowImplicitScrolling: true,
-      scrollDirection: widget.scrool == "h" ? Axis.horizontal : Axis.vertical,
+      scrollDirection: widget.scrool == "h"
+          ? Axis.horizontal
+          : (widget.scrool == "f" ? Axis.horizontal : Axis.vertical),
       itemCount: widget.lista.length,
       onPageChanged: (value) {
         setState(() {
@@ -180,7 +191,9 @@ class _GetPremiosState extends State<GetPremios> {
                 animationDuration: Duration(seconds: 1),
                 borderRadius: BorderRadius.circular(20),
                 child: ItemPageView(
-                  givemy: widget.scrool == "h" ? true : false,
+                  givemy: widget.scrool == "h"
+                      ? true
+                      : (widget.scrool == "f" ? false : false),
                   id: int.parse(widget.lista[index].idPremios),
                   nombre: widget.lista[index].nombreProducto,
                   image: widget.lista[index].imgProducto,
@@ -256,7 +269,10 @@ class _ItemPageViewState extends State<ItemPageView> {
     final double sizealto = MediaQuery.of(context).size.height;
     return Container(
       width: sizewidth,
-      height: sizealto,
+      constraints: BoxConstraints(
+        minHeight: 50,
+        maxWidth: sizealto,
+      ),
       child: InkWell(
         onTap: () => null,
         child: Stack(

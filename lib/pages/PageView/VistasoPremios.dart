@@ -13,6 +13,7 @@ class _VistasoClientesState extends State<VistasoClientes>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
