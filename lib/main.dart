@@ -51,8 +51,21 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
           primaryColor: primarycolor,
-          accentColor: contraste,
-          accentColorBrightness: Brightness.dark,
+          colorScheme: ColorScheme(
+            primary: primarycolor,
+            primaryVariant: primarycolor,
+            secondary: contraste,
+            secondaryVariant: terciarycolor,
+            surface: null,
+            background: Colors.white,
+            error: terciarycolor,
+            onPrimary: primarycolor,
+            onSecondary: secundarycolor,
+            onSurface: null,
+            onBackground: null,
+            onError: null,
+            brightness: Brightness.dark,
+          ),
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: primarycolor,
             splashColor: terciarycolor,
