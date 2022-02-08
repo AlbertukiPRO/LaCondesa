@@ -48,30 +48,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: titleapp,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          primaryColor: primarycolor,
-          colorScheme: ColorScheme(
-            primary: primarycolor,
-            secondary: contraste,
-            background: Colors.white,
-            error: terciarycolor,
-            onPrimary: primarycolor,
-            onSecondary: secundarycolor,
-            brightness: Brightness.dark,
-            onBackground: Colors.blueAccent,
-            onError: Colors.blueAccent,
-            onSurface: Colors.blueAccent,
-            surface: Colors.blueAccent,
-          ),
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: primarycolor,
-            splashColor: terciarycolor,
-            foregroundColor: Colors.white,
-            elevation: 2,
-          ),
-          fontFamily: 'SFRegular',
-        ),
+        theme: buildThemeData(),
         home: FutureBuilder<bool>(
           future: this.initial(),
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -80,7 +57,7 @@ class MyApp extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                return snapshot.data == false ? Login() : const QRNEW();
+                return snapshot.data == false ? const Login() : const QRNEW();
               default:
                 return Center(child: Text(snapshot.data.toString()));
             }
@@ -88,5 +65,32 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ThemeData buildThemeData() {
+    return ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryColor: primarycolor,
+        colorScheme: ColorScheme(
+          primary: primarycolor,
+          secondary: contraste,
+          background: Colors.white,
+          error: terciarycolor,
+          onPrimary: primarycolor,
+          onSecondary: secundarycolor,
+          brightness: Brightness.dark,
+          onBackground: Colors.blueAccent,
+          onError: Colors.blueAccent,
+          onSurface: Colors.blueAccent,
+          surface: Colors.blueAccent,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: primarycolor,
+          splashColor: terciarycolor,
+          foregroundColor: Colors.white,
+          elevation: 2,
+        ),
+        fontFamily: 'SFRegular',
+      );
   }
 }

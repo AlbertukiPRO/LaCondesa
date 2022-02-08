@@ -12,6 +12,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool closedialog = true;
+
   closeAlertDialog() {
     setState(() => closedialog = !closedialog);
   }
@@ -27,38 +28,27 @@ class _LoginState extends State<Login> {
     );
   }*/
 
+  void focusScope() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: GestureDetector(
-          onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          },
+          onTap: focusScope, //! Method
           child: Stack(
             children: [
               Container(
                 width: double.infinity,
                 child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.35,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          scale: 1,
-                          image: AssetImage(
-                            'assets/img/banner.png',
-                          ),
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                        ),
-                      ),
-                    ),
+                    buildBannerLaCondesa(context),
                     Container(
                       width: double.infinity,
                       height: MediaQuery.of(context).size.height * 0.15,
@@ -93,45 +83,66 @@ class _LoginState extends State<Login> {
                       child: const Formulario(),
                     ),
                     SizedBox(height: 15),
-                    Padding(
-                      padding: EdgeInsets.only(right: 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Register(),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Registrarse',
-                                  style: TextStyle(
-                                    color: textcolorsubtitle,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 15,
-                                  ),
-                                  onPressed: null,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    buildButtonRegistrarse(context)
                   ],
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding buildButtonRegistrarse(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Register(),
+              ),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  'Registrarse',
+                  style: TextStyle(
+                    color: textcolorsubtitle,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 15,
+                  ),
+                  onPressed: null,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container buildBannerLaCondesa(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.35,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          scale: 1,
+          image: AssetImage(
+            'assets/img/banner.png',
+          ),
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
         ),
       ),
     );
