@@ -3,9 +3,9 @@ import 'package:lacondesa/variables/BuilderPremios.dart';
 import 'package:lacondesa/variables/styles.dart';
 
 class Premios extends StatefulWidget {
-  final String idcliente;
-  final String puntos;
-  Premios({Key key, this.puntos, this.idcliente}) : super(key: key);
+  final String? idcliente;
+  final String? puntos;
+  Premios({Key? key, this.puntos, this.idcliente}) : super(key: key);
 
   @override
   _PremiosState createState() => _PremiosState();
@@ -66,8 +66,8 @@ class _PremiosState extends State<Premios> {
             ),
             Container(
               child: ShowPremios(
-                puntos: widget.puntos,
-                idcliente: widget.idcliente,
+                puntos: widget.puntos!,
+                idcliente: widget.idcliente!,
                 scrollIs: 'h',
               ),
             ),

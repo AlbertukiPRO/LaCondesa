@@ -24,12 +24,12 @@ List<Ventas> parseItem(String responseBody) {
 }
 
 class Ventas {
-  final String cliente;
-  final String numeroGarrafones;
-  final String fecha;
-  final String total;
-  final String idVenta;
-  final String tipoGarrafon;
+  final String? cliente;
+  final String? numeroGarrafones;
+  final String? fecha;
+  final String? total;
+  final String? idVenta;
+  final String? tipoGarrafon;
 
   Ventas({
     this.cliente,
@@ -53,14 +53,14 @@ class Ventas {
 }
 
 class GetVentas extends StatelessWidget {
-  const GetVentas({Key key}) : super(key: key);
+  const GetVentas({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height, minHeight: 80),
-      child: FutureBuilder(
+      child: FutureBuilder<List<Ventas>>(
         future:
             fetch(http.Client(), Provider.of<User>(context).getid.toString()),
         builder: (context, snapshot) {
@@ -87,8 +87,8 @@ class GetVentas extends StatelessWidget {
 }
 
 class VentasList extends StatelessWidget {
-  final List<Ventas> lista;
-  VentasList({Key key, this.lista}) : super(key: key);
+  final List<Ventas>? lista;
+  VentasList({Key? key, this.lista}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +96,8 @@ class VentasList extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: lista.length,
-      itemBuilder: (context, index) {
+      itemCount: lista!.length,
+      itemBuilder: (context, int? index) {
         return Container(
           margin: EdgeInsets.only(bottom: 30),
           width: MediaQuery.of(context).size.width,
@@ -123,7 +123,7 @@ class VentasList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Text(
-                        'x${lista[index].numeroGarrafones}',
+                        'x${lista![index!].numeroGarrafones}',
                         style: Semibold_blanca,
                       ),
                     )
@@ -134,7 +134,7 @@ class VentasList extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 width: MediaQuery.of(context).size.width * 0.3,
                 child: Text(
-                  'Garrafon ${lista[index].tipoGarrafon}',
+                  'Garrafon ${lista![index].tipoGarrafon}',
                   style: Semibol_negra,
                   textAlign: TextAlign.left,
                   maxLines: 2,
@@ -145,14 +145,14 @@ class VentasList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${lista[index].fecha}',
+                    '${lista![index].fecha}',
                     style: textligth,
                   ),
                   SizedBox(
                     height: 5,
                   ),
                   Text(
-                    '+ \$ ${lista[index].total}',
+                    '+ \$ ${lista![index].total}',
                     style:
                         TextStyle(fontFamily: 'SFBlack', color: secundarycolor),
                     textScaleFactor: 1.2,

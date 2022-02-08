@@ -20,12 +20,12 @@ List<Promos> parseItem(String responseBody) {
 }
 
 class Promos {
-  final String id;
-  final String nombre;
-  final String img;
-  final String precioviejo;
-  final String precionuevo;
-  final String descripcion;
+  final String? id;
+  final String? nombre;
+  final String? img;
+  final String? precioviejo;
+  final String? precionuevo;
+  final String? descripcion;
 
   Promos(
       {this.precioviejo,
@@ -48,14 +48,14 @@ class Promos {
 }
 
 class GetPromos extends StatefulWidget {
-  const GetPromos({Key key}) : super(key: key);
+  const GetPromos({Key? key}) : super(key: key);
 
   @override
   _GetPromosState createState() => _GetPromosState();
 }
 
 class _GetPromosState extends State<GetPromos> {
-  Future<List<Promos>> listasave;
+  Future<List<Promos>>? listasave;
 
   @override
   void initState() {
@@ -70,12 +70,12 @@ class _GetPromosState extends State<GetPromos> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FutureBuilder(
+      child: FutureBuilder<List<Promos>>(
         future: listasave,
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
-              ? PromoList(lista: snapshot.data)
+              ? PromoList(lista: snapshot.data!)
               : CircularProgressIndicator();
         },
       ),
@@ -84,8 +84,8 @@ class _GetPromosState extends State<GetPromos> {
 }
 
 class PromoList extends StatelessWidget {
-  final List<Promos> lista;
-  const PromoList({Key key, this.lista}) : super(key: key);
+  final List<Promos>? lista;
+  const PromoList({Key? key, this.lista}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,18 +96,18 @@ class PromoList extends StatelessWidget {
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: lista.length,
+          itemCount: lista!.length,
           itemBuilder: (context, index) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
               child: InkWell(
-                onTap: () => print(lista[index].id),
+                onTap: () => print(lista![index].id),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CachedNetworkImage(
-                      imageUrl: lista[index].img,
+                      imageUrl: lista![index].img!,
                       imageBuilder: (context, imageProvider) => CircleAvatar(
                         backgroundImage: imageProvider,
                         radius: 40,
@@ -122,12 +122,12 @@ class PromoList extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            lista[index].nombre,
+                            lista![index].nombre!,
                             style: Semibol_negra,
                             textScaleFactor: 1.2,
                           ),
                           Text(
-                            'Precio viejo: \$' + lista[index].precioviejo,
+                            'Precio viejo: \$' + lista![index].precioviejo!,
                             style: Semibol_gris,
                           ),
                         ],
@@ -138,7 +138,7 @@ class PromoList extends StatelessWidget {
                       style: Regular_negra,
                     ),
                     Text(
-                      '\$' + lista[index].precionuevo,
+                      '\$' + lista![index].precionuevo!,
                       style: Black_contraste,
                       textScaleFactor: 1.4,
                     )

@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lacondesa/variables/BuilderPremios.dart';
@@ -14,14 +11,14 @@ import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
 class VentaIUX extends StatefulWidget {
-  final String nombre;
-  final String id;
-  final String puntos;
-  final double preciogarrafon;
-  final String typeGarrafon;
+  final String? nombre;
+  final String? id;
+  final String? puntos;
+  final double? preciogarrafon;
+  final String? typeGarrafon;
 
   VentaIUX({
-    Key key,
+    Key? key,
     this.nombre,
     this.id,
     this.puntos,
@@ -34,38 +31,38 @@ class VentaIUX extends StatefulWidget {
 }
 
 class _VentaIUXState extends State<VentaIUX> {
-  int countgarrafones = 1;
-  double preciogarrafon = 0;
-  double preciototal = 0;
-  bool estatus = false;
-  String mensanje = "";
+  int? countgarrafones = 1;
+  double? preciogarrafon = 0;
+  double? preciototal = 0;
+  bool? estatus = false;
+  String? mensanje = "";
   double _currentSlider = 1;
-  String puntosLocales;
-  double nuevoPrecio = 0;
+  String? puntosLocales;
+  double? nuevoPrecio = 0;
 
-  TextEditingController numeroPuntos = new TextEditingController();
+  TextEditingController? numeroPuntos = new TextEditingController();
 
   final riveFileName = 'assets/img/newagua.riv';
-  Artboard _artboard;
-  bool tipodeVenta = false;
+  Artboard? _artboard;
+  bool? tipodeVenta = false;
 
   @override
   void initState() {
-    this.preciototal = widget.preciogarrafon * countgarrafones;
+    this.preciototal = widget.preciogarrafon! * countgarrafones!;
     this.puntosLocales = widget.puntos;
     this.nuevoPrecio = widget.preciogarrafon;
-    _loadRiveFile();
+    //_loadRiveFile();
     super.initState();
   }
 
-  void _loadRiveFile() async {
+  /*void _loadRiveFile() async {
     final bytes = await rootBundle.load(riveFileName);
     final file = RiveFile();
     if (file.import(bytes)) {
       setState(() =>
           _artboard = file.mainArtboard..addController(SimpleAnimation('add')));
     }
-  }
+  }*/
 
   bool closedialog = false;
   closeAlertDialog() {
@@ -74,31 +71,31 @@ class _VentaIUXState extends State<VentaIUX> {
 
   @override
   Widget build(BuildContext context) {
-    print("Puntos of QR: " + widget.puntos);
+    print("Puntos of QR: " + widget.puntos!);
     Size size = MediaQuery.of(context).size;
     return new Scaffold(
       bottomNavigationBar: AnimatedOpacity(
         duration: const Duration(seconds: 1),
-        opacity: estatus ? 0.0 : 1.0,
+        opacity: estatus! ? 0.0 : 1.0,
         child: InkWell(
-          onTap: () => this.numeroPuntos.text.isEmpty != true
+          onTap: () => this.numeroPuntos!.text.isEmpty != true
               ? addventa(Provider.of<User>(context, listen: false).getid,
-                      int.parse(widget.id))
+                      int.parse(widget.id!))
                   .whenComplete(
                   () => showBarModalBottomSheet(
                     context: context,
                     expand: true,
                     builder: (context) {
                       return Congratulations(
-                          puntos: this.puntosLocales,
-                          id: widget.id,
-                          numMore: int.parse(this.numeroPuntos.text));
+                          puntos: this.puntosLocales!,
+                          id: widget.id!,
+                          numMore: int.parse(this.numeroPuntos!.text));
                     },
                   ),
                 )
               : toast("Ingresa los puntos del cliente"),
-          child:
-              BotonAddCompra(size: size, estatus: estatus, mensanje: mensanje),
+          child: BotonAddCompra(
+              size: size, estatus: estatus!, mensanje: mensanje!),
         ),
       ),
       body: SingleChildScrollView(
@@ -151,8 +148,8 @@ class _VentaIUXState extends State<VentaIUX> {
                       height: 10,
                     ),
                     ContainerCliente(
-                      nombre: widget.nombre,
-                      puntos: widget.puntos,
+                      nombre: widget.nombre!,
+                      puntos: widget.puntos!,
                       size: size,
                     ),
                     Column(
@@ -166,7 +163,7 @@ class _VentaIUXState extends State<VentaIUX> {
                                 height: 300,
                                 child: Rive(
                                   alignment: Alignment.centerLeft,
-                                  artboard: _artboard,
+                                  artboard: _artboard!,
                                   fit: BoxFit.contain,
                                 ),
                               )
@@ -189,16 +186,16 @@ class _VentaIUXState extends State<VentaIUX> {
                                   onTap: () {
                                     setState(() {
                                       if (_currentSlider <= 30) {
-                                        _currentSlider += 1;
+                                        _currentSlider += 1.0;
                                       }
                                       /* this.preciototal = widget.preciogarrafon *
                                           double.parse(
                                               _currentSlider.round().toString());
                                       print(this.preciototal); */
                                     });
-                                    switchPrices(this.tipodeVenta,
+                                    switchPrices(this.tipodeVenta!,
                                         _currentSlider, context);
-                                    _loadRiveFile();
+                                    //_loadRiveFile();
                                   },
                                   borderRadius: BorderRadius.circular(15),
                                   child: Container(
@@ -227,8 +224,8 @@ class _VentaIUXState extends State<VentaIUX> {
                                       print(this.preciototal);
                                     });
                                     switchPrices(
-                                        tipodeVenta, _currentSlider, context);
-                                    _loadRiveFile();
+                                        tipodeVenta!, _currentSlider, context);
+                                    //_loadRiveFile();
                                   },
                                   borderRadius: BorderRadius.circular(15),
                                   child: Container(
@@ -310,7 +307,7 @@ class _VentaIUXState extends State<VentaIUX> {
                                     textScaleFactor: 1.2,
                                   ),
                                   Text(
-                                    '\$${tipodeVenta ? this.nuevoPrecio : widget.preciogarrafon}',
+                                    '\$${tipodeVenta! ? this.nuevoPrecio : widget.preciogarrafon}',
                                     style: TextStyle(
                                       fontFamily: 'SFSemibold',
                                       color: textcolortitle,
@@ -406,8 +403,8 @@ class _VentaIUXState extends State<VentaIUX> {
                                 color: terciarycolor,
                               ),
                               // ignore: missing_return
-                              validator: (String valor) {
-                                if (valor.isEmpty) {
+                              validator: (String? valor) {
+                                if (valor!.isEmpty) {
                                   toast("El valor no puedo estar vacio");
                                 }
                               },
@@ -418,10 +415,10 @@ class _VentaIUXState extends State<VentaIUX> {
                           height: 10,
                         ),
                         context.watch<User>().getMinPoint <=
-                                int.parse(this.puntosLocales)
+                                int.parse(this.puntosLocales!)
                             ? ShowPremios(
-                                idcliente: widget.id,
-                                puntos: this.puntosLocales,
+                                idcliente: widget.id!,
+                                puntos: this.puntosLocales!,
                                 scrollIs: "h",
                               )
                             : Column(
@@ -433,7 +430,7 @@ class _VentaIUXState extends State<VentaIUX> {
                                   ),
                                   Container(
                                     child: ShowPremios(
-                                      idcliente: widget.id,
+                                      idcliente: widget.id!,
                                       puntos: "999",
                                       scrollIs: "f",
                                     ),
@@ -444,7 +441,7 @@ class _VentaIUXState extends State<VentaIUX> {
                             puntos: this.puntosLocales,
                             id: widget.id,
                             size: size), */
-                        estatus
+                        estatus!
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
@@ -499,7 +496,7 @@ class _VentaIUXState extends State<VentaIUX> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Switch(
-                              value: tipodeVenta,
+                              value: tipodeVenta!,
                               onChanged: (value) {
                                 setState(() {
                                   tipodeVenta = value;
@@ -509,7 +506,7 @@ class _VentaIUXState extends State<VentaIUX> {
                                 print("Cambio de Venta: " + value.toString());
                               }),
                           Text(
-                            !tipodeVenta ? 'A domicilio' : 'Venta local',
+                            !tipodeVenta! ? 'A domicilio' : 'Venta local',
                             style: TextStyle(
                                 color: Colors.white, fontFamily: 'SFBlack'),
                             textScaleFactor: 1.2,
@@ -543,7 +540,7 @@ class _VentaIUXState extends State<VentaIUX> {
           "id_repartidor": '' + idR.toString(),
           "garrafones": '' + this._currentSlider.round().toString(),
           "total": '' + this.preciototal.toString(),
-          "puntosManual": this.numeroPuntos.text,
+          "puntosManual": this.numeroPuntos!.text,
           "tipoGarrafon": widget.typeGarrafon,
         })
         .then((response) {
@@ -560,7 +557,7 @@ class _VentaIUXState extends State<VentaIUX> {
             });
             setState(() {
               int ptlocal = int.parse(widget.puntos.toString()) +
-                  int.parse(this.numeroPuntos.text);
+                  int.parse(this.numeroPuntos!.text);
               this.puntosLocales = ptlocal.toString();
             });
             //showMyDialog1();
@@ -594,13 +591,13 @@ class _VentaIUXState extends State<VentaIUX> {
         });
       } else if (count == 1) {
         setState(() {
-          this.preciototal = count * widget.preciogarrafon;
+          this.preciototal = count * widget.preciogarrafon!;
           this.nuevoPrecio = widget.preciogarrafon;
         });
       }
     } else {
       setState(() {
-        this.preciototal = widget.preciogarrafon * count;
+        this.preciototal = widget.preciogarrafon! * count;
         this.nuevoPrecio = widget.preciogarrafon;
       });
     }
@@ -608,10 +605,10 @@ class _VentaIUXState extends State<VentaIUX> {
 }
 
 class Congratulations extends StatelessWidget {
-  final String puntos;
-  final String id;
+  final String? puntos;
+  final String? id;
 
-  final int numMore;
+  final int? numMore;
 
   Congratulations({
     @required this.puntos,
@@ -701,8 +698,8 @@ class Congratulations extends StatelessWidget {
                   ),
                   Container(
                     child: ShowPremios(
-                      idcliente: this.id,
-                      puntos: puntos,
+                      idcliente: this.id!,
+                      puntos: puntos!,
                       scrollIs: "h",
                     ),
                   ),
@@ -756,20 +753,20 @@ class Congratulations extends StatelessWidget {
 }
 
 class ContainerPuntos extends StatelessWidget {
-  const ContainerPuntos({
-    Key key,
+  ContainerPuntos({
+    Key? key,
     @required this.puntos,
     @required this.id,
     @required this.size,
   }) : super(key: key);
 
-  final String id;
-  final String puntos;
-  final Size size;
+  final String? id;
+  final String? puntos;
+  final Size? size;
 
   @override
   Widget build(BuildContext context) {
-    return int.parse(this.puntos) >= context.watch<User>().getMinPoint
+    return int.parse(this.puntos!) >= context.watch<User>().getMinPoint
         ? InkWell(
             onTap: () => print("object"),
             /*  Navigator.push(
@@ -806,7 +803,7 @@ class ContainerPuntos extends StatelessWidget {
                           ),
                   ) */
                   Container(
-                    width: size.width * 0.35,
+                    width: size!.width * 0.35,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -838,15 +835,15 @@ class ContainerPuntos extends StatelessWidget {
 
 class ContainerCliente extends StatelessWidget {
   const ContainerCliente({
-    Key key,
+    Key? key,
     @required this.nombre,
     @required this.size,
     @required this.puntos,
   }) : super(key: key);
 
-  final String nombre;
-  final String puntos;
-  final Size size;
+  final String? nombre;
+  final String? puntos;
+  final Size? size;
 
   @override
   Widget build(BuildContext context) {
@@ -876,7 +873,7 @@ class ContainerCliente extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                this.nombre,
+                this.nombre!,
                 style: TextStyle(color: Colors.white, fontFamily: 'SFBold'),
                 textScaleFactor: 1.5,
               ),
@@ -895,7 +892,7 @@ class ContainerCliente extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.bottomRight,
-                    width: size.width * 0.2,
+                    width: size!.width * 0.2,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.deepOrangeAccent,
@@ -918,7 +915,7 @@ class ContainerCliente extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              this.puntos == "null" ? '0' : this.puntos,
+                              this.puntos! == "null" ? '0' : this.puntos!,
                               style: TextStyle(
                                   fontFamily: 'SFBold',
                                   fontWeight: FontWeight.w500,
@@ -928,7 +925,7 @@ class ContainerCliente extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          width: size.width,
+                          width: size!.width,
                           child: Text(
                             'Puntos',
                             style: TextStyle(
@@ -953,23 +950,23 @@ class ContainerCliente extends StatelessWidget {
 
 class BotonAddCompra extends StatelessWidget {
   const BotonAddCompra({
-    Key key,
+    Key? key,
     @required this.size,
     @required this.estatus,
     @required this.mensanje,
   }) : super(key: key);
 
-  final Size size;
-  final bool estatus;
-  final String mensanje;
+  final Size? size;
+  final bool? estatus;
+  final String? mensanje;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
       constraints: BoxConstraints(
-        maxHeight: size.height * 0.12,
-        minHeight: size.height * 0.08,
+        maxHeight: size!.height * 0.12,
+        minHeight: size!.height * 0.08,
       ),
       height: 65,
       alignment: Alignment.center,
@@ -981,7 +978,7 @@ class BotonAddCompra extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            estatus ? mensanje : 'Confirmar compra',
+            estatus! ? mensanje! : 'Confirmar compra',
             style: texttitle,
             textScaleFactor: 1.3,
           ),

@@ -27,11 +27,11 @@ List<Premios> parseItem(String responseBody) {
 }
 
 class Premios {
-  final String idPremios;
-  final String puntosRequeridos;
-  final String nombreProducto;
-  final String imgProducto;
-  final String descripcion;
+  final String? idPremios;
+  final String? puntosRequeridos;
+  final String? nombreProducto;
+  final String? imgProducto;
+  final String? descripcion;
 
   Premios(
       {this.idPremios,
@@ -52,10 +52,10 @@ class Premios {
 }
 
 class ShowPremios extends StatefulWidget {
-  final String idcliente;
-  final String puntos;
-  final String scrollIs;
-  const ShowPremios({Key key, this.puntos, this.idcliente, this.scrollIs})
+  final String? idcliente;
+  final String? puntos;
+  final String? scrollIs;
+  const ShowPremios({Key? key, this.puntos, this.idcliente, this.scrollIs})
       : super(key: key);
 
   @override
@@ -63,7 +63,7 @@ class ShowPremios extends StatefulWidget {
 }
 
 class ShowPremiosState extends State<ShowPremios> {
-  Future<List<Premios>> preloadDatos;
+  Future<List<Premios>>? preloadDatos;
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class ShowPremiosState extends State<ShowPremios> {
   }
 
   Future<List<Premios>> _getData() async {
-    return await fetchPremios(http.Client(), widget.puntos);
+    return await fetchPremios(http.Client(), widget.puntos!);
   }
 
   @override
@@ -83,7 +83,7 @@ class ShowPremiosState extends State<ShowPremios> {
       builder: (context, snapshot) {
         return snapshot.connectionState == ConnectionState.done
             ? snapshot.hasData
-                ? snapshot.data.length != 0
+                ? snapshot.data!.length != 0
                     ? Container(
                         width: size.width,
                         constraints: BoxConstraints(
@@ -115,10 +115,10 @@ class ShowPremiosState extends State<ShowPremios> {
 
 // ignore: must_be_immutable
 class GetPremios extends StatefulWidget {
-  List<Premios> lista;
-  final String scrool;
-  final String idCliente;
-  GetPremios({Key key, this.lista, this.idCliente, this.scrool})
+  List<Premios>? lista;
+  final String? scrool;
+  final String? idCliente;
+  GetPremios({Key? key, this.lista, this.idCliente, this.scrool})
       : super(key: key);
 
   @override
@@ -126,7 +126,7 @@ class GetPremios extends StatefulWidget {
 }
 
 class _GetPremiosState extends State<GetPremios> {
-  PageController _pageController;
+  PageController? _pageController;
 
   int active = 0;
 
@@ -142,7 +142,7 @@ class _GetPremiosState extends State<GetPremios> {
       viewportFraction: viewportfraction,
     )..addListener(() {
         setState(() {
-          pageOffset = _pageController.page;
+          pageOffset = _pageController!.page!;
         });
       });
   }
@@ -155,7 +155,7 @@ class _GetPremiosState extends State<GetPremios> {
       scrollDirection: widget.scrool == "h"
           ? Axis.horizontal
           : (widget.scrool == "f" ? Axis.horizontal : Axis.vertical),
-      itemCount: widget.lista.length,
+      itemCount: widget.lista!.length,
       onPageChanged: (value) {
         setState(() {
           this.active = value;
@@ -194,12 +194,12 @@ class _GetPremiosState extends State<GetPremios> {
                   givemy: widget.scrool == "h"
                       ? true
                       : (widget.scrool == "f" ? false : false),
-                  id: int.parse(widget.lista[index].idPremios),
-                  nombre: widget.lista[index].nombreProducto,
-                  image: widget.lista[index].imgProducto,
-                  descripcion: widget.lista[index].descripcion,
-                  puntosReque: widget.lista[index].puntosRequeridos,
-                  idCliente: widget.idCliente,
+                  id: int.parse(widget.lista![index].idPremios!),
+                  nombre: widget.lista![index].nombreProducto,
+                  image: widget.lista![index].imgProducto,
+                  descripcion: widget.lista![index].descripcion,
+                  puntosReque: widget.lista![index].puntosRequeridos,
+                  idCliente: widget.idCliente!,
                 ),
               ),
             ),
@@ -212,7 +212,7 @@ class _GetPremiosState extends State<GetPremios> {
 
 class ItemPageView extends StatefulWidget {
   const ItemPageView({
-    Key key,
+    Key? key,
     this.image,
     this.precio,
     this.nombre,
@@ -223,15 +223,15 @@ class ItemPageView extends StatefulWidget {
     this.givemy,
   }) : super(key: key);
 
-  final String image;
-  final String precio;
-  final String nombre;
-  final String descripcion;
-  final String puntosReque;
-  final int id;
-  final bool givemy;
+  final String? image;
+  final String? precio;
+  final String? nombre;
+  final String? descripcion;
+  final String? puntosReque;
+  final int? id;
+  final bool? givemy;
 
-  final String idCliente;
+  final String? idCliente;
 
   @override
   _ItemPageViewState createState() => _ItemPageViewState();
@@ -240,7 +240,7 @@ class ItemPageView extends StatefulWidget {
 class _ItemPageViewState extends State<ItemPageView> {
   bool isCanjeo = false;
 
-  Future<bool> getPremio(
+  Future<bool?> getPremio(
       String idCliente, String puntos, String producto) async {
     setState(() => isCanjeo = !isCanjeo);
     try {
@@ -278,7 +278,7 @@ class _ItemPageViewState extends State<ItemPageView> {
         child: Stack(
           children: [
             CachedNetworkImage(
-              imageUrl: widget.image,
+              imageUrl: widget.image!,
               imageBuilder: (context, imageProvider) => ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
@@ -331,7 +331,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                           height: 10,
                         ),
                         Text(
-                          widget.puntosReque,
+                          widget.puntosReque!,
                           style: TextStyle(
                               fontFamily: 'SFBold', color: Colors.white),
                           textScaleFactor: 1,
@@ -342,11 +342,11 @@ class _ItemPageViewState extends State<ItemPageView> {
                   Spacer(),
                   TextButton(
                     onPressed: () {
-                      widget.givemy
+                      widget.givemy!
                           ? getPremio(
-                              widget.idCliente,
-                              widget.puntosReque,
-                              widget.nombre,
+                              widget.idCliente!,
+                              widget.puntosReque!,
+                              widget.nombre!,
                             ).whenComplete(() {
                               showMaterialModalBottomSheet(
                                 context: context,
@@ -439,7 +439,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                             child: Stack(
                                               children: [
                                                 CachedNetworkImage(
-                                                  imageUrl: widget.image,
+                                                  imageUrl: widget.image!,
                                                   imageBuilder: (context,
                                                           imageProvider) =>
                                                       ClipRRect(
@@ -522,7 +522,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                                             ),
                                                             Text(
                                                               widget
-                                                                  .puntosReque,
+                                                                  .puntosReque!,
                                                               style: TextStyle(
                                                                   fontFamily:
                                                                       'SFBold',
@@ -608,7 +608,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                                                   horizontal:
                                                                       20),
                                                           child: Text(
-                                                            widget.nombre,
+                                                            widget.nombre!,
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -634,7 +634,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                                                                   horizontal:
                                                                       20),
                                                           child: Text(
-                                                            widget.descripcion,
+                                                            widget.descripcion!,
                                                             style: TextStyle(
                                                                 fontFamily:
                                                                     'SFLigera',
@@ -703,7 +703,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                       padding:
                           EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                       child: Text(
-                        widget.nombre,
+                        widget.nombre!,
                         style: TextStyle(
                           color: Colors.white,
                           height: 1,
@@ -720,7 +720,7 @@ class _ItemPageViewState extends State<ItemPageView> {
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       child: Text(
-                        widget.descripcion,
+                        widget.descripcion!,
                         style: TextStyle(
                             fontFamily: 'SFLigera', color: Colors.white),
                         textScaleFactor: 1,

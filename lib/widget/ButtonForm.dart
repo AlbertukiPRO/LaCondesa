@@ -3,13 +3,13 @@ import 'package:lacondesa/variables/styles.dart';
 
 class ButtonForm extends StatelessWidget {
   const ButtonForm({
-    Key key,
+    Key? key,
     @required this.txtbutton,
     @required this.colorbtn,
   }) : super(key: key);
 
-  final String txtbutton;
-  final Color colorbtn;
+  final String? txtbutton;
+  final Color? colorbtn;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +31,7 @@ class ButtonForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            txtbutton,
+            txtbutton!,
             style: TextStyle(fontFamily: 'SFSemibold', color: Colors.white),
             textScaleFactor: 1.1,
           ),

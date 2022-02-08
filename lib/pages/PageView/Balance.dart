@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:lacondesa/variables/BuilderVentas.dart';
 import 'package:lacondesa/variables/styles.dart';
@@ -12,7 +11,7 @@ import 'package:lacondesa/variables/User.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Balance extends StatefulWidget {
-  const Balance({Key key}) : super(key: key);
+  const Balance({Key? key}) : super(key: key);
 
   @override
   _BalanceState createState() => _BalanceState();
@@ -20,19 +19,19 @@ class Balance extends StatefulWidget {
 
 class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
   final riveFileName = 'assets/img/poins.riv';
-  Artboard _artboard;
+  Artboard? _artboard;
 
-  Future httpresponsedata;
+  Future? httpresponsedata;
 
   @override
   void initState() {
     super.initState();
-    _loadRiveFile();
+    //_loadRiveFile();
     httpresponsedata = getDataPoints(
         Provider.of<User>(context, listen: false).getid.toString());
   }
 
-  void _loadRiveFile() async {
+  /*void _loadRiveFile() async {
     final bytes = await rootBundle.load(riveFileName);
     final file = RiveFile();
 
@@ -43,7 +42,7 @@ class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
           SimpleAnimation('Pointsnew'),
         ));
     }
-  }
+  }*/
 
   Future getDataPoints(String id) async {
     try {
@@ -107,7 +106,6 @@ class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
                                 switch (snapshot.connectionState) {
                                   case ConnectionState.active:
                                     return Text('Conectando al servidor');
-                                    break;
                                   case ConnectionState.done:
                                     var mydata = snapshot.data;
                                     return Text(
@@ -182,7 +180,7 @@ class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
                         width: 150,
                         height: 150,
                         child: Rive(
-                          artboard: _artboard,
+                          artboard: _artboard!,
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -220,12 +218,12 @@ class _BalanceState extends State<Balance> with AutomaticKeepAliveClientMixin {
 }
 
 class Header extends StatelessWidget {
-  const Header({
-    Key key,
+  Header({
+    Key? key,
     @required this.size,
   }) : super(key: key);
 
-  final Size size;
+  final Size? size;
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +231,7 @@ class Header extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Container(
-          height: size.height * 0.35,
+          height: size!.height * 0.35,
           alignment: Alignment.topCenter,
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -243,7 +241,7 @@ class Header extends StatelessWidget {
           ),
         ),
         Container(
-          height: size.height * 0.35,
+          height: size!.height * 0.35,
           decoration:
               BoxDecoration(color: Color(0xFFF3B5FFE).withOpacity(0.80)),
         ),
@@ -265,8 +263,8 @@ class Header extends StatelessWidget {
                                 .watch<User>()
                                 .getavatar, //Provider.of<User>(context).getavatar,
                         fit: BoxFit.cover,
-                        width: size.width * 0.2,
-                        height: size.height * 0.2,
+                        width: size!.width * 0.2,
+                        height: size!.height * 0.2,
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) =>
                                 CircularProgressIndicator(

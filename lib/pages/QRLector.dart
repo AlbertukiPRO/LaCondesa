@@ -24,9 +24,9 @@ class QRNEW extends StatefulWidget {
 
 class _QRNEWState extends State<QRNEW> {
   String _scanBarcode = 'Unknown';
-  bool estado;
+  bool? estado;
   final riveFileName = 'assets/img/qr_phone.riv';
-  Artboard _artboard;
+  Artboard? _artboard;
   var mydata;
 
   fetchData(context) async {
@@ -50,14 +50,14 @@ class _QRNEWState extends State<QRNEW> {
     Provider.of<User>(context, listen: false).getid == null
         ? buildProvier(context)
         : print('');
-    _loadRiveFile('QR SCANNER');
+    //_loadRiveFile('QR SCANNER');
     scanQR().whenComplete(
       () => getdatauser().whenComplete(() => fetchData(context)),
     );
   }
 
   buildProvier(BuildContext context) async {
-    SharedPreferences disk = await SharedPreferences.getInstance();
+    SharedPreferences? disk = await SharedPreferences.getInstance();
     context.read<User>().setnombre = disk.getString('nombrekey');
     context.read<User>().setavatar = disk.getString('avatarkey');
     context.read<User>().setisLogin = true;
@@ -66,12 +66,12 @@ class _QRNEWState extends State<QRNEW> {
     context.read<User>().setMinpoint = disk.getInt("keyminpt");
     context.read<User>().setPreciogarrafon = disk.getDouble("keypreciogarr");
     print("Lector QR ()=> dice [ " +
-        disk.getString('nombrekey') +
-        disk.getString('avatarkey') +
+        disk.getString('nombrekey')! +
+        disk.getString('avatarkey')! +
         "]");
   }
 
-  void _loadRiveFile(String animation) async {
+ /* void _loadRiveFile(String animation) async {
     final bytes = await rootBundle.load(riveFileName);
     final file = RiveFile();
 
@@ -82,10 +82,10 @@ class _QRNEWState extends State<QRNEW> {
           SimpleAnimation(animation),
         ));
     }
-  }
+  }*/
 
   Future<void> scanQR() async {
-    String barcodeScanRes;
+    String? barcodeScanRes;
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cerrar', true, ScanMode.QR);
@@ -97,7 +97,7 @@ class _QRNEWState extends State<QRNEW> {
     if (!mounted) return;
 
     setState(() {
-      _scanBarcode = barcodeScanRes;
+      _scanBarcode = barcodeScanRes!;
       vibrar();
     });
   }
@@ -106,10 +106,10 @@ class _QRNEWState extends State<QRNEW> {
     toast("Espere...");
     var arr = _scanBarcode.split(".");
     if (arr[0] != "http://cliente") {
-      _loadRiveFile('ERROR');
+      //_loadRiveFile('ERROR');
       toast("No se encontro nada en la base de datos");
     } else
-      _loadRiveFile('Succes');
+      //_loadRiveFile('Succes');
     await http
         .post(Uri.parse("https://enfastmx.com/lacondesa/get_data_qr.php"),
             body: {
@@ -192,7 +192,7 @@ class _QRNEWState extends State<QRNEW> {
             child: Container(
               padding: EdgeInsets.only(right: 11),
               child: Rive(
-                artboard: _artboard,
+                artboard: _artboard!,
                 fit: BoxFit.contain,
               ),
             ),
@@ -231,7 +231,7 @@ class _QRNEWState extends State<QRNEW> {
                           SizedBox(
                             height: 10,
                           ),
-                          !snapshot.data //hasData
+                          snapshot.data! //Has data
                               ? CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Colors.amber),
@@ -247,7 +247,6 @@ class _QRNEWState extends State<QRNEW> {
                             child: Text('Cerrar'),
                           )
                         ]);
-                        break;
                       case ConnectionState.waiting:
                         return Column(children: [
                           Text('Conectando..'),

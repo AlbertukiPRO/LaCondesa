@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Historial extends StatefulWidget {
-  Historial({Key key}) : super(key: key);
+  Historial({Key? key}) : super(key: key);
 
   @override
   _HistorialState createState() => _HistorialState();

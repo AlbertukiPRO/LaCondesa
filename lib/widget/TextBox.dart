@@ -4,17 +4,17 @@ import 'package:lacondesa/variables/styles.dart';
 // ignore: camel_case_types
 class textbox extends StatelessWidget {
   const textbox({
-    Key key,
+    Key? key,
     @required this.nombreInput,
     @required this.textlabel,
     @required this.errorlabel,
     this.prefixicono,
   }) : super(key: key);
 
-  final TextEditingController nombreInput;
-  final String textlabel;
-  final String errorlabel;
-  final Icon prefixicono;
+  final TextEditingController? nombreInput;
+  final String? textlabel;
+  final String? errorlabel;
+  final Icon? prefixicono;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +47,11 @@ class textbox extends StatelessWidget {
         color: terciarycolor,
       ),
       // ignore: missing_return
-      validator: (String valor) {
-        if (valor.isEmpty) {
+      validator: (String? valor) {
+        if (valor!.isEmpty) {
           return errorlabel;
         }
+        return "Error";
       },
     );
   }

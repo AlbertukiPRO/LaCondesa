@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'PageView/VistasoPremios.dart';
 
 class Inicio extends StatefulWidget {
-  const Inicio({Key key}) : super(key: key);
+  const Inicio({Key? key}) : super(key: key);
 
   @override
   _InicioState createState() => _InicioState();
@@ -37,9 +37,9 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
   final autoSizeGroup = AutoSizeGroup();
   var _bottomNavIndex = 0;
 
-  AnimationController _animationController;
-  Animation<double> animation;
-  CurvedAnimation curve;
+  AnimationController? _animationController;
+  Animation<double>? animation;
+  CurvedAnimation? curve;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
       vsync: this,
     );
     curve = CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Interval(
         0.5,
         1.0,
@@ -65,11 +65,11 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
     animation = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(curve);
+    ).animate(curve!);
 
     Future.delayed(
       Duration(seconds: 1),
-      () => _animationController.forward(),
+      () => _animationController!.forward(),
     );
     Provider.of<User>(context, listen: false).getid == null
         ? buildProvier(context)
@@ -77,7 +77,7 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
   }
 
   buildProvier(BuildContext context) async {
-    SharedPreferences disk = await SharedPreferences.getInstance();
+    SharedPreferences? disk = await SharedPreferences.getInstance();
     context.read<User>().setnombre = disk.getString('nombrekey');
     context.read<User>().setavatar = disk.getString('avatarkey');
     context.read<User>().setisLogin = true;
@@ -86,13 +86,13 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
     context.read<User>().setMinpoint = disk.getInt("keyminpt");
     context.read<User>().setPreciogarrafon = disk.getDouble("keypreciogarr");
     print("Logeado como = " +
-        disk.getString('nombrekey') +
-        disk.getString('avatarkey'));
+        disk.getString('nombrekey')! +
+        disk.getString('avatarkey')!);
   }
 
   int _selectedIndex = 0;
 
-  get selectedIndex => this._selectedIndex;
+  get getselectedIndex => this._selectedIndex;
 
   set selectedIndex(int _selectedIndex) {
     this._selectedIndex = _selectedIndex;
@@ -116,13 +116,13 @@ class _InicioState extends State<Inicio> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return new Scaffold(
       floatingActionButton: ScaleTransition(
-        scale: animation,
+        scale: animation!,
         child: FloatingActionButton(
           elevation: 8,
           child: Icon(Icons.qr_code_scanner),
           onPressed: () {
-            _animationController.reset();
-            _animationController.forward();
+            _animationController!.reset();
+            _animationController!.forward();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const QRNEW()),

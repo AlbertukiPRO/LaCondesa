@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/TextBox.dart';
@@ -100,10 +99,11 @@ class _FormularioState extends State<Formulario> {
               color: terciarycolor,
             ),
             // ignore: missing_return
-            validator: (String valor) {
-              if (valor.isEmpty) {
+            validator: (String? valor) {
+              if (valor!.isEmpty) {
                 return 'Por favor ingrese un clave valida';
               }
+              return "Vacio";
             },
           ),
           SizedBox(
@@ -111,7 +111,7 @@ class _FormularioState extends State<Formulario> {
           ),
           GestureDetector(
             onTap: () {
-              if (_formkey.currentState.validate()) {
+              if (_formkey.currentState!.validate()) {
                 startLogin(context);
                 setState(() => status = "Cargando");
               }
@@ -176,7 +176,7 @@ class _FormularioState extends State<Formulario> {
                 () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Inicio(),
+                    builder: (context) => Inicio(),
                   ),
                 ),
               );
@@ -196,7 +196,7 @@ class _FormularioState extends State<Formulario> {
           }
         })
         .timeout(Duration(seconds: 40))
-        .catchError((onError) =>
-            toast("Tiempo de espera agotado, compruebe su conexión de red."));
+        // ignore: invalid_return_type_for_catch_error
+        .catchError((onError) => toast("Tiempo de espera agotado, compruebe su conexión de red."));
   }
 }

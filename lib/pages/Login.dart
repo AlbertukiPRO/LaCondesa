@@ -4,7 +4,7 @@ import 'package:lacondesa/variables/styles.dart';
 import 'package:lacondesa/widget/Formulario.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key key}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();

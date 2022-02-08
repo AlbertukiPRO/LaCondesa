@@ -3,7 +3,7 @@ import 'package:lacondesa/variables/BuilderPromos.dart';
 import 'package:lacondesa/variables/styles.dart';
 
 class Catalogo extends StatefulWidget {
-  const Catalogo({Key key}) : super(key: key);
+  const Catalogo({Key? key}) : super(key: key);
 
   @override
   _CatalogoState createState() => _CatalogoState();
@@ -40,7 +40,7 @@ class _CatalogoState extends State<Catalogo>
                     style: Semibol_negra,
                     textScaleFactor: 1.3,
                   ),
-                  const GetPromos()
+                  GetPromos()
                 ],
               ),
             ),

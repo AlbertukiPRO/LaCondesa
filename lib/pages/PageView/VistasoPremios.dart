@@ -3,7 +3,7 @@ import 'package:lacondesa/variables/BuilderPremios.dart';
 import 'package:lacondesa/variables/styles.dart';
 
 class VistasoClientes extends StatefulWidget {
-  const VistasoClientes({Key key}) : super(key: key);
+  const VistasoClientes({Key? key}) : super(key: key);
 
   @override
   _VistasoClientesState createState() => _VistasoClientesState();
@@ -59,7 +59,7 @@ class _VistasoClientesState extends State<VistasoClientes>
                 textScaleFactor: 1.3,
               ),
               SingleChildScrollView(
-                child: const ShowPremios(
+                child: ShowPremios(
                   idcliente: "99",
                   puntos: "9999",
                   scrollIs: "v",

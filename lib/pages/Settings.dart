@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key key}) : super(key: key);
+  const Settings({Key? key}) : super(key: key);
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -37,12 +37,12 @@ class _SettingsState extends State<Settings> {
 }
 
 class Header extends StatelessWidget {
-  const Header({
-    Key key,
+  Header({
+    Key? key,
     @required this.size,
   }) : super(key: key);
 
-  final Size size;
+  final Size? size;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class Header extends StatelessWidget {
       alignment: Alignment.topCenter,
       children: [
         Container(
-          height: size.height * 0.25,
+          height: size!.height * 0.25,
           alignment: Alignment.topCenter,
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -60,7 +60,7 @@ class Header extends StatelessWidget {
           ),
         ),
         Container(
-          height: size.height * 0.25,
+          height: size!.height * 0.25,
           decoration:
               BoxDecoration(color: Color(0xFFF3B5FFE).withOpacity(0.80)),
         ),
@@ -81,8 +81,8 @@ class Header extends StatelessWidget {
                             .watch<User>()
                             .getavatar, //Provider.of<User>(context).getavatar,
                     fit: BoxFit.cover,
-                    width: size.width * 0.2,
-                    height: size.height * 0.2,
+                    width: size!.width * 0.2,
+                    height: size!.height * 0.2,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) =>
                             CircularProgressIndicator(
@@ -110,7 +110,7 @@ class Header extends StatelessWidget {
 // ignore: must_be_immutable
 class Lista extends StatefulWidget {
   const Lista({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -240,7 +240,7 @@ class _ListaState extends State<Lista> {
 
 class Perfil extends StatelessWidget {
   const Perfil({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

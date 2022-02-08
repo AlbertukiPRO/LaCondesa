@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:ui';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lacondesa/pages/Login.dart';
 import 'package:lacondesa/variables/User.dart';
 import 'package:lacondesa/variables/styles.dart';
@@ -19,7 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
-  Register({Key key}) : super(key: key);
+  Register({Key? key}) : super(key: key);
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -48,16 +44,16 @@ class _RegisterState extends State<Register> {
       'https://enfastmx.com/lacondesa/registro_repartidor.php';
   final picker = ImagePicker();
   String status = "";
-  File _images;
-  String base64Image;
-  File tmpFile;
+  File? _images;
+  String? base64Image;
+  File? tmpFile;
   bool succesfull = false;
   bool errorregiter = false;
   String errMessage = 'Error Uploading Image';
   String nombreImageAvatar = "";
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(
+    final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
     );
@@ -66,7 +62,7 @@ class _RegisterState extends State<Register> {
       if (pickedFile != null) {
         _images = File(pickedFile.path);
         tmpFile = _images;
-        base64Image = base64Encode(_images.readAsBytesSync());
+        base64Image = base64Encode(_images!.readAsBytesSync());
       } else {
         print('No image selected.');
       }
@@ -85,7 +81,7 @@ class _RegisterState extends State<Register> {
       setStatus(errMessage);
       return;
     }
-    String fileName = tmpFile.path.split('/').last;
+    String fileName = tmpFile!.path.split('/').last;
     print(fileName);
     upload(fileName, context);
     setState(() => nombreImageAvatar = fileName);
@@ -242,8 +238,7 @@ class _RegisterState extends State<Register> {
                                           ),
                                           TextFormField(
                                             inputFormatters: [
-                                              MaskedInputFormater(
-                                                  '(###) ###-####')
+                                              MaskedInputFormatter('(###) ###-####')
                                             ],
                                             keyboardType: TextInputType.phone,
                                             textDirection: TextDirection.ltr,
@@ -285,8 +280,8 @@ class _RegisterState extends State<Register> {
                                               color: terciarycolor,
                                             ),
                                             // ignore: missing_return
-                                            validator: (String valor) {
-                                              if (valor.isEmpty) {
+                                            validator: (String? valor) {
+                                              if (valor!.isEmpty) {
                                                 return "Numero telefónico no valido";
                                               }
                                             },
@@ -340,7 +335,7 @@ class _RegisterState extends State<Register> {
                                                         image: DecorationImage(
                                                           scale: 1,
                                                           image: FileImage(
-                                                              _images),
+                                                              _images!),
                                                           fit: BoxFit.cover,
                                                           alignment:
                                                               Alignment.center,
@@ -361,7 +356,7 @@ class _RegisterState extends State<Register> {
                                             onTap: () {
                                               // devolverá true si el formulario es válido, o falso si
                                               // el formulario no es válido.
-                                              if (_formkeyRegiter.currentState
+                                              if (_formkeyRegiter.currentState!
                                                   .validate()) {
                                                 // Si el formulario es válido, queremos mostrar un Snackbar
                                                 if (claveinput.text ==
@@ -489,11 +484,11 @@ class _RegisterState extends State<Register> {
 
 class NavBar extends StatelessWidget {
   const NavBar({
-    Key key,
+    Key? key,
     @required this.backbutton,
   }) : super(key: key);
 
-  final bool backbutton;
+  final bool? backbutton;
 
   @override
   Widget build(BuildContext context) {
@@ -507,7 +502,7 @@ class NavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            backbutton
+            backbutton!
                 ? InkWell(
                     onTap: () => Navigator.pop(context),
                     child: Padding(

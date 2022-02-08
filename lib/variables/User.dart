@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User with ChangeNotifier {
-  int idRepartidor;
-  String nombre;
-  String avatar;
-  String puntos;
-  bool isLogin;
+  int? idRepartidor;
+  String? nombre;
+  String? avatar;
+  String? puntos;
+  bool? isLogin;
   bool themeLight = true;
   //bool islectorQR = false;
-  double preciogarrafon;
-  double pay;
-  int minimopunto;
-  double costoRecarga;
+  double? preciogarrafon;
+  double? pay;
+  int? minimopunto;
+  double? costoRecarga;
   // SETTERS OF REPARTIDORES */
 
   void initial() async {
@@ -79,15 +79,15 @@ class User with ChangeNotifier {
 
   /// GETTERS OF REPARTIDORES  */
 
-  int get getid => this.idRepartidor;
-  String get getnombre => this.nombre;
-  String get getavatar => this.avatar;
-  String get getpuntos => this.puntos;
-  bool get getisLogin => this.isLogin;
+  int get getid => this.idRepartidor!;
+  String get getnombre => this.nombre!;
+  String get getavatar => this.avatar!;
+  String get getpuntos => this.puntos!;
+  bool get getisLogin => this.isLogin!;
   bool get geThemeLigth => this.themeLight;
   //bool get getislectorQR => this.islectorQR;
-  double get getpreciogarrafon => this.preciogarrafon;
-  double get getPay => this.pay;
-  int get getMinPoint => this.minimopunto;
-  double get getcostoRecarga => this.costoRecarga;
+  double get getpreciogarrafon => this.preciogarrafon!;
+  double get getPay => this.pay!;
+  int get getMinPoint => this.minimopunto!;
+  double get getcostoRecarga => this.costoRecarga!;
 }

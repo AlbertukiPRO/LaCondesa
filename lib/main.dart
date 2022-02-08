@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   final AsyncMemoizer<bool> _memoizer = AsyncMemoizer();
 
   Future<bool> initial() async {
-    bool islogin;
+    bool? islogin;
     return this._memoizer.runOnce(() async {
       try {
         SharedPreferences disk = await SharedPreferences.getInstance();
@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
 
         if (islogin != null) {
           print('Metodo: <main()> : esta logeado => ' + islogin.toString());
-          print('Metodo: <main()> : nombre => ' + disk.getString('nombrekey'));
-          print('Metodo: <main()> : img => ' + disk.getString('avatarkey'));
+          print('Metodo: <main()> : nombre => ' + disk.getString('nombrekey')!);
+          print('Metodo: <main()> : img => ' + disk.getString('avatarkey')!);
           islogin = true;
         } else {
           print("Close sesion");
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       } catch (error) {
         print(error);
       }
-      return islogin;
+      return islogin!;
     });
   }
 
@@ -53,18 +53,16 @@ class MyApp extends StatelessWidget {
           primaryColor: primarycolor,
           colorScheme: ColorScheme(
             primary: primarycolor,
-            primaryVariant: primarycolor,
             secondary: contraste,
-            secondaryVariant: terciarycolor,
-            surface: null,
             background: Colors.white,
             error: terciarycolor,
             onPrimary: primarycolor,
             onSecondary: secundarycolor,
-            onSurface: null,
-            onBackground: null,
-            onError: null,
             brightness: Brightness.dark,
+            onBackground: Colors.blueAccent,
+            onError: Colors.blueAccent,
+            onSurface: Colors.blueAccent,
+            surface: Colors.blueAccent,
           ),
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: primarycolor,
@@ -82,7 +80,7 @@ class MyApp extends StatelessWidget {
               case ConnectionState.waiting:
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
-                return snapshot.data == false ? const Login() : const QRNEW();
+                return snapshot.data == false ? Login() : const QRNEW();
               default:
                 return Center(child: Text(snapshot.data.toString()));
             }
